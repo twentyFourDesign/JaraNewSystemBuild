@@ -1,0 +1,19 @@
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+}
+::-webkit-scrollbar{
+  display: none;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5) hue-rotate(240deg);
+  cursor: pointer;
+}

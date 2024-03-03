@@ -1,0 +1,25 @@
+.rbc-header .rbc-header-row .rbc-header-day {
+    padding: 10;
+}
+
+.rbc-header{
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: medium;
+    color:#828893;
+}
+.rbc-toolbar-label{
+    font-size:1.3rem;
+    margin-top: 10px;
+    margin-bottom:10px;
+}
+
+.rbc-btn-group{
+    margin-top: 10px;
+    margin-bottom:10px;
+}
+.rbc-calendar{
+    border-radius: 1rem;
+}
