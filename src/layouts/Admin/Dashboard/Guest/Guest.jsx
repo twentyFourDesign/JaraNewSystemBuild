@@ -6,7 +6,7 @@ import Input from '../../../../components/Input'
 import Button from '../../../../components/Button'
 import { guestRow } from '../../../../constants/tableData'
 
-const Guest = ({ setShowNav, showNav }) => {
+const Guest = ({guest,setShowNav, showNav }) => {
 
   const [searchValue,setSearchValue] = useState("")
   const iconStyle = 'text-[#828893] text-lg cursor-pointer md:hidden block'
@@ -31,7 +31,7 @@ const Guest = ({ setShowNav, showNav }) => {
           <Button buttonTitle={"Export"} className={"w-[10rem] h-[2.5rem] font-bold rounded-md text-white font-cursive bg-blue-800"}/>
         </div>
         <div>
-          <Table tr={guestRow} />
+          <Table tr={guestRow} guest={guest} />
         </div>
       </div>
 

@@ -1,21 +1,29 @@
+import axios from 'axios'
 import React from 'react'
-
-const Table = ({ tr, guest }) => {
+import {AiFillDelete} from 'react-icons/ai'
+import { baseUrl } from '../../../../constants/baseurl'
+import toast from 'react-hot-toast'
+const Table = ({ tr, data,setData}) => {
     const trStyle = "pb-2 pt-2 pl-4 pr-4 text-lg text-start font-normal whitespace-nowrap border-2 border-[#E9EBED] tracking-wider"
     const tdStyle = "p-4 text-sm text-gray-600 whitespace-nowrap text-center border-2 border-[#E9EBED] tracking-wider"
-    // bg-[#eff6ff]
-    // const arr = [1, 2, 23, 3, 2, 2, 2, 2, 2, 2, 2, , 2,]
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const options = {year: "numeric",month: "long",day: "numeric"};
-        const formattedDate = date.toLocaleDateString("en-US", options);
-        return formattedDate;
+
+    const deleteStaff =(id)=>{
+        axios.delete(`${baseUrl}/staff/delete/${id}`)
+        .then((res)=>{
+            if(res.status){
+                axios.get(`${baseUrl}/staff/get`)
+                .then((res)=>{
+                    setData(res?.data)
+                })
+                toast.success("Staff Deleted")
+            }
+        })
     }
     return (
 
         <div className='w-full overflow-x-scroll md:overflow-x-auto bg-white h-[25rem] '>
             {
-                guest?.length > 0 ? (
+                data?.length > 0 ? (
                     <table className='w-full'>
 
                         <thead >
@@ -28,17 +36,14 @@ const Table = ({ tr, guest }) => {
 
                         <tbody>
                             {
-                                guest.map((item, index) => (
+                                data?.map((item, index) => (
                                     <tr key={index}>
-                                        <td className={tdStyle}>{item?.name}</td>
+                                        <td className={tdStyle}>{item?.firstname}</td>
+                                        <td className={tdStyle}>{item?.lastname}</td>
                                         <td className={tdStyle}>{item?.gender}</td>
                                         <td className={tdStyle}>{item?.email}</td>
                                         <td className={tdStyle}>{item?.mobile}</td>
-                                        <td className={tdStyle}>{formatDate(item?.updatedAt)}</td>
-                                        <td className={tdStyle}>{item?._id}</td>
-                                        <td className={tdStyle}>{!item?.member ? "No" : "Yes"}</td>
-                                        <td className={tdStyle}>{!item?.birthdayReminded ? "No" : "Yes"}</td>
-                                        {/* <td className={tdStyle + ' cursor-pointer'}>More</td> */}
+                                        <td className={tdStyle}><AiFillDelete onClick={()=>deleteStaff(item._id)}/></td>
                                     </tr>
                                 ))
                             }
@@ -47,7 +52,7 @@ const Table = ({ tr, guest }) => {
 
                     </table>
                 ):(
-                    <h1 className='flex justify-center items-center h-[100%] text-lg'>NO GUEST FOUND</h1>
+                    <h1 className='flex justify-center items-center h-[100%] text-lg'>NO STAFF FOUND</h1>
                 )
             }
         </div>

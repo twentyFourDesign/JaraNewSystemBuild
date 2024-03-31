@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { ImCross } from 'react-icons/im'
-import Table from '../../../../components/Table'
+import Table from './Table'
 import Input from '../../../../components/Input'
 import Button from '../../../../components/Button'
 import { dayPassRow } from '../../../../constants/tableData'
 
-const Daypass = ({ setShowNav, showNav }) => {
+const Daypass = ({ setShowNav, showNav , data }) => {
 
   const [searchValue,setSearchValue] = useState("")
   const iconStyle = 'text-[#828893] text-lg cursor-pointer md:hidden block'
@@ -31,7 +31,7 @@ const Daypass = ({ setShowNav, showNav }) => {
           <Button buttonTitle={"Export"} className={"w-[10rem] h-[2.5rem] font-bold rounded-md text-white font-cursive bg-blue-800"}/>
         </div>
         <div>
-          <Table tr={dayPassRow} />
+          <Table tr={dayPassRow} data={data} />
         </div>
       </div>
 

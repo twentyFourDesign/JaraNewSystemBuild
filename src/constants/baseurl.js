@@ -1,0 +1,1 @@
+export const baseUrl = "https://cute-erin-magpie-garb.cyclic.app/api/v1"

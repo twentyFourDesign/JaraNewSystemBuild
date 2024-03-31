@@ -23,9 +23,9 @@ export const guestRow = [
     {
         title:"Birthday Reminded"
     },
-    {
-        title:"Details"
-    },
+    // {
+    //     title:"Details"
+    // },
 ]
 
 export const dayPassRow = [
@@ -41,9 +41,9 @@ export const dayPassRow = [
     {
         title:"Visting Date"
     },
-    {
-        title:"Options"
-    },
+    // {
+    //     title:"Options"
+    // },
     {
         title:"Option Type"
     },

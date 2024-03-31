@@ -9,7 +9,7 @@ const Input = ({placeholder,className,style,type,name,onChangeFun}) => {
         className={className}
         type={type}
         name={name}
-        onChangeFun={(e)=>{onChangeFun(e)}} 
+        onChange={(e)=>{onChangeFun(e)}} 
       />
     </div>
   )
