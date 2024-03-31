@@ -10,6 +10,11 @@
     font-size: medium;
     color:#828893;
 }
+@media only screen and (max-width:850px) {
+    .rbc-header{
+        font-size: 0.5rem;
+    }
+}
 .rbc-toolbar-label{
     font-size:1.3rem;
     margin-top: 10px;
