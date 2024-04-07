@@ -200,3 +200,24 @@ export const DaypassVouchersRow = [
         title:"Options"
     },
 ]
+
+export const paymentRow = [
+    {
+        title:"Ref"
+    },
+    {
+        title:"Guest Name"
+    },
+    {
+        title:"Amount"
+    },
+    {
+        title:"Status"
+    },
+    {
+        title:"Booking Ref"
+    },
+    {
+        title:"Date"
+    }
+]
