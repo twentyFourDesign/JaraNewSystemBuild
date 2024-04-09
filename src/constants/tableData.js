@@ -41,9 +41,6 @@ export const dayPassRow = [
     {
         title:"Visting Date"
     },
-    // {
-    //     title:"Options"
-    // },
     {
         title:"Option Type"
     },

@@ -1,6 +1,11 @@
 import React from 'react'
+import {useNavigate } from 'react-router-dom'
 
 const DaypassSummary = () => {
+    const nav = useNavigate()
+
+
+    
     return (
         <div className='font-robotoFont py-4 px-2 h-[100%] relative'>
             <h1 className='text-xl font-bold'>Booking Summary</h1>
@@ -35,7 +40,7 @@ const DaypassSummary = () => {
 
             <div className='absolute bottom-2 w-[96%] '>
                 {/* <button className='mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive'>Hold | Bank Trasnfer</button> */}
-                <button className='mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive'>Pay with Paystack</button>
+                <button className='mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive' onClick={()=>nav(`/overnight/confirmation`)}>Confrim</button>
             </div>
 
         </div>
