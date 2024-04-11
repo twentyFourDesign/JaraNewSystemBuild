@@ -8,17 +8,20 @@ const OvernightReservation = () => {
 
     const calPrice = ()=>{
         let totalRoomPrice = 0;
-        for (const room of roomDetails.selectedRooms) {
-            const roomPrice = parseInt(room.price, 10);
-            if (isNaN(roomPrice)) {
-              console.error("Error: Invalid price format for room", room);
-              continue;
+        if(roomDetails?.selectedRooms?.length>0){
+            for (const room of roomDetails?.selectedRooms) {
+                const roomPrice = parseInt(room.price, 10);
+                if (isNaN(roomPrice)) {
+                  console.error("Error: Invalid price format for room", room);
+                  continue;
+                }
+                totalRoomPrice += roomPrice;
             }
-            totalRoomPrice += roomPrice;
-          }
-          
-          console.log(totalRoomPrice);
-          return totalRoomPrice
+        }
+        else{
+
+        }
+        return totalRoomPrice
     }
 
     return (

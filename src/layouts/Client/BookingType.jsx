@@ -31,7 +31,7 @@ const BookingType = () => {
                     </div>
                 </div>
 
-                <div className='h-[24rem] lg:-[25rem] min:w-[23rem] w-[23rem] relative  lg:mb-0 mb-2'>
+                <div className='h-[24rem] lg:h-[25rem] min:w-[23rem] w-[23rem] relative  lg:mb-0 mb-2'>
                     <img src={DayPassImage} alt="logo" className='h-[100%] w-[100%] min:w-[100%] rounded-2xl'/>
                     <div className='absolute bottom-4 pl-4 pr-4'>
                         <h1 className='text-3xl font-bold text-white'>Daypass Bookings</h1>
