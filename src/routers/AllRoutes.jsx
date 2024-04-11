@@ -11,6 +11,8 @@ import DiscountScreen from '../screens/Admin/Dashboard/DiscountScreen'
 import TaskScreen from '../screens/Admin/Dashboard/TaskScreen'
 import DaypassDiscountScreen from '../screens/Admin/Dashboard/DaypassDiscountScreen'
 import DaypassVoucherScreen from '../screens/Admin/Dashboard/DaypassVoucherScreen'
+import DayPassDetailsScreen from '../screens/Client/Daypass/DetailsScreem'
+
 import BookingTypeScreen from '../screens/Client/BookingTypeScreen'
 import OvernightGuestScreen from '../screens/Client/Overnight/GuestScreen'
 import OvernightDetailsScreen from '../screens/Client/Overnight/DetailsScreen'
@@ -23,6 +25,7 @@ import DaypassSummaryScreen from '../screens/Client/Daypass/Summary'
 import DayPassRoomDetailsScreen from '../screens/Client/Daypass/RoomDetailsScreen'
 import PaymentScreen from '../screens/Admin/Dashboard/PaymentScreen'
 import SettingScreen from '../screens/Admin/Dashboard/SettingScreen'
+import RoomsScreen from '../screens/Admin/Dashboard/RoomsScreen'
 
 const AllRoutes = () => {
   return (
@@ -44,6 +47,7 @@ const AllRoutes = () => {
         <Route path='vouchers/daypass' element={<DaypassVoucherScreen />} />
         <Route path='payment' element={<PaymentScreen />} />
         <Route path='setting' element={<SettingScreen />} />
+        <Route path='rooms' element={<RoomsScreen />} />
       </Route>
 
       <Route path='/' element={<BookingTypeScreen/>}/>
@@ -56,6 +60,8 @@ const AllRoutes = () => {
       <Route path='/daypass/guest' element={<DaypassGuestScreen/>}/>
       <Route path='/daypass/summary' element={<DaypassSummaryScreen/>}/>
       <Route path='/daypass/room-details' element={<DayPassRoomDetailsScreen/>}/>
+      <Route path='/daypass/details' element={<DayPassDetailsScreen/>}/>
+
 
     </Routes>
   )

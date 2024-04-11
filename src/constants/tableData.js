@@ -218,3 +218,22 @@ export const paymentRow = [
         title:"Date"
     }
 ]
+
+
+export const roomsRow = [
+    {
+        title:"Id"        
+    },
+    {
+        title:"Room Name"
+    },
+    {
+        title:"Room Price"
+    },
+    {
+        title:"Actions"
+    },
+    {
+        title:"Sub Rooms"
+    }
+]

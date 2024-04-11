@@ -4,12 +4,6 @@ import {useSelector } from 'react-redux'
 const DaypassReservation = () => {
   const bookingInfo = useSelector(state => state.daypassBookingInfo)
   const availablity = useSelector(state => state.daypassAvailablity)
-
-
-  console.log(bookingInfo,"booking")
-
-  console.log(availablity,'availablity')
-
   let taxamount = (12.5/100)*bookingInfo.adultsAlcoholic * 45000+bookingInfo.childTotal *17500 +bookingInfo.adultsNonAlcoholic * 35000+bookingInfo.Nanny*15000
   return (
     <div className='font-robotoFont p-4'>

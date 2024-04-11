@@ -1,7 +1,7 @@
 import { FaBed, FaPeopleCarry } from "react-icons/fa";
 import { GrUserFemale } from "react-icons/gr";
 import { LuBed } from "react-icons/lu";
-import { MdBlock, MdDiscount, MdOutlinePayments } from "react-icons/md";
+import { MdBlock, MdDiscount, MdOutlineBedroomParent, MdOutlinePayments } from "react-icons/md";
 import { RiCalendarTodoFill, RiCoupon2Fill, RiCoupon3Fill } from "react-icons/ri";
 import { TbDiscountCheckFilled } from "react-icons/tb";
 import { IoIosSettings } from "react-icons/io";
@@ -67,4 +67,9 @@ export const navLinks= [
         link:"/admin/jara/setting",
         icons:<IoIosSettings/>
     },
+    {
+        title:"Rooms",
+        link:"/admin/jara/rooms",
+        icons:<MdOutlineBedroomParent/>
+    }
 ]

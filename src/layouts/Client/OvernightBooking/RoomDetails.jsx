@@ -1,20 +1,71 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import OvernightSteps from '../../../components/OvernightSteps'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
-import OvernightFooter from '../../../components/OvernightFooter'
 import OvernightReservation from '../../../components/OvernightReservation'
 import { useState } from 'react'
 import Extras from '../../../components/Extras'
-import Calender from '../../../assets/calendar.png'
-const RoomDetails = () => {
+import axios from 'axios'
+import { baseUrl } from '../../../constants/baseurl'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
+import { insert } from '../../../store/slices/overnight/roomDetails.slice'
 
+const RoomDetails = () => {
+    const nav = useNavigate()
+    const dispatch = useDispatch()
     const [showPopup, setshowPopup] = useState(false)
     const [roomId, setroomId] = useState(null)
+    const [modifiedRoom, setModifiedRoom] = useState([])
+    const [selectedRooms, setSelectedRooms] = useState([])
+    const [quantity, setQuantity] = useState(1);
+    const [finalData, setFinalData] = useState([])
+    const [selectedDate, setSelectedDate] = useState({ visitDate: "", endDate: "" })
 
-    const handleClickSave = () => {
-        setshowPopup(false)
-        setroomId(null)
+    const incrementQuantity = (maxCapacity) => {
+        setQuantity(currentQuantity => currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity);
     };
+
+    const decrementQuantity = () => {
+        setQuantity(currentQuantity => currentQuantity > 1 ? currentQuantity - 1 : currentQuantity);
+    };
+
+    const handleClickSave = (room,price) => {
+        setshowPopup(false);
+        setroomId(null);
+        const existingRoomIndex = selectedRooms.findIndex(selectedRoom => selectedRoom.id === room.id);
+        if (existingRoomIndex !== -1) {
+            const updatedRooms = selectedRooms.map((selectedRoom, index) => index === existingRoomIndex ? { ...selectedRoom, quantity , price} : selectedRoom);
+            setSelectedRooms(updatedRooms);
+        }
+        else { setSelectedRooms([...selectedRooms, { ...room, quantity , price}]); }
+        setQuantity(1);
+    };
+
+    useEffect(() => {
+        axios.get(`${baseUrl}/main/rooms/sub/get/all`)
+            .then((res) => {
+                const groupedRooms = res.data.reduce((acc, room) => {
+                    const { title, price } = room.roomId;
+                    const existingGroup = acc.find(group => group.ref === title);
+                    if (existingGroup) {
+                        existingGroup.details.push({ title: room.title, booked: room.booked, capacity: room.capacity, id: room._id });
+                    }
+                    else {
+                        acc.push({ ref: title, price: price, details: [{ title: room.title, booked: room.booked, capacity: room.capacity, id: room._id }] });
+                    }
+                    return acc;
+                }, []);
+                setModifiedRoom(groupedRooms)
+            })
+    }, [])
+
+    const handleNext = () => {
+        dispatch(insert({selectedRooms,...selectedDate,finalData}))
+        nav("/overnight/details")
+    }
+
+
 
     return (
         <div>
@@ -40,11 +91,12 @@ const RoomDetails = () => {
                                 <p className='text-[#606970] text-sm mt-1'>Select the check-in and check-out dates you would like to stay (nights you will be sleeping) and your preferred room(s).</p>
                             </div>
                             {/* FOR CALENDER  */}
-                            <div className='mt-4'>
-                                <h1 className='text-lg font-bold '>How long are you staying?</h1>
-                                <p className='text-[#606970] text-sm mt-1'>Select check-in and check-out dates.</p>
-                                <img src={Calender} alt="" className='mt-3' classNameh='h-[5rem]' />
+
+                            <div className='mt-4 flex gap-x-5 items-center sm:flex-row flex-col'>
+                                <input onChange={(e) => { setSelectedDate({ ...selectedDate, visitDate: e.target.value }) }} type="date" className='w-[100%] sm:w-[15rem] h-[3rem] sm:mt-0 mt-2 pl-4 pr-4 rounded-md outline-none cursor-pointer text-[#828893]' />
+                                <input onChange={(e) => { setSelectedDate({ ...selectedDate, endDate: e.target.value }) }} type="date" className='w-[100%] sm:w-[15rem] h-[3rem] sm:mt-0 mt-2 pl-4 pr-4 rounded-md outline-none cursor-pointer text-[#828893]' />
                             </div>
+
 
                             {/* FOR ROOM TYPES  */}
 
@@ -56,462 +108,47 @@ const RoomDetails = () => {
                             {/* MAIN ROOM TYPES  */}
                             <div className='mt-4'>
 
-                                <div className='lg:flex gap-x-10 items-center'>
-                                    <div>
-                                        <h1 className='text-medium font-bold '>Standard (5)</h1>
-                                    </div>
-                                    <div className='flex-1 flex gap-x-3 lg:mt-0 mt-3'>
+                                {
+                                    modifiedRoom?.length > 0 && (
+                                        modifiedRoom.map((item, index) => (
 
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(1), setshowPopup(true) }}>Standard Room 2</p>
-                                            {
-                                                (showPopup && roomId === 1) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
+                                            <div key={index} className='lg:flex gap-x-10 items-center'>
+                                                <div>
+                                                    <h1 className='text-medium font-bold mt-2  w-[6rem] truncate '>{item?.ref}</h1>
+                                                </div>
+                                                <div className='flex-1 flex gap-x-3 lg:mt-0 mt-3 flex-wrap'>
+                                                    {
+                                                        item?.details.map((room, index) => (
+                                                            <div className='relative min-w-[8rem] h-[2.4rem] mt-2 flex justify-center flex-wrap items-center bg-white rounded-xl cursor-pointer'>
+                                                                <p className='text-sm' onClick={() => { setroomId(room.id), setshowPopup(true) }}>{room.title}</p>
+                                                                {
+                                                                    (showPopup && roomId === room.id) && (
+                                                                        <div className='absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
+                                                                            <h1>Add/minus your guests</h1>
+                                                                            <div className='flex justify-between items-center mt-1'>
+                                                                                <div><p className='text-sm'>Capacity: {room.capacity}</p></div>
+                                                                                <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
+                                                                                    <AiOutlineMinus className='cursor-pointer' onClick={() => decrementQuantity()} />
+                                                                                    <p>{quantity}</p>
+                                                                                    <AiOutlinePlus className='cursor-pointer' onClick={() => incrementQuantity(room.capacity)} />
+                                                                                </div>
+                                                                            </div>
+                                                                            <button onClick={() => handleClickSave(room,item.price)} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
+                                                                        </div>
+
+                                                                    )
+                                                                }
                                                             </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
 
-                                                )
-                                            }
-                                        </div>
+                                                        ))
+                                                    }
 
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(2), setshowPopup(true) }}>Standard Room 3</p>
-                                            {
-                                                (showPopup && roomId === 2) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )
+                                }
 
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(3), setshowPopup(true) }}>Standard Room 4</p>
-                                            {
-                                                (showPopup && roomId === 3) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(4), setshowPopup(true) }}>Standard Room 5</p>
-                                            {
-                                                (showPopup && roomId === 4) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div className='lg:flex gap-x-[3.5rem] items-center mt-3'>
-                                    <h1 className='text-medium font-bold '>Family (3)</h1>
-                                    <div className='flex-1 flex gap-x-3 lg:mt-0 mt-3'>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(9), setshowPopup(true) }}>Standard Room 2</p>
-                                            {
-                                                (showPopup && roomId === 9) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(10), setshowPopup(true) }}>Standard Room 3</p>
-                                            {
-                                                (showPopup && roomId === 10) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(11), setshowPopup(true) }}>Standard Room 4</p>
-                                            {
-                                                (showPopup && roomId === 11) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(12), setshowPopup(true) }}>Standard Room 5</p>
-                                            {
-                                                (showPopup && roomId === 12) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div className='mt-3 lg:flex gap-x-[4.5rem] items-center'>
-                                    <h1 className='text-medium font-bold '>Villa (3)</h1>
-                                    <div className='flex-1 flex gap-x-3 lg:mt-0 mt-3'>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(5), setshowPopup(true) }}>Standard Room 2</p>
-                                            {
-                                                (showPopup && roomId === 5) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(6), setshowPopup(true) }}>Standard Room 3</p>
-                                            {
-                                                (showPopup && roomId === 6) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(7), setshowPopup(true) }}>Standard Room 4</p>
-                                            {
-                                                (showPopup && roomId === 7) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(8), setshowPopup(true) }}>Standard Room 5</p>
-                                            {
-                                                (showPopup && roomId === 8) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div className='lg:flex gap-x-[4.5rem] items-center mt-3'>
-                                    <h1 className='text-medium font-bold  '>Loft (2)</h1>
-                                    <div className='flex-1 flex gap-x-3 lg:mt-0 mt-3'>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(15), setshowPopup(true) }}>Standard Room 2</p>
-                                            {
-                                                (showPopup && roomId === 15) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(16), setshowPopup(true) }}>Standard Room 3</p>
-                                            {
-                                                (showPopup && roomId === 16) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(17), setshowPopup(true) }}>Standard Room 4</p>
-                                            {
-                                                (showPopup && roomId === 17) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(18), setshowPopup(true) }}>Standard Room 5</p>
-                                            {
-                                                (showPopup && roomId === 18) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div className='lg:flex gap-x-[3.5rem] items-center mt-3'>
-                                    <h1 className='text-medium font-bold '>Studio (2)</h1>
-                                    <div className='flex-1 flex gap-x-3 lg:mt-0 mt-3'>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(25), setshowPopup(true) }}>Standard Room 2</p>
-                                            {
-                                                (showPopup && roomId === 25) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(26), setshowPopup(true) }}>Standard Room 3</p>
-                                            {
-                                                (showPopup && roomId === 26) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(27), setshowPopup(true) }}>Standard Room 4</p>
-                                            {
-                                                (showPopup && roomId === 27) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                        <div className='relative min-w-[8rem] h-[2.4rem] flex justify-center items-center bg-white rounded-xl cursor-pointer'>
-                                            <p className='text-sm' onClick={() => { setroomId(28), setshowPopup(true) }}>Standard Room 5</p>
-                                            {
-                                                (showPopup && roomId === 28) && (
-                                                    <div className='absolute top-[-9rem] left-[-10rem] w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
-                                                        <h1>Add/minus your guests</h1>
-                                                        <div className='flex justify-between items-center mt-1'>
-                                                            <div><p className='text-sm'>Capacity: 10</p></div>
-                                                            <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
-                                                                <AiOutlineMinus className='cursor-pointer' />
-                                                                <p>4</p>
-                                                                <AiOutlinePlus className='cursor-pointer' />
-                                                            </div>
-                                                        </div>
-                                                        <button onClick={handleClickSave} className='mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50'>Save</button>
-                                                    </div>
-
-                                                )
-                                            }
-                                        </div>
-
-                                    </div>
-                                </div>
 
 
                             </div>
@@ -520,7 +157,7 @@ const RoomDetails = () => {
 
                             {/* EXTRAS  */}
                             <div>
-                                <Extras />
+                                <Extras setFinalData={setFinalData} finalData={finalData} />
                             </div>
 
                         </div>
@@ -539,7 +176,29 @@ const RoomDetails = () => {
 
 
             {/* FOOTER  */}
-            <OvernightFooter backLink="/overnight/guest" forwardLink={"/overnight/details"} />
+
+            <div className='w-screen bg-white'>
+
+                <div className='flex justify-between items-center px-7 pt-4'>
+
+                    <div className='flex gap-x-1 items-center text-[#75A9BF] cursor-pointer' onClick={() => nav("/overnight/guest")}>
+                        <MdKeyboardArrowLeft />
+                        <p>Back</p>
+                    </div>
+                    <div>
+                        <button onClick={handleNext} className='w-[10rem] h-[3rem] bg-black text-white rounded-md flex items-center justify-center font-robotoFont'>
+                            Continue
+                            <MdKeyboardArrowRight className='ml-2 text-lg' />
+                        </button>
+                    </div>
+                </div>
+
+                <div className='flex justify-between items-center px-7 mt-3 pb-3'>
+                    <p>© 2023 JARA BEACH RESORT</p>
+                    <p>owned and operated by Little Company Nigeria Limited</p>
+                </div>
+
+            </div>
 
         </div>
     )

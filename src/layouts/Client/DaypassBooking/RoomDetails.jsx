@@ -17,14 +17,14 @@ const RoomDetails = () => {
     const [availablityInfo, setavailablityInfo] = useState({
         dayType: dayType,
         startDate: "",
-        endDate: "",
         extras: finalData
     })
 
     const onSubmit = () => {
         setavailablityInfo({...availablityInfo,extras:finalData})
         dispatch(insert({...availablityInfo,extras:[...finalData]}))
-        nav("/daypass/summary")
+        // nav("/daypass/summary")
+        nav("/daypass/details")
     }
 
     return (
@@ -67,7 +67,7 @@ const RoomDetails = () => {
 
                                 <div className='mt-3' >
                                     <input type="date" className='mr-10 w-[100%] lg:mb-0 mb-2 lg:w-[20rem] h-[2.3rem] px-3 rounded-md' onChange={(e) => setavailablityInfo({ ...availablityInfo, startDate: e.target.value })} />
-                                    <input type="date" className='lg:w-[20rem] w-[100%]  h-[2.3rem] px-3 rounded-md' onChange={(e) => setavailablityInfo({ ...availablityInfo, endDate: e.target.value })} />
+                                    {/* <input type="date" className='lg:w-[20rem] w-[100%]  h-[2.3rem] px-3 rounded-md' onChange={(e) => setavailablityInfo({ ...availablityInfo, endDate: e.target.value })} /> */}
                                 </div>
                                 {/* <img src={Calender} alt="" className='mt-3' classNameh='h-[5rem]' /> */}
                             </div>
