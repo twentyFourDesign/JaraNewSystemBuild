@@ -18,7 +18,7 @@ export const navLinks= [
         icons:<GrUserFemale/>
     },
     {
-        title:"Day Pass",
+        title:"Booking Details",
         link:"/admin/jara/day-pass",
         icons:<LuBed/>
     },

@@ -42,7 +42,6 @@ const Massage = ({ setShowPopups, showPopups }) => {
 
     const del = async (id) => {
         let response = await axios.delete(`${baseUrl}/massage/delete/${id}`)
-        console.log(response, 'response of del')
         if (response.status) {
             getData()
             toast.success("Massage Deleted")

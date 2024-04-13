@@ -12,7 +12,6 @@ const Popup = ({setshowPopup,setData}) => {
             toast.error("All Fields Are Required")
         }
         else{
-            console.log(staffData)
             axios.post(`${baseUrl}/staff/create`,staffData)
             .then((res)=>{
                 if(res.status){

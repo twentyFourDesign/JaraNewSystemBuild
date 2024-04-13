@@ -24,7 +24,7 @@ const Summary = () => {
 
 
             {/* FOOTER  */}
-            <OvernightFooter backLink="/overnight/details" forwardLink={"/overnight/confirmation"} />
+            {/* <OvernightFooter backLink="/overnight/details" forwardLink={"/overnight/confirmation"} /> */}
         </div>
     )
 }

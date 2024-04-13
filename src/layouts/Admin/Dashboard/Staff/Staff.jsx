@@ -9,7 +9,6 @@ import Popup from './Popup'
 
 const Staff = ({ setShowNav, showNav,data,setData }) => {
 
-  console.log(data,'data')
 
   const [searchValue,setSearchValue] = useState("")
   const iconStyle = 'text-[#828893] text-lg cursor-pointer md:hidden block'

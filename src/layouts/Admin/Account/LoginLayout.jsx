@@ -25,7 +25,6 @@ const loginFunc =(e)=>{
     axios.post(`${baseUrl}/admin/login`,loginInfo)
     .then((res)=>{
       if(res.status){
-        console.log(res.data)
         toast.success("Login Succesfull")
         localStorage.setItem("adminId",res.data.adminInfo._id)
         localStorage.setItem("token",res.data.token)

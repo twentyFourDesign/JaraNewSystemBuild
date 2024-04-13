@@ -34,7 +34,6 @@ const ShowSub = ({ showRoom, data }) => {
     const onDelete = (id) => {
         axios.delete(`${baseUrl}/main/rooms/sub/delete/${id}`)
             .then((res) => {
-                console.log(res)
                 toast.success("Room Deleted")
                 axios.get(`${baseUrl}/main/rooms/sub/get/${data._id}`)
                     .then((res) => {

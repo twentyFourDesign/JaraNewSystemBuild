@@ -14,10 +14,10 @@ const Guest = () => {
     const dispatch = useDispatch()
 
     const [guestInfo, setGuestInfo] = useState({
-        adultsAlcoholic: 1,
-        adultsNonAlcoholic: 1,
-        Nanny: 1,
-        childTotal: 1
+        adultsAlcoholic: 0,
+        adultsNonAlcoholic: 0,
+        Nanny: 0,
+        childTotal: 0
     })
 
 

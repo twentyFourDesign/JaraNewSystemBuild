@@ -49,6 +49,19 @@ export const dayPassRow = [
     },
 ]
 
+export const overNightBookinRow = [
+    {title:"Booking Id"},{title:"Booking By"},{title:"Email"},{title:"Phone Number"},{title:"Gender"},
+    {title:"Adults"},{title:"Children"},{title:"Toodlers"},{title:"Infants"},{title:"Check In"},{title:"Check Out"},{title:"Rooms"},
+    {title:"Extras"}
+]
+
+export const daypassBookinRow = [
+    {title:"Booking Id"},{title:"Booking By"},{title:"Email"},{title:"Phone Number"},{title:"Gender"},
+    {title:"Adults Alcoholic"},{title:"Adults Non-Alcoholic"},{title:"Nanny"},{title:"Child"},{title:"Check In"},{title:"Visit On"},
+    {title:"Extras"}
+]
+
+
 export const blackListGuestRow =[
     {
         title:"Email",

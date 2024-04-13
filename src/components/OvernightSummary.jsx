@@ -1,6 +1,23 @@
 import React from 'react'
-
+import { useSelector } from 'react-redux'
+import axios from 'axios'
+import {baseUrl} from '../constants/baseurl'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 const OvernightSummary = () => {
+    const guestCount = useSelector(state => state.overnightGuestCount)
+    const roomDetails = useSelector(state => state.overnightRoomInfo)
+    const guestDetails = useSelector(state => state.overnightGuestDetails)
+    const nav = useNavigate()
+
+    const confirmBooking = async()=>{
+        let result = await axios.post(`${baseUrl}/overnight/booking/create`,{guestCount,roomDetails,guestDetails})
+        if(result){
+            toast.success("Booking Created")
+            nav("/overnight/confirmation")
+        }
+    }
+
     return (
         <div className='font-robotoFont py-4 px-2 h-[100%] relative'>
             <h1 className='text-xl font-bold'>Booking Summary</h1>
@@ -11,13 +28,13 @@ const OvernightSummary = () => {
 
                 <div className='flex justify-between items-center mt-2'>
                     <p className='text-[#606970]'>Check-in</p>
-                    <p>18 Feb 2024</p>
+                    <p>{roomDetails?.visitDate}</p>
 
                 </div>
 
                 <div className='flex justify-between items-center mt-1'>
-                    <p className='text-[#606970]'>Check-in</p>
-                    <p>18 Feb 2024</p>
+                    <p className='text-[#606970]'>Check-out</p>
+                    <p>{roomDetails?.endDate}</p>
                 </div>
 
             </div>
@@ -33,7 +50,7 @@ const OvernightSummary = () => {
             </div>
 
             <div className='absolute bottom-2 w-[96%] '>
-                <button className='mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive'>Hold | Bank Trasnfer</button>
+                <button className='mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive' onClick={confirmBooking}>Hold | Bank Trasnfer</button>
                 <button className='mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive'>Pay with Paystack</button>
             </div>
 

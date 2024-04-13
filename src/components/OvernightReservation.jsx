@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 const OvernightReservation = () => {
     const guestCount = useSelector(state => state.overnightGuestCount)
     const roomDetails = useSelector(state => state.overnightRoomInfo)
-    console.log(roomDetails)
 
     const calPrice = ()=>{
         let totalRoomPrice = 0;
