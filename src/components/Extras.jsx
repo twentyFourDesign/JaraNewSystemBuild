@@ -4,12 +4,14 @@ import downIcon from '../assets/down.svg'
 import axios from 'axios'
 import { baseUrl } from '../constants/baseurl'
 import { insert } from '../store/slices/daypassAvailablity.slice'
-const Extras = ({finalData,setFinalData}) => {
+const Extras = ({ finalData, setFinalData, type }) => {
     const [showExtra, setshowExtra] = useState(false)
     const [cakeExtra, setCakeExtra] = useState([])
     const [lookoutExtra, setlookoutExtra] = useState([])
     const [massageExtra, setmassageExtra] = useState([])
     const [drinkExtra, setdrinkExtra] = useState([])
+    const [rindingExtra, setrindingExtra] = useState([])
+    const [personalExtra, setpersonalExtra] = useState([])
     const [addedItems, setAddedItems] = useState({});
 
 
@@ -18,11 +20,24 @@ const Extras = ({finalData,setFinalData}) => {
         let lookout = await axios.get(`${baseUrl}/lookout/get`)
         let massage = await axios.get(`${baseUrl}/massage/get`)
         let drinks = await axios.get(`${baseUrl}/drink/get`)
+        let riding = await axios.get(`${baseUrl}/riding/get`)
+        let personal = await axios.get(`${baseUrl}/personal/get`)
+        setpersonalExtra([
+            { price: personal.data[0].DIYPainting, title: "DIY Painting" },
+            { price: personal.data[0].baloons, title: "Baloons" },
+            { price: personal.data[0].floatingBreakFast, title: "Floating Breakfast" },
+            { price: personal.data[0].flowerPetals, title: "Flower Petals" },
+            { price: personal.data[0].sunsetPicnic, title: "Sunset Picninc" },
+            { price: personal.data[0].welcomeNote, title: "Welcome Note" },
+        ])
         setCakeExtra(cakes.data)
         setlookoutExtra(lookout.data)
         setmassageExtra(massage.data)
         setdrinkExtra(drinks.data)
+        setrindingExtra(riding.data)
     }
+
+    console.log(personalExtra)
 
     useEffect(() => {
         getExtras()
@@ -72,6 +87,31 @@ const Extras = ({finalData,setFinalData}) => {
         }
     };
 
+    const handleAddRemoveRiding = (drinkItem) => {
+        const itemIndex = finalData.findIndex(item => item.title === drinkItem.title);
+        if (itemIndex !== -1) {
+            setFinalData(prevData => {
+                const newData = [...prevData];
+                newData.splice(itemIndex, 1);
+                return newData;
+            });
+        } else {
+            setFinalData(prevData => [...prevData, drinkItem]);
+        }
+    };
+    const handleAddRemovePersonal = (drinkItem) => {
+        const itemIndex = finalData.findIndex(item => item.title === drinkItem.title);
+        if (itemIndex !== -1) {
+            setFinalData(prevData => {
+                const newData = [...prevData];
+                newData.splice(itemIndex, 1);
+                return newData;
+            });
+        } else {
+            setFinalData(prevData => [...prevData, drinkItem]);
+        }
+    };
+
     const isCakeAdded = (cakeItem) => {
         return finalData.some(item => item.title === cakeItem.title);
     };
@@ -82,6 +122,33 @@ const Extras = ({finalData,setFinalData}) => {
     const isDrinkAdded = (drinkItem) => {
         return finalData.some(item => item.title === drinkItem.title);
     }
+
+    const isRidingAdded = (drinkItem) => {
+        return finalData.some(item => item.title === drinkItem.title);
+    }
+
+    const isPersonalAdded = (drinkItem) => {
+        return finalData.some(item => item.title === drinkItem.title);
+    }
+
+    const selectBg = (item) => {
+        switch (item) {
+            case "DIY Painting":
+                return "https://img.freepik.com/premium-photo/painting-paint-splash-color-full-width-white-art-painter-generative-ai_862745-558.jpg"
+            case "Baloons":
+                return "https://www.elliesparty.com/cdn/shop/products/black-gold-silver-balloon-arch-balloon-garland-kit-280393.jpg?v=1684344401&width=1946"
+
+            case "Floating Breakfast":
+                return "https://www.journeyera.com/wp-content/uploads/2023/11/Resorts-Offering-Floating-Breakfast-in-Bali-samaya-1024x746.jpg"
+            case "Flower Petals":
+                return "https://catalog.parkseed.com/images?highQuality=true&src=https%3A%2F%2Fparkseed.com%2Fimages%2Fxxl%2F88089-PK-6.jpg&s=b7176707314f1bcc91c8e13ca0439f7502392014b978925ff0a305f0c2a0a87e"
+            case "Welcome Note":
+                return "https://assets-global.website-files.com/5c6d6c45eaa55f57c6367749/6501c92b89796e35d456179e_AnyConv.com__c%20(10).webp"
+            case "Sunset Picninc":
+                return "https://w0.peakpx.com/wallpaper/611/649/HD-wallpaper-sunset-beach-picnic-dusk-candlelight-sunset-twilight-eat-picnic-sea-beach-sand-dining-evening-exotic-islands-romantic-view-romance-food-ocean-ornage-sky-table-for-two-candles-skies.jpg"
+        }
+    }
+
 
     return (
         <div className='w-[100%] max-h-[19rem] overflow-y-auto  bg-white rounded-md mt-4 font-robotoFont p-4'>
@@ -198,7 +265,7 @@ const Extras = ({finalData,setFinalData}) => {
                         {
                             drinkExtra?.map((item, index) => (
                                 <div key={index} className='mt-4'>
-                                    <h1 className='text-lg mb-3 ml-0 font-semibold'>Massage</h1>
+                                    <h1 className='text-lg mb-3 ml-0 font-semibold'>Drinks</h1>
                                     <div className='lg:flex justify-between items-center mb-4'>
 
                                         <div className='lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto'>
@@ -224,6 +291,79 @@ const Extras = ({finalData,setFinalData}) => {
                                 </div>
                             ))
                         }
+                        {console.log(type,'key')}
+                        {
+                            
+                            type == "overnight" && (
+                                <div>
+                                    {
+                                        rindingExtra?.map((item, index) => (
+                                            <div key={index} className='mt-4'>
+                                                <h1 className='text-lg mb-3 ml-0 font-semibold'>Riding</h1>
+                                                <div className='lg:flex justify-between items-center mb-4'>
+
+                                                    <div className='lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto'>
+                                                        <div>
+                                                            <img src={"https://hips.hearstapps.com/hmg-prod/images/elm100120ppequestrians0012-1600436753.jpg?crop=1.00xw:0.492xh;0,0.322xh&resize=1200:*"} alt="" className='lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]' />
+                                                        </div>
+                                                        <div className='lg:block flex gap-x-3 lt:mt-0 mt-2'>
+                                                            <p className='text-[#606970]'>Item</p>
+                                                            <p className='lg:mt-1 mt-0 font-bold'>{item?.title}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className='lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]'>
+                                                        <p className='text-[#606970]'>Price</p>
+                                                        <p className='font-bold'>{item.price}₦</p>
+                                                    </div>
+
+                                                    <div className='lg:mt-0 mt-4'>
+                                                        <button onClick={() => handleAddRemoveRiding(item)} className='w-[8rem] h-[2.4rem] rounded-lg text-white bg-black'>{isRidingAdded(item) ? 'Remove Riding' : 'Add Ridng'}</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
+
+
+
+                                    {
+                                        personalExtra?.map((item, index) => (
+                                            <div key={index} className='mt-4'>
+                                                <h1 className='text-lg mb-3 ml-0 font-semibold'>{item.title}</h1>
+                                                <div className='lg:flex justify-between items-center mb-4'>
+
+                                                    <div className='lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto'>
+                                                        <div>
+                                                            <img src={selectBg(item.title)} alt="" className='lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]' />
+                                                        </div>
+                                                        <div className='lg:block flex gap-x-3 lt:mt-0 mt-2'>
+                                                            <p className='text-[#606970]'>Item</p>
+                                                            <p className='lg:mt-1 mt-0 font-bold'>{item?.title}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className='lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]'>
+                                                        <p className='text-[#606970]'>Price</p>
+                                                        <p className='font-bold'>{item.price}₦</p>
+                                                    </div>
+
+                                                    <div className='lg:mt-0 mt-4'>
+                                                        <button onClick={() => handleAddRemovePersonal(item)} className='w-[fit] px-1 h-[2.4rem] rounded-lg text-white bg-black'>{isPersonalAdded(item) ? `Remove ${item.title}` : `Add ${item.title}`}</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
+
+                                </div>
+                            )
+                        }
+
+
+
 
                     </>
 

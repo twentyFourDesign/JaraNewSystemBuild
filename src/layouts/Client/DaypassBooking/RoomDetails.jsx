@@ -74,7 +74,7 @@ const RoomDetails = () => {
 
                             {/* EXTRAS  */}
                             <div>
-                                <Extras setFinalData={setFinalData} finalData={finalData} />
+                                <Extras setFinalData={setFinalData} finalData={finalData} type={"daypass"} />
                             </div>
 
                         </div>
