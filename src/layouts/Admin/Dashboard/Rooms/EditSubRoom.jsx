@@ -5,7 +5,7 @@ import { ImCross } from 'react-icons/im'
 import { baseUrl } from '../../../../constants/baseurl'
 
 const EditSubRoom = ({ showRoom, detail, setData }) => {
-    const [roomData, setroomData] = useState({ title: detail.title, capacity: detail.capacity })
+    const [roomData, setroomData] = useState({ title: detail.title, totalRoom: detail.totalRoom, adults: detail.adult, children: detail.children, toddler: detail.toddler, infant: detail.infant,roomId:detail.roomId})
     const submitData = (e) => {
         e.preventDefault()
 
@@ -28,8 +28,14 @@ const EditSubRoom = ({ showRoom, detail, setData }) => {
                 <ImCross onClick={() => showRoom(false)} className='cursor-pointer' />
             </div>
 
-            <input defaultValue={detail.title} onChange={(e) => { setroomData({ ...roomData, title: e.target.value }) }} type="text" placeholder='Enter Room Title' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
-            <input defaultValue={detail.capacity} onChange={(e) => { setroomData({ ...roomData, capacity: e.target.value }) }} type="number" placeholder='Enter Room Capacity' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
+            <input defaultValue={detail.title} onChange={(e) => { setroomData({ ...roomData, title: e.target.value }) }} type="text" placeholder='Room Title' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
+            <input defaultValue={detail.totalRoom} onChange={(e) => { setroomData({ ...roomData, capacity: e.target.value }) }} type="number" placeholder='Total Room' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
+
+
+            <input  defaultValue={detail.adults} onChange={(e) => { setroomData({ ...roomData, adults: e.target.value }) }} type="number" placeholder='Enter Total Adults' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
+            <input  defaultValue={detail.children} onChange={(e) => { setroomData({ ...roomData, children: e.target.value }) }} type="number" placeholder='Enter Total Children' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
+            <input  defaultValue={detail.toddler} onChange={(e) => { setroomData({ ...roomData, toddler: e.target.value }) }} type="number" placeholder='Enter Total Toodler' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
+            <input  defaultValue={detail.infant} onChange={(e) => { setroomData({ ...roomData, infant: e.target.value }) }} type="number" placeholder='Enter Total Infant' className='w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none' />
             <button onClick={submitData} className='mt-4 w-[100%] h-[2.5rem] font-bold rounded-md text-white font-cursive bg-blue-800'>Update Room</button>
 
         </div>

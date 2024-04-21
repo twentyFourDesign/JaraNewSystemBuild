@@ -6,10 +6,11 @@ import { useState } from 'react'
 import Extras from '../../../components/Extras'
 import axios from 'axios'
 import { baseUrl } from '../../../constants/baseurl'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { insert } from '../../../store/slices/overnight/roomDetails.slice'
+import toast from 'react-hot-toast'
 
 const RoomDetails = () => {
     const nav = useNavigate()
@@ -21,6 +22,7 @@ const RoomDetails = () => {
     const [quantity, setQuantity] = useState(1);
     const [finalData, setFinalData] = useState([])
     const [selectedDate, setSelectedDate] = useState({ visitDate: "", endDate: "" })
+    const guestCount = useSelector(state => state.overnightGuestCount)
 
     const incrementQuantity = (maxCapacity) => {
         setQuantity(currentQuantity => currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity);
@@ -42,17 +44,19 @@ const RoomDetails = () => {
         setQuantity(1);
     };
 
+
     useEffect(() => {
         axios.get(`${baseUrl}/main/rooms/sub/get/all`)
             .then((res) => {
                 const groupedRooms = res.data.reduce((acc, room) => {
+                    // console.log(room.roomId,'0',room,'room')
                     const { title, price } = room.roomId;
                     const existingGroup = acc.find(group => group.ref === title);
                     if (existingGroup) {
-                        existingGroup.details.push({ title: room.title, booked: room.booked, capacity: room.capacity, id: room._id });
+                        existingGroup.details.push({ title: room.title, booked: room.booked, capacity: room.capacity, id: room._id,adult:room.adults,children:room.children,infant:room.infant,toodler:room.toddler });
                     }
                     else {
-                        acc.push({ ref: title, price: price, details: [{ title: room.title, booked: room.booked, capacity: room.capacity, id: room._id }] });
+                        acc.push({ ref: title, price: price, details: [{ title: room.title, booked: room.booked, capacity: room.availableRoom, id: room._id,adult:room.adults,children:room.children,infant:room.infant,toodler:room.toddler }] });
                     }
                     return acc;
                 }, []);
@@ -61,9 +65,46 @@ const RoomDetails = () => {
     }, [])
 
     const handleNext = () => {
-        dispatch(insert({selectedRooms,...selectedDate,finalData}))
-        nav("/overnight/details")
+        let totalAdults = 0;
+        let totalChildren = 0;
+        let totalInfants = 0;
+        let totalToddlers = 0;
+
+        selectedRooms.forEach(room => {
+            console.log(room,'rooom')
+            totalAdults += room.adult*room.quantity;
+            totalChildren += room.children*room.quantity;
+            totalInfants += room.infant*room.quantity;
+            totalToddlers += room.toodler*room.quantity;
+        });
+        console.log("Calculated Totals:");
+        console.log("Adults:", totalAdults, "vs Booked:", guestCount.adults);
+        console.log("Children:", totalChildren, "vs Booked:", guestCount.children);
+        console.log("Infants:", totalInfants, "vs Booked:", guestCount.infants);
+        console.log("Toddlers:", totalToddlers, "vs Booked:", guestCount.toddler);
+
+        if(totalAdults >= guestCount.adults &&totalChildren >= guestCount.children >= totalInfants >= guestCount.infants &&totalToddlers >= guestCount.toddler){
+            console.log('u can fit ')
+            dispatch(insert({selectedRooms,...selectedDate,finalData}))
+            nav("/overnight/details")
+        }
+        else{
+            toast.error("Please Select More Rooms")
+            console.log('u cannot fit')
+        }
     }
+
+    // console.log(guestCount,'guestCount')
+
+
+    const getSelectedCount = ()=>{
+
+    }
+
+    useEffect(()=>{
+        getSelectedCount()
+    },[selectedRooms])
+
 
 
 
@@ -126,7 +167,7 @@ const RoomDetails = () => {
                                                                         <div className='absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50'>
                                                                             <h1>Add/minus your guests</h1>
                                                                             <div className='flex justify-between items-center mt-1'>
-                                                                                <div><p className='text-sm'>Capacity: {room.capacity}</p></div>
+                                                                                <div><p className='text-sm'>Available Room: {room.capacity}</p></div>
                                                                                 <div className='flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl'>
                                                                                     <AiOutlineMinus className='cursor-pointer' onClick={() => decrementQuantity()} />
                                                                                     <p>{quantity}</p>

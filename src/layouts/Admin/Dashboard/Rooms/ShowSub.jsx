@@ -59,8 +59,12 @@ const ShowSub = ({ showRoom, data }) => {
                             <tr className=''>
                                 <th className={trStyle}>Room Id</th>
                                 <th className={trStyle}>Room Name</th>
-                                <th className={trStyle}>Room Capacity</th>
-                                {/* <th className={trStyle}>Available Rooms</th> */}
+                                <th className={trStyle}>Total Rooms</th>
+                                <th className={trStyle}>Available Rooms</th>
+                                <th className={trStyle}>Adults</th>
+                                <th className={trStyle}>Children</th>
+                                <th className={trStyle}>Toodler</th>
+                                <th className={trStyle}>Infants</th>
                                 <th className={trStyle}>Actions</th>
                             </tr>
                         </thead>
@@ -71,7 +75,14 @@ const ShowSub = ({ showRoom, data }) => {
                                     <tr key={index}>
                                         <td className={tdStyle}>{item?.roomId}</td>
                                         <td className={tdStyle}>{item?.title}</td>
-                                        <td className={tdStyle}>{item?.capacity}</td>
+                                        <td className={tdStyle}>{item?.totalRoom}</td>
+                                        <td className={tdStyle}>{item?.availableRoom}</td>
+
+                                        <td className={tdStyle}>{item?.adults}</td>
+                                        <td className={tdStyle}>{item?.children}</td>
+                                        <td className={tdStyle}>{item?.toddler}</td>
+                                        <td className={tdStyle}>{item?.infant}</td>
+
                                         <td className={tdStyle}>
                                             <div className='flex gap-x-5 items-center'>
                                                 <AiOutlineEdit className='cursor-pointer' onClick={() => onEdit(item)} />
