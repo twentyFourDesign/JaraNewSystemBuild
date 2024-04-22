@@ -46,7 +46,7 @@ const RoomDetails = () => {
 
 
     useEffect(() => {
-        axios.get(`${baseUrl}/main/rooms/sub/get/all`)
+        axios.post(`${baseUrl}/main/rooms/sub/get/dynamic/all`,selectedDate)
             .then((res) => {
                 const groupedRooms = res.data.reduce((acc, room) => {
                     // console.log(room.roomId,'0',room,'room')
@@ -62,7 +62,7 @@ const RoomDetails = () => {
                 }, []);
                 setModifiedRoom(groupedRooms)
             })
-    }, [])
+    }, [selectedDate])
 
     const handleNext = () => {
         let totalAdults = 0;
