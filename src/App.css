@@ -1,19 +1,48 @@
-
-*{
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body{
+body {
   width: 100vw;
   height: 100vh;
   overflow-y: auto;
 }
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5) hue-rotate(240deg);
   cursor: pointer;
+}
+.wrapper-background {
+  background-image: url("../../jaraBooking/src/assets/landinglogo.png"); /* Adjust the path as needed */
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+.wrapper-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+.custom-shape-divider-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.font-inter {
+  font-family: "Inter", sans-serif;
 }

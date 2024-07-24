@@ -1,12 +1,11 @@
-import React from 'react'
-import BookingType from '../../layouts/Client/BookingType'
-
+import React from "react";
+import BookingType from "../../layouts/Client/BookingType";
 const BookingTypeScreen = () => {
   return (
     <>
-      <BookingType/>
+      <BookingType />
     </>
-  )
-}
+  );
+};
 
-export default BookingTypeScreen
+export default BookingTypeScreen;

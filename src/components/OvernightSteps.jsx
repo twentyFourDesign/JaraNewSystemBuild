@@ -1,41 +1,64 @@
-import React from 'react'
+import React from "react";
+import { FaCheck } from "react-icons/fa";
 
-const OvernightSteps = ({step}) => {
+const OvernightSteps = ({ step }) => {
+  const activeStyle = "bg-[#75A9BF] text-white";
+  const nonActiveStyle = "bg-[#C8D5E0] text-black";
+  const passStyle = "bg-[#000000] text-white";
+  const getStepClass = (currentStep) => {
+    if (step > currentStep) {
+      return passStyle;
+    } else {
+      return step === currentStep ? activeStyle : nonActiveStyle;
+    }
+  };
 
-    let activeStyle = "w-[100%] lg:w-[13rem] h-[4px] rounded-md bg-[#75A9BF] mt-2"
-    let nonActiveStyle="w-[100%] lg:w-[13rem] h-[4px] rounded-md bg-[#C8D5E0]  mt-2"
+  const getStepContent = (currentStep) => {
+    return step > currentStep ? <FaCheck /> : currentStep;
+  };
+
   return (
-
-    <div className='lg:flex items-center gap-x-4 font-robotoFont w-[100%]'>
-
-        <div className='flex items-center'>
-
-            <div className='w-[100%]'>
-                <h1  className='text-lg'>1: Guest(s) Number</h1>
-                <div className={step === 1? activeStyle :nonActiveStyle}></div>
-            </div>
-            <div className='hidden lg:block w-[6rem] h-[2px] bg-[#C8D5E0]'></div>
+    <div className="flex items-center justify-center lg:justify-start lg:ml-3 font-robotoFont w-[100%]">
+      <div className="flex flex-col justify-center  gap-2">
+        <div className="flex items-center">
+          <div
+            className={`w-[60px] h-[60px] flex items-center justify-center rounded-full ${getStepClass(
+              1
+            )}`}
+          >
+            {getStepContent(1)}
+          </div>
+          <div className="w-[11rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-
-        <div className='flex items-center mt-2 lg:ml-3 lg:mt-0'>
-
-            <div className='w-[100%]'>
-                <h1 className='text-lg'>2: Stay & Room Details</h1>
-                <div className={step === 2? activeStyle :nonActiveStyle}></div>
-            </div>
-            <div className='hidden lg:block w-[6rem] h-[2px] bg-[#C8D5E0]'></div>
+        <span>Guest(s) Details</span>
+      </div>
+      <div className="flex flex-col justify-center  gap-2 ">
+        <div className="flex items-center">
+          <div
+            className={`w-[60px] h-[60px] flex items-center justify-center rounded-full ${getStepClass(
+              2
+            )}`}
+          >
+            {getStepContent(2)}
+          </div>
+          <div className="w-[11rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-
-        <div className='flex items-center mt-2 lg:ml-3 lg:mt-0'>
-
-            <div className='w-[100%]'>
-                <h1 className='text-lg'>3: Your Info/ Guest(s) Info</h1>
-                <div className={step === 3? activeStyle :nonActiveStyle}></div>
-            </div>
+        <span>Stay & Room Details</span>
+      </div>
+      <div className="flex flex-col justify-center  gap-2">
+        <div className="flex items-center">
+          <div
+            className={`w-[60px] h-[60px] flex items-center justify-center rounded-full ${getStepClass(
+              3
+            )}`}
+          >
+            {getStepContent(3)}
+          </div>
         </div>
-
+        <span>Guest(s) info</span>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default OvernightSteps
+export default OvernightSteps;
