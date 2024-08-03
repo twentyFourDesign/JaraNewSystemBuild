@@ -1,0 +1,46 @@
+name: Deploy app
+
+on:
+  push:
+    branches:
+      - ci
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+        matrix:
+            node-version: [14.x, 16.x, 18.x, 20.x]
+
+            
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test application
+        run: npm test
+
+        env:
+            CI: true
+
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+
+      - name: DigitalOcean App Platform deployment
+        uses: digitalocean/app_action@v2.0.0
+        with:
+          app_name: frontend-jara-app
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
