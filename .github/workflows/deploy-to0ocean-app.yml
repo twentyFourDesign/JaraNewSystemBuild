@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: DigitalOcean App Platform deployment
-        uses: digitalocean/app_action@v2.0.0
+        uses: digitalocean/app_action/deploy@v2
         with:
           app_name: frontend-jara-app
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
