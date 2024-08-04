@@ -17,11 +17,11 @@ jobs:
       with:
         node-version: '18'
 
-    # - name: Install dependencies
-    #   run: npm install
+    - name: Install dependencies
+      run: npm install
 
-    # - name: Build the project
-    #   run: npm run build
+    - name: Build the project
+      run: npm run build
 
     - name: copy file via ssh key
       uses: appleboy/scp-action@v0.1.7
