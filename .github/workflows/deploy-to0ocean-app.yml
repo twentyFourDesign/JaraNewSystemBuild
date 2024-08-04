@@ -24,13 +24,12 @@ jobs:
       run: npm run build
 
     - name: Deploy to server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          mkdir -p /var/www/html
-          rm -rf /var/www/html/*
-          scp -i ${{ secrets.SSH_KEY }} -r ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        scp -i private_key.pem -r dist/* $SSH_USER@$SSH_HOST:/var/www/html/
+        rm private_key.pem
