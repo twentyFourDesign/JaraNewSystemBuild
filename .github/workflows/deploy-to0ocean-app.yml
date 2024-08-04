@@ -23,7 +23,7 @@ jobs:
     - name: Build the project
       run: npm run build
 
-    - name: SSH and deploy node app
+    - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -31,4 +31,6 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd ~/
+          mkdir -p /var/www/html
+          rm -rf /var/www/html/*
+          scp -i ${{ secrets.SSH_KEY }} -r ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/
