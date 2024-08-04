@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { insert } from "../../../store/slices/overnight/overnightGuest.slice";
 import CustomSelect from "../../../components/CustomSelect";
 import Edit from "../../../assets/editBlack.png";
-import arrow from "../../../assets/arrowRight.png";
+import arrow from "../../../assets/editBlack.png";
 const Guest = () => {
   const [guestNumber, setguestNumber] = useState({
     adults: 0,
