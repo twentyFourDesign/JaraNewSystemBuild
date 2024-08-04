@@ -23,13 +23,15 @@ jobs:
     - name: Build the project
       run: npm run build
 
-    - name: Deploy to server
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATEKEY }}
-        SSH_USER: ${{ secrets.SSH_USER }}
-        SSH_HOST: ${{ secrets.SSH_HOST }}
+    - name: Setup SSH Agent
       run: |
-        echo "$SSH_PRIVATEKEY" > private_key.pem
-        chmod 600 private_key.pem
-        scp -i private_key.pem -r dist/* $SSH_USER@$SSH_HOST:/var/www/html/
-        rm private_key.pem
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATEKEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        eval $(ssh-agent -s)
+        ssh-add ~/.ssh/id_rsa
+        ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+    
+    - name: Deploy to server
+      run: |
+        scp -i ~/.ssh/id_rsa -r dist/* $SSH_USER@$SSH_HOST:/var/www/html/
