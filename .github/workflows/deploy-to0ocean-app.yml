@@ -23,15 +23,12 @@ jobs:
     - name: Build the project
       run: npm run build
 
-    - name: Setup SSH Agent
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATEKEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        eval $(ssh-agent -s)
-        ssh-add ~/.ssh/id_rsa
-        ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
-    
-    - name: Deploy to server
-      run: |
-        scp -i ~/.ssh/id_rsa -r dist/* $SSH_USER@$SSH_HOST:/var/www/html/
+    - name: SSH and deploy node app
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATEKEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd ~/
