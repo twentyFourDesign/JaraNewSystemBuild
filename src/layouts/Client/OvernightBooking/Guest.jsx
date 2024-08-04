@@ -35,17 +35,22 @@ const Guest = () => {
     setNumChildren(newNumChildren);
 
     const newAges = new Array(newNumChildren).fill("");
+
     setChildrenAges(newAges);
   };
 
   const handleAgeChange = (index, value) => {
     const newAges = [...childrenAges];
     newAges[index] = value;
+
     setChildrenAges(newAges);
   };
   const onNext = () => {
-    setguestNumber({ ...guestNumber, ages: childrenAges });
-    dispatch(insert(guestNumber));
+    const updatedGuestNumber = {
+      ...guestNumber,
+      ages: childrenAges,
+    };
+    dispatch(insert(updatedGuestNumber));
     nav("/overnight/room-details");
   };
   const ageOptions = [

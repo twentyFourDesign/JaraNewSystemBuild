@@ -6,7 +6,7 @@ import Fb from "../../../assets/fb.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import arrow from "../../../assets/arrowLeft.png";
 import arrowR from "../../../assets/arrowRight.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
@@ -15,6 +15,7 @@ const Confirmation = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
 
+  const guestDetails = useSelector((state) => state.overnightGuestDetails);
   const handleAnotherBooking = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
@@ -37,7 +38,7 @@ const Confirmation = () => {
             </div>
 
             <h1 className="text-2xl font-bold text-center mt-2">
-              Thanks John!
+              Thanks {guestDetails.firstname ? guestDetails.firstname : ""}!
             </h1>
             <p className="text-[#606970] text-center mt-2">
               Your booking is done successfully. We’ve sent an email with all

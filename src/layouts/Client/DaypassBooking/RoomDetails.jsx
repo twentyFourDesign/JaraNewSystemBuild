@@ -5,11 +5,13 @@ import DaypassSteps from "../../../components/DaypassSteps";
 import DaypassReservation from "../../../components/DaypassReservation";
 import { insert } from "../../../store/slices/daypassAvailablity.slice";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const RoomDetails = () => {
+  const bookingInfo = useSelector((state) => state.daypassBookingInfo);
+  // console.log(bookingInfo);
   const dispatch = useDispatch();
   const nav = useNavigate();
   const [finalData, setFinalData] = useState([]);
@@ -18,6 +20,9 @@ const RoomDetails = () => {
     dayType: dayType,
     startDate: "",
     extras: finalData,
+    groups: bookingInfo,
+    adultsCount: bookingInfo.adultsAlcoholic + bookingInfo.adultsNonAlcoholic,
+    childrenCount: bookingInfo.Nanny + bookingInfo.childTotal,
   });
   const checkIfDateIsNotPast = (dateString) => {
     const today = new Date();
@@ -37,6 +42,7 @@ const RoomDetails = () => {
       toast.error("Select a date not in the past");
       return;
     }
+
     setavailablityInfo({ ...availablityInfo, extras: finalData });
     dispatch(insert({ ...availablityInfo, extras: [...finalData] }));
     // nav("/daypass/summary")
@@ -121,6 +127,7 @@ const RoomDetails = () => {
                         startDate: e.target.value,
                       })
                     }
+                    min={new Date().toISOString().split("T")[0]}
                   />
                 </div>
               </div>

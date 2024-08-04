@@ -14,6 +14,7 @@ import { FiRefreshCcw } from "react-icons/fi";
 import toast from "react-hot-toast";
 import arrow from "../../../assets/arrowLeft.png";
 import arrowR from "../../../assets/arrowRight.png";
+import { baseUrl } from "../../../constants/baseurl";
 
 const Details = () => {
   const dispatch = useDispatch();
@@ -43,20 +44,42 @@ const Details = () => {
     dateOfBirth: "",
     mailLitst: false,
     keepInfo: false,
-    file: null,
+    file: "",
   });
+  const calculateAge = (dateOfBirth) => {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
   const isValid =
     userDetails.firstname &&
     userDetails.lastname &&
     userDetails.email &&
     userDetails.phone &&
     userDetails.gender &&
-    userDetails.dateOfBirth;
-  const onSubmit = () => {
+    userDetails.dateOfBirth &&
+    userDetails.file;
+
+  const acceptedFileTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "application/pdf",
+  ];
+  const onSubmit = async () => {
     if (!isValid) {
       toast.error("Please fill all the fields");
       return;
     }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userDetails.email)) {
       toast.error("Please enter a valid email address");
@@ -68,10 +91,22 @@ const Details = () => {
       toast.error("Please enter a valid phone number");
       return;
     }
+    if (calculateAge(userDetails.dateOfBirth) < 18) {
+      toast.error("You must be above 18 years old");
+      return;
+    }
+    if (
+      userDetails.file &&
+      !acceptedFileTypes.includes(userDetails.file.type)
+    ) {
+      toast.error("Please upload a valid file (jpg, png, gif, pdf)");
+      return;
+    }
     if (!isNamesValid) {
       toast.error("Please let us know the names of the guests");
       return;
     }
+
     dispatch(insert(userDetails));
     nav("/overnight/summary");
   };
@@ -174,6 +209,13 @@ const Details = () => {
                       });
                     }}
                     type="date"
+                    max={
+                      new Date(
+                        new Date().setFullYear(new Date().getFullYear() - 18)
+                      )
+                        .toISOString()
+                        .split("T")[0]
+                    }
                     placeholder=""
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                   />
@@ -206,6 +248,7 @@ const Details = () => {
                     <input
                       type="file"
                       id="file"
+                      name="file"
                       onChange={handleFileChange}
                       style={{ display: "none" }}
                     />
@@ -290,7 +333,9 @@ const Details = () => {
                   onClick={onSubmit}
                   // disabled={!isValid}
                   className={`w-full p-2 gap-x-4 ${
-                    isValid && isNamesValid
+                    isValid &&
+                    isNamesValid &&
+                    calculateAge(userDetails.dateOfBirth) >= 18
                       ? "cursor-pointer bg-black"
                       : "bg-[#D2D2D2] cursor-not-allowed"
                   } text-white rounded-xl flex items-center justify-center font-robotoFont`}
