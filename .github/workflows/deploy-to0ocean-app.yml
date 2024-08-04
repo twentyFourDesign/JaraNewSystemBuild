@@ -1,4 +1,4 @@
-name: Deploy app
+name: Deploy React App
 
 on:
   push:
@@ -6,41 +6,28 @@ on:
       - ci
 
 jobs:
-  test:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-        matrix:
-            node-version: [14.x, 16.x, 18.x, 20.x]
-
-            
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install
 
-      - name: Test application
-        run: npm test
+    - name: Build the project
+      run: npm run build
 
-        env:
-            CI: true
-
-  deploy:
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v2
-
-      - name: DigitalOcean App Platform deployment
-        uses: digitalocean/app_action/deploy@v2
-        with:
-          app_name: frontend-jara-app
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    - name: Deploy to server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATEKEY }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" | ssh-add -
+        scp -r dist/* $SSH_USER@$SSH_HOST:/var/www/html/
