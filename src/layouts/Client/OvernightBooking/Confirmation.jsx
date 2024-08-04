@@ -5,7 +5,7 @@ import Insta from "../../../assets/Instagram.svg";
 import Fb from "../../../assets/fb.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import arrow from "../../../assets/arrowLeft.png";
-import arrowR from "../../../assets/arrowRight.png";
+import arrowR from "../../../assets/arrowLeft.png";
 import { useDispatch } from "react-redux";
 import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
