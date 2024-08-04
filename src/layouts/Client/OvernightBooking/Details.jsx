@@ -13,7 +13,7 @@ import { Photo } from "@mui/icons-material";
 import { FiRefreshCcw } from "react-icons/fi";
 import toast from "react-hot-toast";
 import arrow from "../../../assets/arrowLeft.png";
-import arrowR from "../../../assets/arrowRight.png";
+import arrowR from "../../../assets/arrowLeft.png";
 
 const Details = () => {
   const dispatch = useDispatch();
