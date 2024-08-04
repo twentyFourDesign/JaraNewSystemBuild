@@ -29,5 +29,5 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_HOST: ${{ secrets.SSH_HOST }}
       run: |
-        echo "$SSH_PRIVATE_KEY" | ssh-add -
+        echo "$SSH_PRIVATEKEY" | ssh-add -
         scp -r dist/* $SSH_USER@$SSH_HOST:/var/www/html/
