@@ -192,7 +192,7 @@ const BookingType = () => {
         </div>
         <div>
           <p className="text-right max-w-[300px] md:max-w-full">
-            owned and operated by Little Company Nigeria Limited
+            owned and operated by Little Company Nigeria Limited edit
           </p>
         </div>
       </div>
