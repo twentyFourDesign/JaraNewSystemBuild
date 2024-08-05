@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { insert } from "../../../store/slices/overnight/overnightGuest.slice";
 import CustomSelect from "../../../components/CustomSelect";
 import Edit from "../../../assets/editBlack.png";
-import arrow from "../../../assets/editBlack.png";
+import arrowR from "../../../assets/arrowRight.png";
 const Guest = () => {
   const [guestNumber, setguestNumber] = useState({
     adults: 0,
@@ -250,7 +250,7 @@ const Guest = () => {
                   } text-white rounded-md flex items-center justify-center font-robotoFont`}
                 >
                   <p className={"font-[500] text-xl"}>Continue</p>
-                  <img src={arrow} alt="icon" className="w-[1rem]" />
+                  <img src={arrowR} alt="icon" className="w-[1rem]" />
                 </button>
               </div>
             </div>

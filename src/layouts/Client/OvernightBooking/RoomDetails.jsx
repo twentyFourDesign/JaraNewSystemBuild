@@ -19,7 +19,7 @@ import EventIcon from "@mui/icons-material/Event";
 import dayjs from "dayjs";
 import { FiRefreshCcw } from "react-icons/fi";
 import arrow from "../../../assets/arrowLeft.png";
-import arrowR from "../../../assets/arrowLeft.png";
+import arrowR from "../../../assets/arrowRight.png";
 const RoomDetails = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
