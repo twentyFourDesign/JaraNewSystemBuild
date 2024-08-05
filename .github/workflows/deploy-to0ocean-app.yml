@@ -23,6 +23,8 @@ jobs:
 
     - name: Build the project
       run: npm run build
+      env:
+        VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
 
     - name: copy file via ssh key
       uses: appleboy/scp-action@v0.1.7
