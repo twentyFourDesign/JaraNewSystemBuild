@@ -18,7 +18,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 .wrapper-background {
-  background-image: url("../../jaraBooking/src/assets/landinglogo.png"); /* Adjust the path as needed */
+  background-image: url("../src/assets/landinglogo.png");
   background-size: cover;
   background-position: center;
   width: 100vw;

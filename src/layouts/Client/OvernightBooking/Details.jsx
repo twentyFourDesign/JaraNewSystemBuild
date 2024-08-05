@@ -14,7 +14,7 @@ import { FiRefreshCcw } from "react-icons/fi";
 import toast from "react-hot-toast";
 import arrow from "../../../assets/arrowLeft.png";
 
-import arrowR from "../../../assets/arrowRight.png";
+import arrowR from "../../../assets/arrowRIght.png";
 
 import { baseUrl } from "../../../constants/baseurl";
 
