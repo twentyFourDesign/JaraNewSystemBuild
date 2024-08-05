@@ -1,0 +1,6 @@
+name: frontend-jara-app
+services:
+- name: frontend-jara-app
+  github:
+    branch: ci
+    repo: twentyFourDesign/JaraNewSystemBuild

@@ -1,0 +1,41 @@
+name: Deploy React App
+
+on:
+  push:
+    branches:
+      - ci
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the project
+      run: npm run build
+
+    - name: copy file via ssh key
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "dist/*"
+        target: /var/www/html
+        overwrite: true
+
+
+    # - name: Extract files on server
+    #   run: |
+    #       ssh -i ${{ secrets.SSH_KEY }} prodjarafront@${{ secrets.SSH_HOST }} 'cd /var/www/html && sudo tar -xzf /var/www/html/kzbymZQsCS.tar.gz'
