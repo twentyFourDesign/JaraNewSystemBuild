@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { insert } from "../../../store/slices/overnight/overnightGuest.slice";
 import CustomSelect from "../../../components/CustomSelect";
 import Edit from "../../../assets/editBlack.png";
-import arrow from "../../../assets/editBlack.png";
+import arrowR from "../../../assets/arrowRIght.png";
 const Guest = () => {
   const [guestNumber, setguestNumber] = useState({
     adults: 0,
@@ -250,14 +250,14 @@ const Guest = () => {
                   } text-white rounded-md flex items-center justify-center font-robotoFont`}
                 >
                   <p className={"font-[500] text-xl"}>Continue</p>
-                  <img src={arrow} alt="icon" className="w-[1rem]" />
+                  <img src={arrowR} alt="icon" className="w-[1rem]" />
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
+        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
           <div>
             <p>© 2023 JARA BEACH RESORT</p>
           </div>

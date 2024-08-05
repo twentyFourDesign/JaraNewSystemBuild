@@ -6,7 +6,7 @@ import Fb from "../../../assets/fb.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import arrow from "../../../assets/arrowLeft.png";
 
-import arrowR from "../../../assets/arrowLeft.png";
+import arrowR from "../../../assets/arrowRIght.png";
 import { useDispatch } from "react-redux";
 
 import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
