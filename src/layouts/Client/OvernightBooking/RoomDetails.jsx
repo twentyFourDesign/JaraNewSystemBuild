@@ -244,11 +244,11 @@ const RoomDetails = () => {
                           variant: "outlined",
                           InputProps: {
                             style: {
-                              backgroundColor: selectedDate.visitDate
-                                ? "#75A9BF"
-                                : "inherit",
+                              // backgroundColor: selectedDate.visitDate
+                              //   ? "inherit"
+                              //   : "inherit",
                               color: selectedDate.visitDate
-                                ? "white"
+                                ? "black"
                                 : "inherit",
                             },
                           },
@@ -281,10 +281,10 @@ const RoomDetails = () => {
                           variant: "outlined",
                           InputProps: {
                             style: {
-                              backgroundColor: selectedDate.endDate
-                                ? "#75A9BF"
-                                : "inherit",
-                              color: selectedDate.endDate ? "white" : "inherit",
+                              // backgroundColor: selectedDate.endDate
+                              //   ? "#75A9BF"
+                              //   : "inherit",
+                              color: selectedDate.endDate ? "black" : "inherit",
                             },
                           },
                           label: "Check-out Date",
