@@ -186,9 +186,15 @@ const BookingType = () => {
       )}
 
       {/* FOOTER CONTACT  */}
-      <div className="absolute bottom-0 left-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 px-5  text-sm z-10">
-        <p>© 2023 JARA BEACH RESORT</p>
-        <p>owned and operated by Little Company Nigeria Limited</p>
+      <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
+        <div>
+          <p>© 2023 JARA BEACH RESORT</p>
+        </div>
+        <div>
+          <p className="text-right max-w-[300px] md:max-w-full">
+            owned and operated by Little Company Nigeria Limited
+          </p>
+        </div>
       </div>
     </div>
   );

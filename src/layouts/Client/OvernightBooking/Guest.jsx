@@ -35,17 +35,22 @@ const Guest = () => {
     setNumChildren(newNumChildren);
 
     const newAges = new Array(newNumChildren).fill("");
+
     setChildrenAges(newAges);
   };
 
   const handleAgeChange = (index, value) => {
     const newAges = [...childrenAges];
     newAges[index] = value;
+
     setChildrenAges(newAges);
   };
   const onNext = () => {
-    setguestNumber({ ...guestNumber, ages: childrenAges });
-    dispatch(insert(guestNumber));
+    const updatedGuestNumber = {
+      ...guestNumber,
+      ages: childrenAges,
+    };
+    dispatch(insert(updatedGuestNumber));
     nav("/overnight/room-details");
   };
   const ageOptions = [
@@ -57,8 +62,9 @@ const Guest = () => {
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[#eff6ff] pt-4  font-robotoFont flex-wrap">
         <div className="flex-1 gap-x-3">
+          {/* className="flex-1 gap-x-3  */}
           {/* SETPS  */}
-          <div className="w-[100%] flex justify-center items-center">
+          <div className="w-[100%] overflow-x-auto flex justify-center items-center">
             <div className="w-[100%] lg:w-[90%]">
               <OvernightSteps step={1} />
             </div>
@@ -251,9 +257,15 @@ const Guest = () => {
           </div>
         </div>
 
-        <div className="flex justify-between bg-[#000000] w-screen text-white items-center px-7 mt-3 pb-3">
-          <p>© 2023 JARA BEACH RESORT</p>
-          <p>owned and operated by Little Company Nigeria Limited</p>
+        <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
+          <div>
+            <p>© 2023 JARA BEACH RESORT</p>
+          </div>
+          <div>
+            <p className="text-right max-w-[300px] md:max-w-full">
+              owned and operated by Little Company Nigeria Limited
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -79,16 +79,14 @@ const RoomDetails = () => {
       requestData = {
         visitDate: visitDateObj.toLocaleDateString("en-CA"),
         endDate: endDateObj.toLocaleDateString("en-CA"),
-        // visitDate: selectedDate.visitDate.toISOString().slice(0, 10),
-        // endDate: selectedDate.endDate.toISOString().slice(0, 10),
       };
     }
     // selectedDate
     axios
       .post(`${baseUrl}/main/rooms/sub/get/dynamic/all`, requestData)
       .then((res) => {
+        console.log(res.data);
         const groupedRooms = res.data.reduce((acc, room) => {
-          // console.log(room.roomId,'0',room,'room')
           const { title, price } = room.roomId;
           const existingGroup = acc.find((group) => group.ref === title);
           if (existingGroup) {
@@ -170,6 +168,16 @@ const RoomDetails = () => {
         visitDate: visitDateObj2.toLocaleDateString("en-CA"),
         endDate: endDateObj2.toLocaleDateString("en-CA"),
       };
+
+      selectedRooms.forEach((room) => {
+        room.guestCount = {
+          adults: guestCount.adults,
+          children: guestCount.children,
+          infants: guestCount.infants,
+          toodler: guestCount.toddler,
+          ages: guestCount.ages,
+        };
+      });
       dispatch(
         insert({ selectedRooms, ...serializableSelectedDate, finalData })
       );
@@ -214,7 +222,7 @@ const RoomDetails = () => {
                 <div className="flex gap-9 mt-3">
                   <div className="flex flex-col w-full md:flex-row gap-9 mt-3">
                     <DatePicker
-                      label="CheckDate"
+                      label="Check-in Date"
                       value={selectedDate?.visitDate || null}
                       onChange={(newValue) => {
                         if (
@@ -236,17 +244,18 @@ const RoomDetails = () => {
                           variant: "outlined",
                           InputProps: {
                             style: {
-                              backgroundColor: selectedDate.visitDate
-                                ? "#75A9BF"
-                                : "inherit",
+                              // backgroundColor: selectedDate.visitDate
+                              //   ? "inherit"
+                              //   : "inherit",
                               color: selectedDate.visitDate
-                                ? "white"
+                                ? "black"
                                 : "inherit",
                             },
                           },
                           label: "Check-in Date",
                         },
                       }}
+                      //minDate={dayjs()} // Add this line to set the minimum date to today
                     />
 
                     <DatePicker
@@ -272,15 +281,16 @@ const RoomDetails = () => {
                           variant: "outlined",
                           InputProps: {
                             style: {
-                              backgroundColor: selectedDate.endDate
-                                ? "#75A9BF"
-                                : "inherit",
-                              color: selectedDate.endDate ? "white" : "inherit",
+                              // backgroundColor: selectedDate.endDate
+                              //   ? "#75A9BF"
+                              //   : "inherit",
+                              color: selectedDate.endDate ? "black" : "inherit",
                             },
                           },
                           label: "Check-out Date",
                         },
                       }}
+                      //minDate={dayjs()} // Add this line to set the minimum date to today
                     />
                   </div>
                 </div>

@@ -7,8 +7,19 @@ import OvernightSummary from "../../../components/OvernightSummary";
 import { FiRefreshCcw } from "react-icons/fi";
 import arrow from "../../../assets/arrowLeft.png";
 import { useNavigate } from "react-router-dom";
+import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
+import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
+import { useDispatch } from "react-redux";
 const Summary = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
+  const handleRestart = () => {
+    dispatch(resetGuestInfo());
+    dispatch(resetGuestCount());
+    dispatch(resetRoomDetails());
+    nav("/");
+  };
   return (
     <div className="flex flex-col justify-center items-center ">
       <div className="flex w-screen justify-center items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap gap-x-4">
@@ -34,7 +45,7 @@ const Summary = () => {
         </div>
         <div
           className="flex w-full lg:w-[30%]  p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-          onClick={() => nav("/")}
+          onClick={handleRestart}
         >
           <FiRefreshCcw />
           <p className="font-[500] text-xl">Restart Booking</p>

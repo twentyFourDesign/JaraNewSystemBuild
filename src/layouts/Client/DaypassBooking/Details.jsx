@@ -24,7 +24,21 @@ const Details = () => {
     gender: "",
     para: "",
     dateOfBirth: "",
+    file: "",
   });
+  const calculateAge = (dateOfBirth) => {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
 
   const isValid =
     userDetails.firstname &&
@@ -32,7 +46,15 @@ const Details = () => {
     userDetails.email &&
     userDetails.phone &&
     userDetails.gender &&
-    userDetails.dateOfBirth;
+    userDetails.dateOfBirth &&
+    userDetails.file;
+
+  const acceptedFileTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "application/pdf",
+  ];
   const emailPhoneValid =
     emailRegex.test(userDetails.email) && phoneRegex.test(userDetails.phone);
   const onSubmit = () => {
@@ -50,8 +72,22 @@ const Details = () => {
       toast.error("Please enter a valid phone number");
       return;
     }
+    if (calculateAge(userDetails.dateOfBirth) < 18) {
+      toast.error("You must be above 18 years old");
+      return;
+    }
+    if (
+      userDetails.file &&
+      !acceptedFileTypes.includes(userDetails.file.type)
+    ) {
+      toast.error("Please upload a valid file (jpg, png, gif, pdf)");
+      return;
+    }
     dispatch(insert(userDetails));
     nav("/daypass/summary");
+  };
+  const handleFileChange = (e) => {
+    setuserDetails({ ...userDetails, file: e.target.files[0] });
   };
 
   return (
@@ -157,6 +193,13 @@ const Details = () => {
                       });
                     }}
                     type="date"
+                    max={
+                      new Date(
+                        new Date().setFullYear(new Date().getFullYear() - 18)
+                      )
+                        .toISOString()
+                        .split("T")[0]
+                    }
                     placeholder=""
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                   />
@@ -173,7 +216,12 @@ const Details = () => {
                 </p>
 
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
-                  <input type="file" className="" />
+                  <input
+                    type="file"
+                    name="file"
+                    onChange={handleFileChange}
+                    className=""
+                  />
                   <input
                     onChange={(e) => {
                       setuserDetails({ ...userDetails, para: e.target.value });
@@ -225,7 +273,9 @@ const Details = () => {
             <button
               onClick={onSubmit}
               className={
-                isValid && emailPhoneValid
+                isValid &&
+                emailPhoneValid &&
+                calculateAge(userDetails.dateOfBirth) >= 18
                   ? "w-[10rem] h-[3rem] bg-black text-white rounded-md flex items-center justify-center font-robotoFont"
                   : "text-white rounded-md flex items-center justify-center font-robotoFont bg-[#D2D2D2] w-[10rem] h-[3rem] cursor-not-allowed"
               }

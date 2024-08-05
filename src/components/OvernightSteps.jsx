@@ -30,7 +30,7 @@ const OvernightSteps = ({ step }) => {
           </div>
           <div className="w-[11rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-        <span>Guest(s) Details</span>
+        <span className="md: w-3/4">Guest(s) Details</span>
       </div>
       <div className="flex flex-col justify-center  gap-2 ">
         <div className="flex items-center">
@@ -43,7 +43,7 @@ const OvernightSteps = ({ step }) => {
           </div>
           <div className="w-[11rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-        <span>Stay & Room Details</span>
+        <span className="md: w-3/4">Stay & Room Details</span>
       </div>
       <div className="flex flex-col justify-center  gap-2">
         <div className="flex items-center">
@@ -55,7 +55,7 @@ const OvernightSteps = ({ step }) => {
             {getStepContent(3)}
           </div>
         </div>
-        <span>Guest(s) info</span>
+        <span className="md: w-3/4">Guest(s) info</span>
       </div>
     </div>
   );
