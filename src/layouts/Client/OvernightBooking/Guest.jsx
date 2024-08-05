@@ -257,7 +257,7 @@ const Guest = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
+        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
           <div>
             <p>© 2023 JARA BEACH RESORT</p>
           </div>
