@@ -3,8 +3,7 @@ name: Deploy React App
 on:
   push:
     branches:
-      - ci
-      - main
+      - main-prod-server/booking-nginx
 
 jobs:
   build-and-deploy:
