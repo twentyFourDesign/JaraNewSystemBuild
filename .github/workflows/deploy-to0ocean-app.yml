@@ -30,12 +30,13 @@ jobs:
     - name: copy file via ssh key
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
+        host: ${{ secrets.MASTER_SERVER_HOST }}
+        username: ${{ secrets.MAIN_SERVER_USER }}
         port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.SSH_KEY }}
+        key: ${{ secrets.MAIN_SERVER_SSH_KEY_PRIV }}
         source: "dist/*"
         target: /var/www/html
+
         overwrite: true
 
 
