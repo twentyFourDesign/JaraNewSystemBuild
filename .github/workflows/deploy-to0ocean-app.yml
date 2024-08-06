@@ -36,6 +36,7 @@ jobs:
         key: ${{ secrets.MAIN_SERVER_SSH_KEY_PRIV }}
         source: "dist/*"
         target: /var/www/html
+        password: ${{ secrets.MAIN_SERVER_PASS }}
         overwrite: true
 
 
