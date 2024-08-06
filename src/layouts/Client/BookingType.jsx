@@ -169,7 +169,7 @@ const BookingType = () => {
       </div>
       {/* shape divider */}
       {windowWidth > 768 && (
-        <div class="custom-shape-divider-bottom ">
+        <div className="custom-shape-divider-bottom ">
           <svg
             data-name="Layer 1"
             xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +178,7 @@ const BookingType = () => {
           >
             <path
               d="M0,0 Q600,150 1200,0 V150 H0 Z"
-              class="shape-fill"
+              className="shape-fill"
               fill-opacity="0.8"
             ></path>
           </svg>
