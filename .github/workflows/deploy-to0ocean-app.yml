@@ -33,10 +33,11 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.MAIN_SERVER_USER }}
         port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.MAIN_SERVER_SSH_KEY_PRIV }}
+        password: ${{ secrets.MAIN_SERVER_PASS }}
+
         source: "dist/*"
         target: /var/www/html
-        
+
         overwrite: true
 
 
