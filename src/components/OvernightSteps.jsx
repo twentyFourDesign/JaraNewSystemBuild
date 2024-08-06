@@ -55,7 +55,7 @@ const OvernightSteps = ({ step }) => {
             {getStepContent(3)}
           </div>
         </div>
-        <span className="md: w-3/4">Guest(s) info</span>
+        <span className="md: w-full">Guest(s) info</span>
       </div>
     </div>
   );

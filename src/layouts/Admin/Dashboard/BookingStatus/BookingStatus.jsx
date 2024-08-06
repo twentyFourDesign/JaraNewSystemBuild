@@ -14,7 +14,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const [selectedBank, setSelectedBank] = useState("");
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
-
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const fetchPayment = async () => {
     try {
       const result = await axios.get(
@@ -25,8 +25,8 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       console.log("failed to fetch", err);
     }
   };
-  console.log(booking);
-  console.log(paymentInfo);
+  // console.log(booking);
+  // console.log(paymentInfo);
 
   const confirmPayment = async () => {
     try {
@@ -38,6 +38,16 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       fetchPayment();
     } catch (error) {
       toast.error("Failed to confirm payment");
+    }
+  };
+  const cancelBooking = async () => {
+    try {
+      await axios.post(`${baseUrl}/payment/cancel/${id}`);
+      setIsCancelModalOpen(false);
+      toast.success("Booking cancelled successfully");
+      fetchPayment();
+    } catch (error) {
+      toast.error("Failed to cancel booking");
     }
   };
   useEffect(() => {
@@ -83,7 +93,15 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
             </div>
             <div className="flex justify-between">
               <p className="text-gray-600">Booking Status</p>
-              <span className="font-semibold">
+              <span
+                className={
+                  paymentInfo?.status == "Success"
+                    ? "text-green-500 font-semibold"
+                    : paymentInfo?.status == "Pending"
+                    ? "text-yellow-500 font-semibold"
+                    : "text-red-500 font-semibold"
+                }
+              >
                 {paymentInfo?.status == "Success"
                   ? "Booked Paid"
                   : paymentInfo?.status == "Pending"
@@ -101,7 +119,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
             )}
           </div>
         </div>
-        {/* Modal */}
+        {/*Confirm Modal */}
         <Modal
           isOpen={isModalOpen}
           onRequestClose={() => setIsModalOpen(false)}
@@ -355,20 +373,60 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="ignore-transfer-charge"
-              className="mr-2"
-            />
-            <label htmlFor="ignore-transfer-charge" className="text-gray-600">
-              Ignore booking transfer charge if required
-            </label>
+          {/* Cancel Modal */}
+          <Modal
+            isOpen={isCancelModalOpen}
+            onRequestClose={() => setIsCancelModalOpen(false)}
+            contentLabel="Cancel Booking Modal"
+            style={{
+              overlay: {
+                backgroundColor: "rgba(0, 0, 0, 0.75)",
+              },
+              content: {
+                top: "50%",
+                left: "50%",
+                right: "auto",
+                bottom: "auto",
+                transform: "translate(-50%, -50%)",
+                minWidth: "300px",
+                maxWidth: "400px",
+                margin: "0 auto",
+                display: "flex",
+                flexDirection: "column",
+              },
+            }}
+          >
+            <div className="text-center">
+              <h2 className="text-lg font-semibold mb-4">Cancel Booking</h2>
+              <p className="text-gray-600 text-sm">
+                Are you sure you want to cancel this booking? This action cannot
+                be reversed.
+              </p>
+            </div>
+            <button
+              onClick={cancelBooking}
+              className="bg-red-500 text-white py-2 px-4 rounded-lg mt-4"
+            >
+              Yes, I'm sure
+            </button>
+            <button
+              onClick={() => setIsCancelModalOpen(false)}
+              className="bg-gray-300 text-white py-2 px-4 rounded-lg mt-4"
+            >
+              {" "}
+              No, Keep it
+            </button>
+          </Modal>
+          <div className="flex items-center justify-end">
+            {paymentInfo?.status === "Pending" && (
+              <button
+                onClick={() => setIsCancelModalOpen(true)}
+                className="bg-red-500 text-white py-2 px-4 rounded-lg mt-4"
+              >
+                Cancel Booking
+              </button>
+            )}
           </div>
-
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">
-            Edit Booking
-          </button>
         </div>
       </div>
     </div>
