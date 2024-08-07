@@ -66,7 +66,7 @@ const OvernightSummary = () => {
 
     await createGuest();
     if (success === 1) {
-      nav(`/overnight/confirmation`);
+      nav("/overnight/confirmation");
     }
   };
   const createPayment = async (bookingId, status, method) => {
