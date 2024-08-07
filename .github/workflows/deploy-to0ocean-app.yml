@@ -3,7 +3,7 @@ name: Deploy React App
 on:
   push:
     branches:
-      - main
+      - main-prod-server/booking-nginx
 
 jobs:
   build-and-deploy:
@@ -23,7 +23,7 @@ jobs:
     - name: Build the project
       run: npm run build
       env:
-        VITE_BASEURL: ${{ secrets.VITE_BASE_URL }}
+        VITE_BASEURL: /new/api/v1
         VITE_PAYSTACK_PUBLIC_KEY: ${{ secrets.VITE_PAYSTACK_PUBLIC_KEY }}
 
     - name: copy file via ssh key
