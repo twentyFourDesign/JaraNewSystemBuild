@@ -255,7 +255,7 @@ const RoomDetails = () => {
                           label: "Check-in Date",
                         },
                       }}
-                      //minDate={dayjs()} // Add this line to set the minimum date to today
+                      minDate={dayjs()} // Add this line to set the minimum date to today
                     />
 
                     <DatePicker
@@ -290,7 +290,7 @@ const RoomDetails = () => {
                           label: "Check-out Date",
                         },
                       }}
-                      //minDate={dayjs()} // Add this line to set the minimum date to today
+                      minDate={dayjs()} // Add this line to set the minimum date to today
                     />
                   </div>
                 </div>
