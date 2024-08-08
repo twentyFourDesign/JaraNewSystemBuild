@@ -33,7 +33,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       const result = await axios.post(`${baseUrl}/payment/confirm/${id}`, {
         bank: selectedBank,
       });
-      setIsModalOpen(false); // Close the modal after successful payment confirmation
+      setIsModalOpen(false);
       toast.success("Payment confirmed");
       fetchPayment();
     } catch (error) {
@@ -42,7 +42,8 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   };
   const cancelBooking = async () => {
     try {
-      await axios.post(`${baseUrl}/payment/cancel/${id}`);
+      const result = await axios.post(`${baseUrl}/payment/cancel/${id}`);
+      console.log(result);
       setIsCancelModalOpen(false);
       toast.success("Booking cancelled successfully");
       fetchPayment();
@@ -61,7 +62,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   }
 
   if (!booking) return <div>Loading...</div>;
-
+  console.log(booking?.bookingDetails?.groups?.Nanny);
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       {/* HEADER  */}
@@ -276,7 +277,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                         <span key={index}>{age} </span>
                       )
                     )}
-                    {booking?.bookingDetails?.groups?.adultsAlcoholic != 0 ? (
+                    {booking?.bookingDetails?.groups?.adultsAlcoholic ? (
                       <span>
                         {booking?.bookingDetails?.groups?.adultsAlcoholic}{" "}
                         Adults Alcoholic
@@ -284,8 +285,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                     ) : (
                       ""
                     )}
-                    {booking?.bookingDetails?.groups?.adultsNonAlcoholic !=
-                    0 ? (
+                    {booking?.bookingDetails?.groups?.adultsNonAlcoholic ? (
                       <span>
                         {booking?.bookingDetails?.groups?.adultsNonAlcoholic}{" "}
                         Adults Non Alcoholic
@@ -293,14 +293,14 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                     ) : (
                       ""
                     )}
-                    {booking?.bookingDetails?.groups?.Nanny != 0 ? (
+                    {booking?.bookingDetails?.groups?.Nanny ? (
                       <span>
                         {booking?.bookingDetails?.groups?.Nanny} Nanny
                       </span>
                     ) : (
                       ""
                     )}
-                    {booking?.bookingDetails?.groups?.childTotal != 0 ? (
+                    {booking?.bookingDetails?.groups?.childTotal ? (
                       <span>
                         {booking?.bookingDetails?.groups?.childTotal} Child
                       </span>
