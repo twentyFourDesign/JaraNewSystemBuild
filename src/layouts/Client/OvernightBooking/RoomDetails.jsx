@@ -67,8 +67,8 @@ const RoomDetails = () => {
     setQuantity(1);
   };
 
-  const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate; // Check if both dates are selected
-  const hasSelectedRoom = selectedRooms.length > 0; // Check if at least one room is selected
+  const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
+  const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
 
   useEffect(() => {
