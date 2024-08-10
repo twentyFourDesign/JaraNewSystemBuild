@@ -5,6 +5,8 @@ import { updateGuest } from "../store/slices/overnight/guestInfo.slice";
 
 const Modal = ({ onClose, onSave }) => {
   const guests = useSelector((state) => state.overnightGuestDetails);
+
+  const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const dispatch = useDispatch();
 
   const handleInputChange = (id, field, value) => {
@@ -52,10 +54,13 @@ const Modal = ({ onClose, onSave }) => {
                   }
                 >
                   <option value="">Select Room</option>
-                  <option value="Loft Sunrise 1">Loft Sunrise 1</option>
+                  {roomDetails?.selectedRooms?.map((room) => (
+                    <option value={room.title}>{room.title}</option>
+                  ))}
+                  {/* <option value="Loft Sunrise 1">Loft Sunrise 1</option>
                   <option value="Loft Sunrise 2">Loft Sunrise 2</option>
                   <option value="Loft Sunset 1">Loft Sunset 1</option>
-                  <option value="Loft Sunset 2">Loft Sunset 2</option>
+                  <option value="Loft Sunset 2">Loft Sunset 2</option> */}
                 </select>
               </div>
             </div>

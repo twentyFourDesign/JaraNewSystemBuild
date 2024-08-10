@@ -85,7 +85,6 @@ const RoomDetails = () => {
     axios
       .post(`${baseUrl}/main/rooms/sub/get/dynamic/all`, requestData)
       .then((res) => {
-        console.log(res.data);
         const groupedRooms = res.data.reduce((acc, room) => {
           const { title, price } = room.roomId;
           const existingGroup = acc.find((group) => group.ref === title);
@@ -121,7 +120,7 @@ const RoomDetails = () => {
           return acc;
         }, []);
         setModifiedRoom(groupedRooms);
-        console.log("grouped rooms", groupedRooms);
+        // console.log("grouped rooms", groupedRooms);
       });
   }, [selectedDate]);
 
@@ -132,18 +131,18 @@ const RoomDetails = () => {
     let totalToddlers = 0;
 
     selectedRooms.forEach((room) => {
-      console.log(room, "rooom");
+      // console.log(room, "rooom");
       totalAdults += room.adult * room.quantity;
       totalChildren += room.children * room.quantity;
       totalInfants += room.infant * room.quantity;
       totalToddlers += room.toodler * room.quantity;
     });
-    console.log("Calculated Totals:");
-    console.log("Adults:", totalAdults, "vs Booked:", guestCount.adults);
-    console.log("Children:", totalChildren, "vs Booked:", guestCount.children);
-    console.log("Infants:", totalInfants, "vs Booked:", guestCount.infants);
-    console.log("Toddlers:", totalToddlers, "vs Booked:", guestCount.toddler);
-    console.log("GUest Adults", guestCount.adults);
+    // console.log("Calculated Totals:");
+    // console.log("Adults:", totalAdults, "vs Booked:", guestCount.adults);
+    // console.log("Children:", totalChildren, "vs Booked:", guestCount.children);
+    // console.log("Infants:", totalInfants, "vs Booked:", guestCount.infants);
+    // console.log("Toddlers:", totalToddlers, "vs Booked:", guestCount.toddler);
+    // console.log("GUest Adults", guestCount.adults);
 
     if (!guestCount.adults) {
       toast.error("Please Return back and Select Number of Adults");
@@ -308,7 +307,7 @@ const RoomDetails = () => {
               </div>
 
               {/* MAIN ROOM TYPES  */}
-              <div className="mt-4 flex ">
+              <div className="mt-4 flex flex-col ">
                 {modifiedRoom?.length > 0 &&
                   modifiedRoom.map((item, index) => (
                     <div key={index} className="lg:flex  gap-x-10 items-center">
@@ -372,7 +371,7 @@ const RoomDetails = () => {
               </div>
 
               <p className="text-[#606970] text-sm mt-3">
-                *Available rooms are showing based your selected check-in and
+                *Available rooms are showing based on your selected check-in and
                 check-out dates above.
               </p>
 
