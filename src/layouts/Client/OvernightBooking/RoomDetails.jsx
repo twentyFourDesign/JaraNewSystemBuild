@@ -20,6 +20,9 @@ import dayjs from "dayjs";
 import { FiRefreshCcw } from "react-icons/fi";
 import arrow from "../../../assets/arrowLeft.png";
 import arrowR from "../../../assets/arrowRIght.png";
+import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
+import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 const RoomDetails = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -34,6 +37,12 @@ const RoomDetails = () => {
     endDate: null,
   });
 
+  const handleRestart = () => {
+    dispatch(resetGuestInfo());
+    dispatch(resetGuestCount());
+    dispatch(resetRoomDetails());
+    nav("/");
+  };
   const guestCount = useSelector((state) => state.overnightGuestCount);
 
   const incrementQuantity = (maxCapacity) => {
@@ -81,7 +90,7 @@ const RoomDetails = () => {
         endDate: endDateObj.toLocaleDateString("en-CA"),
       };
     }
-    // selectedDate
+    if (!requestData) return;
     axios
       .post(`${baseUrl}/main/rooms/sub/get/dynamic/all`, requestData)
       .then((res) => {
@@ -212,8 +221,8 @@ const RoomDetails = () => {
                   Stay & Room Details
                 </h1>
                 <p className="text-[#606970] text-sm mt-1">
-                  Select the check-in and check-out dates you would like to stay
-                  (nights you will be sleeping).
+                  Select the check-in and check-out dates you would like to
+                  stay.
                 </p>
               </div>
 
@@ -394,21 +403,6 @@ const RoomDetails = () => {
           </div>
           <div className="min-w-[18rem] ">
             <div className="flex flex-col  items-center gap-y-2 pt-4">
-              <div
-                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-                onClick={() => nav("/")}
-              >
-                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
-                <FiRefreshCcw />
-                <p className="font-[500] text-xl">Restart Booking</p>
-              </div>
-              <div
-                onClick={() => nav("/overnight/guest")}
-                className=" flex w-full p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-              >
-                <img src={arrow} alt="icon" className="w-[1rem]" />
-                <p className="font-[500] text-xl">Back</p>
-              </div>
               <div className="w-full">
                 <button
                   onClick={handleNext}
@@ -423,6 +417,21 @@ const RoomDetails = () => {
                   <img src={arrowR} alt="icon" className="w-[1rem]" />
                 </button>
               </div>
+              <div
+                onClick={() => nav("/overnight/guest")}
+                className=" flex w-full p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
+              >
+                <img src={arrow} alt="icon" className="w-[1rem]" />
+                <p className="font-[500] text-xl">Back</p>
+              </div>
+              <div
+                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
+                onClick={handleRestart}
+              >
+                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
+                <FiRefreshCcw />
+                <p className="font-[500] text-xl">Restart Booking</p>
+              </div>
             </div>
           </div>
         </div>
@@ -430,7 +439,7 @@ const RoomDetails = () => {
 
       {/* FOOTER  */}
 
-      <div className="w-screen bg-black text-white">
+      <div className="w-screen bg-[#9DD4D3] text-black">
         <div className="flex justify-between items-center px-7 mt-3 pb-3">
           <p>© 2023 JARA BEACH RESORT</p>
           <p>owned and operated by Little Company Nigeria Limited</p>

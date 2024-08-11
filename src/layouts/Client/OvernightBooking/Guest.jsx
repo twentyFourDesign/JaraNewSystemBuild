@@ -54,9 +54,9 @@ const Guest = () => {
     nav("/overnight/room-details");
   };
   const ageOptions = [
-    { value: "12months-infant", label: "12 months - Infant" },
-    { value: "3years-toddler", label: "3 years - Toddler" },
-    { value: "4-17years-child", label: "4-17 years - Child or Nanny" },
+    { value: "0-12 months - infant", label: "0-12 months - Infant" },
+    { value: "1-3 years - toddler", label: "1-3 years - Toddler" },
+    { value: "4-17 years - child", label: "4-17 years - Child or Nanny" },
   ];
   return (
     <div>
@@ -232,13 +232,6 @@ const Guest = () => {
           </div>
           <div className="min-w-[18rem] ">
             <div className="flex flex-col  items-center gap-y-2 pt-4">
-              <div
-                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-md gap-x-2 justify-center items-center text-black cursor-pointer"
-                onClick={() => nav("/")}
-              >
-                <img src={Edit} alt="icon" className="w-[1rem]" />
-                <p className="font-[500] text-xl">Manage Booking</p>
-              </div>
               <div className="w-full">
                 <button
                   onClick={onNext}
@@ -253,11 +246,18 @@ const Guest = () => {
                   <img src={arrowR} alt="icon" className="w-[1rem]" />
                 </button>
               </div>
+              <div
+                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-md gap-x-2 justify-center items-center text-black cursor-pointer"
+                onClick={() => nav("/")}
+              >
+                <img src={Edit} alt="icon" className="w-[1rem]" />
+                <p className="font-[500] text-xl">Manage Booking</p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
+        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-cursive py-3 md:px-5  px-2 text-sm z-10">
           <div>
             <p>© 2023 JARA BEACH RESORT</p>
           </div>

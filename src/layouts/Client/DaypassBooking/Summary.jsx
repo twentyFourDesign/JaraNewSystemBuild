@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const Summary = () => {
   const nav = useNavigate();
+
   return (
     <div className="flex flex-col">
       <div className="flex w-screen justify-center items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap gap-x-4">

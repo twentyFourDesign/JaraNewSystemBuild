@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import JaraLogo from "../../assets/jarabeachlogo.png";
+import JaraLogo from "../../assets/jaralogo.png";
 import moon from "../../assets/akar-icons_moon.png";
 import light from "../../assets/Vector (1).png";
 import existing from "../../assets/existing.png";
@@ -49,9 +49,9 @@ const BookingType = () => {
     setModalIsOpen(false);
   };
   return (
-    <div className="wrapper-background w-screen h-screen relative bg-[rgba(0,0,0,0.8)] font-robotoFont overflow-hidden ">
+    <div className="wrapper-background w-screen h-screen relative font-robotoFont overflow-hidden ">
       {/* UPPER LOGO  */}
-      <div className="flex w-screen justify-center items-center h-[13vh] bg-[rgba(0,0,0,0.8)] ">
+      <div className="flex w-screen justify-center items-center h-[13vh] bg-[#9DD4D3] ">
         <img
           src={JaraLogo}
           loading="true"
@@ -64,11 +64,11 @@ const BookingType = () => {
 
       <div className="w-full h-full flex flex-col z-20 items-center">
         <div className="flex items-center flex-col md:flex-row md:gap-0 gap-2 w-full justify-center pt-36">
-          <span className="px-3 py-4 md:py-0 text-white  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins border-b-2  border-b-[#bcb9b9] md:border-b-0  md:border-r-2">
+          <span className="px-3 py-4 md:py-0 text-[#f8e3e3]  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins border-b-2  border-b-[#bcb9b9] md:border-b-0  md:border-r-2">
             All-Inclusive
           </span>
           {/* <hr className="md:w-2 md:h-9 z-10" /> */}
-          <span className=" pl-5 py-4 md:py-0 pr-3 text-white  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins  md:border-l-2">
+          <span className=" pl-5 py-4 md:py-0 pr-3 text-[#f8e3e3]  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins  md:border-l-2">
             Beach Experience
           </span>
         </div>
@@ -180,13 +180,14 @@ const BookingType = () => {
               d="M0,0 Q600,150 1200,0 V150 H0 Z"
               className="shape-fill"
               fill-opacity="0.8"
+              fill="#9DD4D3"
             ></path>
           </svg>
         </div>
       )}
 
       {/* FOOTER CONTACT  */}
-      <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
+      <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-cursive py-3 md:px-5  px-2 text-sm z-10">
         <div>
           <p>© 2023 JARA BEACH RESORT</p>
         </div>

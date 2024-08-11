@@ -16,12 +16,20 @@ import arrow from "../../../assets/arrowLeft.png";
 
 import arrowR from "../../../assets/arrowRIght.png";
 
-import { baseUrl } from "../../../constants/baseurl";
+import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
+import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 
 const Details = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
+  const handleRestart = () => {
+    dispatch(resetGuestInfo());
+    dispatch(resetGuestCount());
+    dispatch(resetRoomDetails());
+    nav("/");
+  };
   const guests = useSelector((state) => state.overnightGuestDetails);
   const [isNamesValid, setIsNamesValid] = useState(false);
   useEffect(() => {
@@ -315,21 +323,6 @@ const Details = () => {
           </div>
           <div className="min-w-[18rem] ">
             <div className="flex flex-col  items-center gap-y-2 pt-4">
-              <div
-                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-                onClick={() => nav("/")}
-              >
-                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
-                <FiRefreshCcw />
-                <p className="font-[500] text-xl">Restart Booking</p>
-              </div>
-              <div
-                onClick={() => nav("/overnight/room-details")}
-                className=" flex w-full p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-              >
-                <img src={arrow} alt="icon" className="w-[1rem]" />
-                <p className="font-[500] text-xl">Back</p>
-              </div>
               <div className="w-full">
                 <button
                   onClick={onSubmit}
@@ -346,6 +339,21 @@ const Details = () => {
                   <img src={arrowR} alt="icon" className="w-[1rem]" />
                 </button>
               </div>
+              <div
+                onClick={() => nav("/overnight/room-details")}
+                className=" flex w-full p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
+              >
+                <img src={arrow} alt="icon" className="w-[1rem]" />
+                <p className="font-[500] text-xl">Back</p>
+              </div>
+              <div
+                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
+                onClick={handleRestart}
+              >
+                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
+                <FiRefreshCcw />
+                <p className="font-[500] text-xl">Restart Booking</p>
+              </div>
             </div>
           </div>
         </div>
@@ -353,7 +361,7 @@ const Details = () => {
 
       {/* FOOTER  */}
 
-      <div className="w-screen bg-black text-white">
+      <div className="w-screen bg-[#9DD4D3] text-black">
         <div className="flex justify-between items-center px-7 mt-3 pb-3">
           <p>© 2023 JARA BEACH RESORT</p>
           <p>owned and operated by Little Company Nigeria Limited</p>

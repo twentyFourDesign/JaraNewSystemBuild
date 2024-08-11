@@ -51,7 +51,7 @@ const Summary = () => {
           <p className="font-[500] text-xl">Restart Booking</p>
         </div>
       </div>
-      <div className="w-screen bg-black text-white">
+      <div className="w-screen bg-[#9DD4D3] text-black">
         <div className="flex justify-between items-center px-7 mt-3 pb-3">
           <p>© 2023 JARA BEACH RESORT</p>
           <p>owned and operated by Little Company Nigeria Limited</p>

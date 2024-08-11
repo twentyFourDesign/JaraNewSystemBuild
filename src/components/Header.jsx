@@ -1,18 +1,19 @@
 import React from "react";
 import HeaderImage from "../assets/overnightDesign.png";
-import logo from "../assets/jaralogo.png";
-
-import JaraLogo from "../assets/jarabeachlogo.png";
+import JaraLogo from "../assets/jaralogo.png";
+import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div>
-      <div className="flex w-screen justify-center items-center h-[13vh] bg-[rgba(0,0,0,0.8)] ">
-        <img
-          src={JaraLogo}
-          loading="true"
-          alt="jaralogo"
-          className="h-[100%] p-2 z-10"
-        />
+      <div className="flex w-screen justify-center items-center h-[13vh] bg-[#9DD4D3] ">
+        <Link to="/">
+          <img
+            src={JaraLogo}
+            loading="true"
+            alt="jaralogo"
+            className="h-[100%] w-[8rem] p-2 z-10 hover:cursor-pointer"
+          />
+        </Link>
       </div>
       <img src={HeaderImage} alt="overnight" className="h-[fit] w-full" />
     </div>

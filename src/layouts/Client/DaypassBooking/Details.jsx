@@ -286,7 +286,7 @@ const Details = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center px-7 mt-3 pb-3">
+        <div className="flex justify-between items-center bg-[#9DD4D3] text-black px-7 mt-3 pb-3">
           <p>© 2023 JARA BEACH RESORT</p>
           <p>owned and operated by Little Company Nigeria Limited</p>
         </div>

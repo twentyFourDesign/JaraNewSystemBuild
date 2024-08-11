@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 const OvernightReservation = () => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
-
   const data = useSelector((state) => state.overnightRoomInfo);
 
   const calPrice = () => {
@@ -38,6 +37,16 @@ const OvernightReservation = () => {
             </>
           ) : (
             "No guests are selected yet."
+          )}
+        </div>
+        <div className="flex justify-between items-center">
+          {guestCount.children ? (
+            <>
+              <p className="text-[#606970]">Children</p>
+              <p>{guestCount.children}</p>
+            </>
+          ) : (
+            ""
           )}
         </div>
       </div>

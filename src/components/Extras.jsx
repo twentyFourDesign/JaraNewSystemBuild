@@ -55,13 +55,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
     setdrinkExtra(drinks.data);
     setrindingExtra(riding.data);
   };
-  console.log(cakeExtra);
-  console.log(lookoutExtra);
-  console.log(massageExtra);
-  console.log(drinkExtra);
-  console.log(rindingExtra);
+  // console.log(cakeExtra);
+  // console.log(lookoutExtra);
+  // console.log(massageExtra);
+  // console.log(drinkExtra);
+  // console.log(rindingExtra);
 
-  console.log(personalExtra);
+  // console.log(personalExtra);
 
   useEffect(() => {
     getExtras();
