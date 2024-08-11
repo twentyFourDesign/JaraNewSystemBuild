@@ -12,7 +12,7 @@ const OvernightSummary = () => {
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   const [disabled, setDisabled] = useState(false);
   const nav = useNavigate();
-  console.log(roomDetails);
+
   const calPrice = () => {
     let totalRoomPrice = 0;
     if (roomDetails?.selectedRooms?.length > 0) {
@@ -24,9 +24,17 @@ const OvernightSummary = () => {
         }
         totalRoomPrice += roomPrice;
       }
-    } else {
     }
-    // if(roomDetails?.finalData){
+    if (roomDetails?.finalData?.length > 0) {
+      for (const extra of roomDetails?.finalData) {
+        const extraPrice = parseInt(extra.price, 10);
+        if (isNaN(extraPrice)) {
+          console.error("Error: Invalid price format for extra", extra);
+          continue;
+        }
+        totalRoomPrice += extraPrice;
+      }
+    }
     return totalRoomPrice;
   };
   const formData = new FormData();

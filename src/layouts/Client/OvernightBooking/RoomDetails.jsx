@@ -8,14 +8,11 @@ import axios from "axios";
 import { baseUrl } from "../../../constants/baseurl";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { insert } from "../../../store/slices/overnight/roomDetails.slice";
 import toast from "react-hot-toast";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TextField, InputAdornment } from "@mui/material";
-import EventIcon from "@mui/icons-material/Event";
 import dayjs from "dayjs";
 import { FiRefreshCcw } from "react-icons/fi";
 import arrow from "../../../assets/arrowLeft.png";
@@ -398,7 +395,7 @@ const RoomDetails = () => {
 
         {/* RESERVATION  */}
         <div className="min-w-[18rem] pr-4">
-          <div className="min-w-[18rem] h-[30rem] mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+          <div className="w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">

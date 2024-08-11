@@ -39,7 +39,7 @@ const Details = () => {
   const validateGuests = () => {
     // Step 2: Validation Function
     if (!guests) return;
-    const isNamesValid = guests.every(
+    const isNamesValid = guests?.every(
       (guest) => guest.firstName && guest.lastName && guest.room
     ); // Example validation
     setIsNamesValid(isNamesValid);
@@ -318,7 +318,7 @@ const Details = () => {
         {/* RESERVATION  */}
 
         <div className="min-w-[18rem] pr-4">
-          <div className="min-w-[18rem] h-[30rem] mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+          <div className="w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">

@@ -5,7 +5,7 @@ const OvernightReservation = () => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const data = useSelector((state) => state.overnightRoomInfo);
-
+  console.log(roomDetails);
   const calPrice = () => {
     let totalRoomPrice = 0;
     if (roomDetails?.selectedRooms?.length > 0) {
@@ -17,13 +17,22 @@ const OvernightReservation = () => {
         }
         totalRoomPrice += roomPrice;
       }
-    } else {
+    }
+    if (roomDetails?.finalData?.length > 0) {
+      for (const extra of roomDetails?.finalData) {
+        const extraPrice = parseInt(extra.price, 10);
+        if (isNaN(extraPrice)) {
+          console.error("Error: Invalid price format for extra", extra);
+          continue;
+        }
+        totalRoomPrice += extraPrice;
+      }
     }
     return totalRoomPrice;
   };
 
   return (
-    <div className="font-robotoFont p-4 mb-10">
+    <div className="font-robotoFont  p-4 mb-10">
       <h1 className="text-xl font-bold">Your Reservation</h1>
       <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
 
@@ -77,6 +86,27 @@ const OvernightReservation = () => {
         <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
       </div>
 
+      <div className="mt-3">
+        <h1 className="text-lg font-bold">Extras</h1>
+        {roomDetails?.finalData?.length > 0 ? (
+          <div className="flex gap-2 flex-wrap items-center">
+            {roomDetails?.finalData?.map((item, index) => {
+              if (index == roomDetails?.finalData?.length - 1) {
+                return (
+                  <p key={item.id}>{item.title ? item.title : item.type}</p>
+                );
+              } else {
+                return (
+                  <p key={item.id}>{item.title ? item.title : item.type}, </p>
+                );
+              }
+            })}
+          </div>
+        ) : (
+          <p className="mt-1">No extras are selected yet.</p>
+        )}
+        <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
+      </div>
       <div className="mt-3">
         <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Sub-total</h1>
