@@ -62,7 +62,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   }
 
   if (!booking) return <div>Loading...</div>;
-  console.log(booking?.bookingDetails?.groups?.Nanny);
+  // console.log(booking?.bookingDetails?.groups?.Nanny);
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       {/* HEADER  */}
@@ -327,7 +327,9 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
               {booking?.bookingDetails?.finalData?.map((extra, index) => (
                 <div className="flex justify-between min-w-[350px]" key={index}>
                   <p className="text-gray-600">Extra {index + 1}</p>
-                  <span className="font-semibold text-start">{extra.key}</span>
+                  <span className="font-semibold text-start">
+                    {extra.title ? extra.title : extra.type}
+                  </span>
                 </div>
               )) ||
                 booking?.bookingDetails?.extras?.map((extra, index) => (
