@@ -32,7 +32,7 @@ const Account = ({ setShowNav, showNav, data, setData }) => {
       <div className="p-5">
         <div className="mb-4 block md:flex justify-between items-start">
           <Input
-            placeholder={"Search staff list ...."}
+            placeholder={"Search Admin list ...."}
             className={
               "sm:mb-0 mb-2 w-[15rem] h-[3rem] pl-4 pr-4 rounded-md outline-none text-[#828893]"
             }
