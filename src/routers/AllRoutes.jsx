@@ -27,6 +27,7 @@ import DayPassRoomDetailsScreen from "../screens/Client/Daypass/RoomDetailsScree
 import PaymentScreen from "../screens/Admin/Dashboard/PaymentScreen";
 import SettingScreen from "../screens/Admin/Dashboard/SettingScreen";
 import RoomsScreen from "../screens/Admin/Dashboard/RoomsScreen";
+import AccountsScreen from "../screens/Admin/Dashboard/AccountsScreen";
 import DaypassConfirmationScreen from "../screens/Client/Daypass/ConfirmationScreen";
 import ProtectedRoute from "../components/ProtectedRoute";
 import ResetPassword from "../components/ResetPassword";
@@ -146,6 +147,14 @@ const AllRoutes = () => {
           element={
             <ProtectedRoute>
               <BookingStatusScreen />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="accounts"
+          element={
+            <ProtectedRoute>
+              <AccountsScreen />
             </ProtectedRoute>
           }
         />

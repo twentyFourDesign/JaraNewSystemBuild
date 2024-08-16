@@ -4,27 +4,34 @@ import { AiFillDelete } from "react-icons/ai";
 import { baseUrl } from "../../../../constants/baseurl";
 import toast from "react-hot-toast";
 const Table = ({ tr, data, setData }) => {
+  const token = localStorage.getItem("token");
   const trStyle =
     "pb-2 pt-2 pl-4 pr-4 text-lg text-start font-normal whitespace-nowrap border-2 border-[#E9EBED] tracking-wider";
   const tdStyle =
     "p-4 text-sm text-gray-600 whitespace-nowrap text-center border-2 border-[#E9EBED] tracking-wider";
 
-  const deleteStaff = (id) => {
-    axios.delete(`${baseUrl}/daypass/discount/delete/${id}`).then((res) => {
-      if (res.status) {
-        axios.get(`${baseUrl}/daypass/discount/get`).then((res) => {
-          setData(res?.data);
-        });
-        toast.success("Discount Deleted");
-      }
-    });
+  const deleteAdmin = (id) => {
+    axios
+      .delete(`${baseUrl}/admin/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        if (res.status) {
+          axios
+            .get(`${baseUrl}/admin/role/admin`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((res) => {
+              setData(res?.data);
+            });
+          toast.success("Admin Deleted");
+        }
+      });
   };
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = date.toLocaleDateString("en-US", options);
-    return formattedDate;
-  }
   return (
     <div className="w-full overflow-x-scroll md:overflow-x-auto bg-white h-[25rem] ">
       {data?.length > 0 ? (
@@ -43,15 +50,13 @@ const Table = ({ tr, data, setData }) => {
             {data?.map((item, index) => (
               <tr key={index}>
                 <td className={tdStyle}>{item?._id}</td>
-                <td className={tdStyle}>{item?.code}</td>
-                <td className={tdStyle}>{item?.percentage}</td>
-                <td className={tdStyle}>{formatDate(item?.createdAt)}</td>
-                <td className={tdStyle}>{item?.expires}</td>
-                <td className={tdStyle}>{item?.days}</td>
+                <td className={tdStyle}>{item?.username}</td>
+                <td className={tdStyle}>{item?.email}</td>
+                <td className={tdStyle}>{item?.role}</td>
                 <td className={tdStyle}>
                   <AiFillDelete
                     className="text-red-500 cursor-pointer"
-                    onClick={() => deleteStaff(item._id)}
+                    onClick={() => deleteAdmin(item._id)}
                   />
                 </td>
               </tr>
@@ -60,7 +65,7 @@ const Table = ({ tr, data, setData }) => {
         </table>
       ) : (
         <h1 className="flex justify-center items-center h-[100%] text-lg">
-          NO STAFF FOUND
+          NO Admin FOUND
         </h1>
       )}
     </div>

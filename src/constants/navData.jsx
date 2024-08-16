@@ -15,6 +15,7 @@ import {
 // import { TbDiscountCheckFilled } from "react-icons/tb";
 import { IoIosSettings } from "react-icons/io";
 import { TbRosetteDiscountCheckFilled } from "react-icons/tb";
+import { BiSolidUserAccount } from "react-icons/bi";
 
 export const navLinks = [
   {
@@ -81,5 +82,10 @@ export const navLinks = [
     title: "Rooms",
     link: "/admin/jara/rooms",
     icons: <MdOutlineBedroomParent />,
+  },
+  {
+    title: "Accounts",
+    link: "/admin/jara/accounts",
+    icons: <BiSolidUserAccount />,
   },
 ];
