@@ -19,7 +19,7 @@ import { BiSolidUserAccount } from "react-icons/bi";
 
 export const navLinks = [
   {
-    title: "Booking",
+    title: "Bookings",
     link: "/admin/jara/booking",
     icons: <FaBed />,
   },
@@ -69,12 +69,12 @@ export const navLinks = [
     icons: <RiCoupon3Fill />,
   },
   {
-    title: "Payment",
+    title: "Payments",
     link: "/admin/jara/payment",
     icons: <MdOutlinePayments />,
   },
   {
-    title: "Setting",
+    title: "Settings",
     link: "/admin/jara/setting",
     icons: <IoIosSettings />,
   },
