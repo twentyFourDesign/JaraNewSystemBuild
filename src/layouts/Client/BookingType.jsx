@@ -179,7 +179,7 @@ const BookingType = () => {
             <path
               d="M0,0 Q600,150 1200,0 V150 H0 Z"
               className="shape-fill"
-              fill-opacity="0.8"
+              fillOpacity="0.8"
               fill="#9DD4D3"
             ></path>
           </svg>

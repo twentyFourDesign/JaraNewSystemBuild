@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../../../constants/baseurl";
@@ -6,7 +6,9 @@ import toast from "react-hot-toast";
 import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Modal from "react-modal";
+import { AuthContext } from "../../../../Context/AuthContext";
 const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
+  const { adminUser } = useContext(AuthContext);
   const location = useLocation();
   const initialPaymentId = location.state.paymentId;
   const [paymentId, setPaymentId] = useState(initialPaymentId);
@@ -110,14 +112,15 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                   : "Cancelled"}
               </span>
             </div>
-            {paymentInfo?.status == "Pending" && (
-              <button
-                className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Confirm Payment
-              </button>
-            )}
+            {paymentInfo?.status == "Pending" &&
+              adminUser?.role === "superAdmin" && (
+                <button
+                  className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  Confirm Payment
+                </button>
+              )}
           </div>
         </div>
         {/*Confirm Modal */}
@@ -420,14 +423,15 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
             </button>
           </Modal>
           <div className="flex items-center justify-end">
-            {paymentInfo?.status === "Pending" && (
-              <button
-                onClick={() => setIsCancelModalOpen(true)}
-                className="bg-red-500 text-white py-2 px-4 rounded-lg mt-4"
-              >
-                Cancel Booking
-              </button>
-            )}
+            {paymentInfo?.status === "Pending" &&
+              adminUser?.role === "superAdmin" && (
+                <button
+                  onClick={() => setIsCancelModalOpen(true)}
+                  className="bg-red-500 text-white py-2 px-4 rounded-lg mt-4"
+                >
+                  Cancel Booking
+                </button>
+              )}
           </div>
         </div>
       </div>
