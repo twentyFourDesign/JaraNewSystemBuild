@@ -23,7 +23,10 @@ import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomD
 const Details = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-
+  const guestCount = useSelector(
+    (state) => state.overnightGuestCount.adults || 0
+  );
+  console.log(guestCount);
   const handleRestart = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
@@ -31,19 +34,9 @@ const Details = () => {
     nav("/");
   };
   const guests = useSelector((state) => state.overnightGuestDetails);
+  console.log(guests);
   const [isNamesValid, setIsNamesValid] = useState(false);
-  useEffect(() => {
-    // Step 3: Use Effect for Validation
-    validateGuests();
-  }, [guests]);
-  const validateGuests = () => {
-    // Step 2: Validation Function
-    if (!guests) return;
-    const isNamesValid = guests?.every(
-      (guest) => guest.firstName && guest.lastName && guest.room
-    ); // Example validation
-    setIsNamesValid(isNamesValid);
-  };
+
   const [userDetails, setuserDetails] = useState({
     firstname: "",
     lastname: "",
@@ -55,7 +48,34 @@ const Details = () => {
     mailLitst: false,
     keepInfo: false,
     file: "",
+    guests: Array.from({ length: guestCount }, (_, i) => ({
+      id: i + 1,
+      firstName: "",
+      lastName: "",
+      room: "",
+    })),
   });
+  const updateGuest = (id, field, value) => {
+    setuserDetails((prevState) => ({
+      ...prevState,
+      guests: prevState.guests.map((guest) =>
+        guest.id === id ? { ...guest, [field]: value } : guest
+      ),
+    }));
+  };
+
+  const validateGuests = () => {
+    if (!userDetails.guests) return;
+    const isNamesValid = userDetails.guests?.every(
+      (guest) => guest.firstName && guest.lastName && guest.room
+    ); // Example validation
+    setIsNamesValid(isNamesValid);
+  };
+  useEffect(() => {
+    // Step 3: Use Effect for Validation
+    validateGuests();
+  }, [userDetails.guests]);
+
   const calculateAge = (dateOfBirth) => {
     const today = new Date();
     const birthDate = new Date(dateOfBirth);
@@ -308,7 +328,11 @@ const Details = () => {
                   </div>
                 </div>
                 <div>
-                  <GuestForm />
+                  <GuestForm
+                    guests={userDetails.guests}
+                    guestCount={guestCount}
+                    updateGuest={updateGuest}
+                  />
                 </div>
               </div>
             </div>

@@ -51,6 +51,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
     ]);
     setCakeExtra(cakes.data);
     setlookoutExtra(lookout.data);
+    console.log(lookout.data);
     setmassageExtra(massage.data);
     setdrinkExtra(drinks.data);
     setrindingExtra(riding.data);

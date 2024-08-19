@@ -11,6 +11,7 @@ const DaypassSummary = () => {
   const availablity = useSelector((state) => state.daypassAvailablity);
   const guestInfo = useSelector((state) => state.daypassUserInfo);
   const [disabled, setDisabled] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   console.log("guest info", guestInfo);
   let taxamount =
     (12.5 / 100) * bookingInfo.adultsAlcoholic * 45000 +
@@ -162,7 +163,14 @@ const DaypassSummary = () => {
     onClose: onClose,
   };
   const handleHold = () => {
+    if (!isChecked) {
+      toast.error("You must accept the terms and conditions first");
+      return;
+    }
     confirmBooking("Pending", "Bank Transfer");
+  };
+  const handleCheckbox = (event) => {
+    setIsChecked(event.target.checked);
   };
   return (
     <div className="font-robotoFont py-4 px-2 h-[100%]  relative">
@@ -170,7 +178,13 @@ const DaypassSummary = () => {
       <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
 
       <div className="flex items-start gap-x-5 mt-10">
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          name=""
+          id=""
+          checked={isChecked}
+          onChange={handleCheckbox}
+        />
         <p className="text-xs">
           Agree with the Booking Terms and Conditions and Proceed to payment.
         </p>
@@ -191,15 +205,32 @@ const DaypassSummary = () => {
       <div className="absolute bottom-2 w-[96%] ">
         <button
           disabled={disabled}
-          className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
+          className={
+            !isChecked
+              ? "mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive opacity-50 cursor-not-allowed"
+              : "mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
+          }
           onClick={handleHold}
         >
           Hold | Bank Trasnfer
         </button>
-        <PaystackButton
+        {!isChecked ? (
+          <div
+            onClick={handlePaystackClick}
+            className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive opacity-50 cursor-not-allowed flex items-center justify-center"
+          >
+            Pay with Paystack
+          </div>
+        ) : (
+          <PaystackButton
+            {...componentProps}
+            className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
+          />
+        )}
+        {/* <PaystackButton
           {...componentProps}
           className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
-        />
+        /> */}
       </div>
     </div>
   );

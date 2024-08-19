@@ -47,15 +47,24 @@ const Confirmation = () => {
             </p>
 
             <div className="flex justify-center items-center gap-x-4 mt-4">
-              <p className="text-[#0F93F8] border-b-2 border-[#0F9EF8] sm:text-base text-sm">
+              <a
+                href="https://www.jarabeachresort.com/faq-s"
+                className="text-[#0F93F8] border-b-2 border-[#0F9EF8] sm:text-base text-sm"
+              >
                 GENERAL FAQS
-              </p>
-              <p className="text-[#0F93F8] border-b-2 border-[#0F9EF8] sm:text-base text-sm">
+              </a>
+              <a
+                href="https://menu.jarabeachresort.com/"
+                className="text-[#0F93F8] border-b-2 border-[#0F9EF8] sm:text-base text-sm"
+              >
                 MENUS
-              </p>
-              <p className="text-[#0F93F8] border-b-2 border-[#0F9EF8] sm:text-base text-sm">
+              </a>
+              <a
+                href=" https://www.jarabeachresort.com/children"
+                className="text-[#0F93F8] border-b-2 border-[#0F9EF8] sm:text-base text-sm"
+              >
                 VISITING WITH CHILDREN
-              </p>
+              </a>
             </div>
             <h1 className="text-xl font-bold text-center mt-5">
               Connect Socially

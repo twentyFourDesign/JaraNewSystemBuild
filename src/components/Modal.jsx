@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { useSelector, useDispatch } from "react-redux";
-import { updateGuest } from "../store/slices/overnight/guestInfo.slice";
+import { useSelector } from "react-redux";
 
-const Modal = ({ onClose, onSave }) => {
-  const guests = useSelector((state) => state.overnightGuestDetails);
-
+const Modal = ({ onClose, onSave, guests, updateGuest }) => {
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
-  const dispatch = useDispatch();
 
   const handleInputChange = (id, field, value) => {
-    dispatch(updateGuest({ id, field, value }));
+    updateGuest(id, field, value);
   };
 
   return (

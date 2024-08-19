@@ -52,7 +52,7 @@ const Summary = () => {
       {/* FOOTER  */}
       <div className="flex flex-col px-4 md:px-8 lg:px-0 mb-4 gap-y-4 lg:flex-row w-screen justify-center items-center lg:gap-x-4 pt-4">
         <div
-          onClick={() => nav("/overnight/room-details")}
+          onClick={() => nav("/overnight/details")}
           className=" flex w-full lg:w-[30%] p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
         >
           <img src={arrow} alt="icon" className="w-[1rem]" />

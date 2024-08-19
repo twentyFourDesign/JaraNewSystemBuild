@@ -6,28 +6,13 @@ import Edit from "../assets/edit.png";
 import { useSelector, useDispatch } from "react-redux";
 import { insert as insertGuestCount } from "../store/slices/overnight/overnightGuest.slice";
 import { insert as insertGuestInfo } from "../store/slices/overnight/guestInfo.slice";
-const GuestForm = () => {
+const GuestForm = ({ guests, guestCount, updateGuest }) => {
   const dispatch = useDispatch();
-  const guestCount = useSelector(
-    (state) => state.overnightGuestCount.adults || 0
-  );
-  const guests = useSelector((state) => state.overnightGuestDetails);
+
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    if (guestCount > 0) {
-      const initialGuests = Array.from({ length: guestCount }, (_, i) => ({
-        id: i + 1,
-        firstName: "",
-        lastName: "",
-        room: "",
-      }));
-      dispatch(insertGuestInfo(initialGuests));
-    }
-  }, [guestCount, dispatch]);
-
   const handleAddGuests = () => {
-    dispatch(insertGuestCount({ guestCount: guestCount }));
+    // dispatch(insertGuestCount({ guestCount: guestCount }));
     setShowModal(true);
   };
 
@@ -68,6 +53,8 @@ const GuestForm = () => {
         <Modal
           onClose={() => setShowModal(false)}
           onSave={() => setShowModal(false)}
+          guests={guests}
+          updateGuest={updateGuest}
         />
       )}
     </div>

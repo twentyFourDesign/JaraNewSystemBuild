@@ -27,7 +27,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       console.log("failed to fetch", err);
     }
   };
-  // console.log(booking);
+  console.log(booking);
   // console.log(paymentInfo);
 
   const confirmPayment = async () => {
@@ -314,12 +314,27 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                 </span>
               </div>
               <div className="flex justify-between min-w-[350px] ">
-                <p className="text-gray-600">Room</p>
-                <span className="font-semibold">
-                  {booking?.bookingDetails?.selectedRooms?.[0].title ||
-                    "Day Pass"}
+                <p className="text-gray-600">Rooms</p>
+                <span className="font-semibold flex flex-col">
+                  {booking?.bookingDetails?.selectedRooms?.map(
+                    (room, index) => <span key={index}>{room?.title} </span>
+                  ) || "Day Pass"}
                 </span>
               </div>
+              {booking?.bookingDetails?.selectedRooms ? (
+                <div className="flex justify-between min-w-[350px] ">
+                  <p className="text-gray-600">Guests</p>
+                  <span className="font-semibold flex flex-col">
+                    {booking?.guestDetails?.guests?.map((guest, index) => (
+                      <span key={index}>
+                        {guest?.firstName} {guest?.lastName} - {guest?.room}{" "}
+                      </span>
+                    ))}
+                  </span>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
 
