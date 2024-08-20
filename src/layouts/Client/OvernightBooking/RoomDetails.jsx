@@ -20,6 +20,7 @@ import arrowR from "../../../assets/arrowRIght.png";
 import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
+import { ImCross } from "react-icons/im";
 const RoomDetails = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -198,6 +199,7 @@ const RoomDetails = () => {
   useEffect(() => {
     getSelectedCount();
   }, [selectedRooms]);
+  console.log(modifiedRoom);
 
   return (
     <div>
@@ -338,14 +340,35 @@ const RoomDetails = () => {
                             </p>
                             {showPopup && roomId === room.id && (
                               <div className="absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50">
-                                <h1>Add/minus your guests</h1>
-                                <div className="flex justify-between items-center mt-1">
+                                <h1 className="text-lg font-bold text-center">
+                                  Capacity of {room.title}
+                                </h1>
+                                <ImCross
+                                  onClick={() => setshowPopup(false)}
+                                  className="absolute top-2 right-2 text-sm cursor-pointer"
+                                />
+                                <div className="flex justify-center items-center mt-1">
                                   <div>
-                                    <p className="text-sm">
-                                      Available Room: {room.capacity}
+                                    <p className="text-sm text-center">
+                                      <span className="font-bold text-[#75A9BF]">
+                                        Adults
+                                      </span>
+                                      : {room.adult} <br />
+                                      <span className="font-bold text-[#75A9BF]">
+                                        Children
+                                      </span>
+                                      : {room.children} <br />
+                                      <span className="font-bold text-[#75A9BF]">
+                                        Infants
+                                      </span>
+                                      : {room.infant} <br />
+                                      <span className="font-bold text-[#75A9BF]">
+                                        Toodlers
+                                      </span>
+                                      : {room.toodler} <br />
                                     </p>
                                   </div>
-                                  <div className="flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl">
+                                  {/* <div className="flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl">
                                     <AiOutlineMinus
                                       className="cursor-pointer"
                                       onClick={() => decrementQuantity()}
@@ -357,7 +380,7 @@ const RoomDetails = () => {
                                         incrementQuantity(room.capacity)
                                       }
                                     />
-                                  </div>
+                                  </div> */}
                                 </div>
                                 <button
                                   onClick={() =>

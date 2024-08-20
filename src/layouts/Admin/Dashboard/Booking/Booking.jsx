@@ -1,15 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calender from "../../../../components/Calender";
-import { roomsTypes } from "../../../../constants/rooms";
+// import { roomsTypes } from "../../../../constants/rooms";
 import { IoIosArrowDown } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
-
+import { baseUrl } from "../../../../constants/baseurl";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Booking = ({ setShowNav, showNav }) => {
-  const [bookingType, setBookingType] = useState("Standard Room 1");
+  const [bookingType, setBookingType] = useState("");
   const [showType, setshowType] = useState(false);
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
+  const [roomTypes, setRoomTypes] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [paymentData, setPaymentData] = useState([]);
+  const navigate = useNavigate();
+  console.log(paymentData);
+  useEffect(() => {
+    const fetchRoomTypes = async () => {
+      await axios.get(`${baseUrl}/main/rooms/sub/get/all`).then((res) => {
+        // console.log(res);
+        setRoomTypes(res.data);
+      });
+    };
+    fetchRoomTypes();
+  }, []);
+  useEffect(() => {
+    const fetchBookings = async () => {
+      const selectedRoom = roomTypes.find((room) => room.title === bookingType);
+      // console.log(selectedRoom);
+      if (selectedRoom) {
+        try {
+          await axios
+            .get(`${baseUrl}/main/rooms/bookings/${selectedRoom._id}`)
+            .then((res) => {
+              // console.log("res", res);
+              setBookings(res.data);
+            });
+        } catch (err) {
+          console.log("failed to get bookings");
+        }
+      }
+    };
+    fetchBookings();
+  }, [bookingType, roomTypes]);
+  const handleDateClick = async (date) => {
+    const booking = bookings.find(
+      (booking) =>
+        new Date(booking.bookingDetails.visitDate).toDateString() ===
+        date.toDateString()
+    );
 
+    if (booking) {
+      try {
+        const res = await axios.get(
+          `${baseUrl}/payment/get/byBookingId/${booking._id}`
+        );
+        // console.log(res.data);
+        if (res.data) {
+          navigate(`/admin/jara/booking-status/${booking._id}`, {
+            state: { paymentId: res.data[0]._id },
+          });
+        }
+      } catch (err) {
+        console.log("failed to get payment");
+      }
+    }
+  };
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       <div className="w-[100%] bg-white h-[6rem] flex justify-between items-center p-5 border-b-2 border-solid border-[#e6e7e9]">
@@ -38,22 +95,22 @@ const Booking = ({ setShowNav, showNav }) => {
               onClick={() => setshowType(!showType)}
               className="w-[100%] flex items-center justify-between pl-4 pr-4 h-[3rem] bg-white rounded-md cursor-pointer text-[#828893]"
             >
-              <p>{bookingType}</p>
+              <p>{bookingType ? bookingType : "Select Room Type"}</p>
               <IoIosArrowDown />
             </div>
 
             {showType && (
               <div className="absolute p-3 top-[3.5rem] h-[10rem] overflow-y-auto bg-white text-[#828893] w-[15rem] left-0 z-50 rounded-md shadow-shadow1">
-                {roomsTypes?.map((item, index) => {
+                {roomTypes?.map((item, index) => {
                   return (
                     <p
                       onClick={() => {
-                        setBookingType(item?.type), setshowType(false);
+                        setBookingType(item?.title), setshowType(false);
                       }}
                       key={index}
                       className="mb-1 cursor-pointer"
                     >
-                      {item?.type}
+                      {item?.title}
                     </p>
                   );
                 })}
@@ -63,7 +120,7 @@ const Booking = ({ setShowNav, showNav }) => {
         </div>
 
         <div className="mt-4 sm:mt-10">
-          <Calender />
+          <Calender bookings={bookings} onDateClick={handleDateClick} />
         </div>
       </div>
     </div>

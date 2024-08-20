@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { AuthContext } from "../Context/AuthContext";
 const ProtectedRoute = ({ children }) => {
   const { adminUser } = useContext(AuthContext);
-  console.log(adminUser);
+  // console.log(adminUser);
   const nav = useNavigate();
 
   useEffect(() => {

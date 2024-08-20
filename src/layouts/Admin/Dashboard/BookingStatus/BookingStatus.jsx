@@ -28,7 +28,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
     }
   };
   console.log(booking);
-  // console.log(paymentInfo);
+  console.log(paymentInfo);
 
   const confirmPayment = async () => {
     try {
