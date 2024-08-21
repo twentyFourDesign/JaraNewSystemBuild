@@ -161,6 +161,8 @@ const DaypassSummary = () => {
         subTotal: subTotal,
         vat: taxamount,
         totalCost: daypassPrice,
+        discount: daypassDiscount ? daypassDiscount.percentage : 0,
+        voucher: daypassVoucher ? daypassVoucher.voucher.balance : 0,
       });
     } catch (err) {
       toast.error("An error occurred while creating payment");

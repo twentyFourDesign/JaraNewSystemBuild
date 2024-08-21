@@ -166,6 +166,8 @@ const OvernightSummary = () => {
         subTotal: price,
         vat: (12.5 / 100) * price,
         totalCost: (12.5 / 100) * price + price,
+        discount: discount ? discount.percentage : 0,
+        voucher: voucher ? voucher.voucher.balance : 0,
       });
     } catch (err) {
       toast.error("An error occurred while creating payment");
