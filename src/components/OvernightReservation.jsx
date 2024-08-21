@@ -1,35 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useSelector } from "react-redux";
-
+import { PriceContext } from "../Context/PriceContext";
 const OvernightReservation = () => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const data = useSelector((state) => state.overnightRoomInfo);
-  console.log(roomDetails);
-  const calPrice = () => {
-    let totalRoomPrice = 0;
-    if (roomDetails?.selectedRooms?.length > 0) {
-      for (const room of roomDetails?.selectedRooms) {
-        const roomPrice = parseInt(room.price, 10);
-        if (isNaN(roomPrice)) {
-          console.error("Error: Invalid price format for room", room);
-          continue;
-        }
-        totalRoomPrice += roomPrice;
-      }
-    }
-    if (roomDetails?.finalData?.length > 0) {
-      for (const extra of roomDetails?.finalData) {
-        const extraPrice = parseInt(extra.price, 10);
-        if (isNaN(extraPrice)) {
-          console.error("Error: Invalid price format for extra", extra);
-          continue;
-        }
-        totalRoomPrice += extraPrice;
-      }
-    }
-    return totalRoomPrice;
-  };
+  const { price, setPrice, discount, setDiscount, voucher, setVoucher } =
+    useContext(PriceContext);
+  // const calPrice = () => {
+  //   let totalRoomPrice = 0;
+  //   if (roomDetails?.selectedRooms?.length > 0) {
+  //     for (const room of roomDetails?.selectedRooms) {
+  //       const roomPrice = parseInt(room.price, 10);
+  //       if (isNaN(roomPrice)) {
+  //         console.error("Error: Invalid price format for room", room);
+  //         continue;
+  //       }
+  //       totalRoomPrice += roomPrice;
+  //     }
+  //   }
+  //   if (roomDetails?.finalData?.length > 0) {
+  //     for (const extra of roomDetails?.finalData) {
+  //       const extraPrice = parseInt(extra.price, 10);
+  //       if (isNaN(extraPrice)) {
+  //         console.error("Error: Invalid price format for extra", extra);
+  //         continue;
+  //       }
+  //       totalRoomPrice += extraPrice;
+  //     }
+  //   }
+  //   return totalRoomPrice;
+  // };
 
   return (
     <div className="font-robotoFont  p-4 mb-10">
@@ -110,24 +111,24 @@ const OvernightReservation = () => {
       <div className="mt-3">
         <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Sub-total</h1>
-          <h1 className="text-base font-bold">₦{calPrice()}</h1>
+          <h1 className="text-base font-bold">₦{price}</h1>
         </div>
         <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Room Discount (%)</h1>
-          <h1 className="text-base font-bold">0%</h1>
+          <h1 className="text-base font-bold">
+            {discount?.percentage ? discount?.percentage : 0}%
+          </h1>
         </div>
       </div>
 
       <div className="bg-[#F1F5F8] mt-3 h-[6rem] rounded-md shadow-shadow1 p-2 flex justify-center items-start flex-col z-50">
         <div className="flex justify-between items-center w-[100%]">
           <p className="text-sm ">Consumption Tax and VAT (12.5%)</p>
-          <p className="text-sm font-bold">₦{(12.5 / 100) * calPrice()}</p>
+          <p className="text-sm font-bold">₦{(12.5 / 100) * price}</p>
         </div>
         <div className="flex justify-between items-center mt-3 w-[100%]">
           <p className="font-bold text-lg">Total</p>
-          <p className="font-bold text-lg">
-            ₦{(12.5 / 100) * calPrice() + calPrice()}
-          </p>
+          <p className="font-bold text-lg">₦{(12.5 / 100) * price + price}</p>
         </div>
       </div>
     </div>

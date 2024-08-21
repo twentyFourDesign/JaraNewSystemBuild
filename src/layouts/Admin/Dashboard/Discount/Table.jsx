@@ -46,7 +46,7 @@ const Table = ({ tr, data, setData }) => {
                 <td className={tdStyle}>{item?.code}</td>
                 <td className={tdStyle}>{item?.percentage}</td>
                 <td className={tdStyle}>{formatDate(item?.createdAt)}</td>
-                <td className={tdStyle}>{item?.expires}</td>
+                <td className={tdStyle}>{formatDate(item?.expires)}</td>
                 <td className={tdStyle}>{item?.roomNo}</td>
                 <td className={tdStyle}>{item?.days}</td>
                 <td className={tdStyle}>

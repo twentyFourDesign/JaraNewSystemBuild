@@ -335,6 +335,14 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
               ) : (
                 ""
               )}
+              <div className="flex justify-between min-w-[350px] ">
+                <p className="text-gray-600">Extra Need</p>
+                <span className="font-semibold">
+                  {booking?.guestDetails?.para
+                    ? booking?.guestDetails?.para
+                    : "nothing"}
+                </span>
+              </div>
             </div>
           </div>
 

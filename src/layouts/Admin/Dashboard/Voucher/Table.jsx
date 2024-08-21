@@ -47,8 +47,8 @@ const Table = ({ tr, data, setData }) => {
                 <td className={tdStyle}>{item?.amount}</td>
                 <td className={tdStyle}>{item?.balance}</td>
                 <td className={tdStyle}>{formatDate(item?.createdAt)}</td>
-                <td className={tdStyle}>{item?.startsAt}</td>
-                <td className={tdStyle}>{item?.expireAt}</td>
+                <td className={tdStyle}>{formatDate(item?.startsAt)}</td>
+                <td className={tdStyle}>{formatDate(item?.expireAt)}</td>
                 <td className={tdStyle}>{item?.status}</td>
                 <td className={tdStyle}>
                   <AiFillDelete
@@ -62,7 +62,7 @@ const Table = ({ tr, data, setData }) => {
         </table>
       ) : (
         <h1 className="flex justify-center items-center h-[100%] text-lg">
-          NO STAFF FOUND
+          NO Voucher FOUND
         </h1>
       )}
     </div>

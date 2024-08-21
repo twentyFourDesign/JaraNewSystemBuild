@@ -1,43 +1,116 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { baseUrl } from "../constants/baseurl";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { PaystackButton } from "react-paystack";
-
+import { PriceContext } from "../Context/PriceContext";
 const OvernightSummary = () => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   const [disabled, setDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const nav = useNavigate();
+  const [discountCode, setDiscountCode] = useState("");
+  const [voucherCode, setVoucherCode] = useState("");
 
-  const calPrice = () => {
-    let totalRoomPrice = 0;
-    if (roomDetails?.selectedRooms?.length > 0) {
-      for (const room of roomDetails?.selectedRooms) {
-        const roomPrice = parseInt(room.price, 10);
-        if (isNaN(roomPrice)) {
-          console.error("Error: Invalid price format for room", room);
-          continue;
+  const [discountDisabled, setDiscountDisabled] = useState(false);
+
+  const { price, setPrice, discount, setDiscount, voucher, setVoucher } =
+    useContext(PriceContext);
+  const nav = useNavigate();
+  console.log(price);
+
+  // const calPrice = () => {
+  //   let totalRoomPrice = 0;
+  //   if (roomDetails?.selectedRooms?.length > 0) {
+  //     for (const room of roomDetails?.selectedRooms) {
+  //       const roomPrice = parseInt(room.price, 10);
+  //       if (isNaN(roomPrice)) {
+  //         console.error("Error: Invalid price format for room", room);
+  //         continue;
+  //       }
+  //       totalRoomPrice += roomPrice;
+  //     }
+  //   }
+  //   if (roomDetails?.finalData?.length > 0) {
+  //     for (const extra of roomDetails?.finalData) {
+  //       const extraPrice = parseInt(extra.price, 10);
+  //       if (isNaN(extraPrice)) {
+  //         console.error("Error: Invalid price format for extra", extra);
+  //         continue;
+  //       }
+  //       totalRoomPrice += extraPrice;
+  //     }
+  //   }
+
+  //   if (discount) {
+  //     totalRoomPrice -= (discount.percentage / 100) * totalRoomPrice;
+  //   }
+
+  //   if (voucher) {
+  //     totalRoomPrice -= voucher.balance;
+  //   }
+  //   return totalRoomPrice;
+  // };
+
+  const handleApplyVoucher = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/voucher/validate`, {
+        code: voucherCode,
+        price: price,
+      });
+      console.log(response.data);
+      setVoucher(response.data);
+      toast.success(`Voucher applied successfully`);
+      if (response.data.newPrice == 0) {
+        if (!isChecked) {
+          toast.error(
+            "You must accept the terms and conditions first to proceed"
+          );
+          return;
         }
-        totalRoomPrice += roomPrice;
+        confirmBooking("Success", "Voucher");
       }
+    } catch (error) {
+      toast.error(
+        error.response.data.message || "Invalid Voucher Code or Expired"
+      );
     }
-    if (roomDetails?.finalData?.length > 0) {
-      for (const extra of roomDetails?.finalData) {
-        const extraPrice = parseInt(extra.price, 10);
-        if (isNaN(extraPrice)) {
-          console.error("Error: Invalid price format for extra", extra);
-          continue;
-        }
-        totalRoomPrice += extraPrice;
-      }
-    }
-    return totalRoomPrice;
   };
+  const handleApplyDiscount = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/discount/validate`, {
+        code: discountCode,
+      });
+      console.log(response.data);
+      setDiscount(response.data);
+      toast.success(`Discount applied successfully`);
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error.response.data.message || "Invalid Discount Code or Expired"
+      );
+    }
+  };
+  useEffect(() => {
+    if (discount) {
+      setDiscountDisabled(true);
+    }
+  }, [discount]);
+
+  useEffect(() => {
+    if (isChecked) {
+      if (price == 0) {
+        if (voucher) {
+          confirmBooking("Success", "Voucher");
+        } else if (discount) {
+          confirmBooking("Success", "Discount");
+        }
+      }
+    }
+  }, [isChecked]);
   const formData = new FormData();
   formData.append("guestCount", guestCount);
   formData.append("roomDetails", JSON.stringify(roomDetails));
@@ -84,15 +157,15 @@ const OvernightSummary = () => {
     try {
       let result = await axios.post(`${baseUrl}/payment/create`, {
         name: guestDetails.firstname + " " + guestDetails.lastname,
-        amount: (12.5 / 100) * calPrice() + calPrice(),
+        amount: (12.5 / 100) * price + price,
         status: status,
         ref: bookingId,
         method: method,
         guestDetails: JSON.stringify(guestDetails),
         roomDetails: JSON.stringify(roomDetails),
-        subTotal: calPrice(),
-        vat: (12.5 / 100) * calPrice(),
-        totalCost: (12.5 / 100) * calPrice() + calPrice(),
+        subTotal: price,
+        vat: (12.5 / 100) * price,
+        totalCost: (12.5 / 100) * price + price,
       });
     } catch (err) {
       toast.error("An error occurred while creating payment");
@@ -161,7 +234,7 @@ const OvernightSummary = () => {
 
   const componentProps = {
     email: guestDetails.email,
-    amount: ((12.5 / 100) * calPrice() + calPrice()) * 100,
+    amount: ((12.5 / 100) * price + price) * 100,
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     text: "Pay with Paystack",
     metadata: {
@@ -209,11 +282,37 @@ const OvernightSummary = () => {
       <div className="flex justify-between items-center gap-x-3 mt-4">
         <input
           type="text"
-          placeholder="Enter Discount Code / Voucher"
+          placeholder="Enter Voucher Code"
           name=""
+          value={voucherCode}
+          onChange={(e) => setVoucherCode(e.target.value)}
           className="flex-1 h-[2.3rem] border-2 border-[black] pl-3 pr-3 rounded-md outline-none"
         />
-        <button className="w-[6rem] h-[2.3rem] bg-black text-white rounded-md">
+        <button
+          onClick={handleApplyVoucher}
+          className="w-[6rem] h-[2.3rem] bg-black text-white rounded-md"
+        >
+          Apply
+        </button>
+      </div>
+      <div className="flex justify-between items-center gap-x-3 mt-4">
+        <input
+          type="text"
+          placeholder="Enter Discount Code"
+          name=""
+          value={discountCode}
+          onChange={(e) => setDiscountCode(e.target.value)}
+          className="flex-1 h-[2.3rem] border-2 border-[black] pl-3 pr-3 rounded-md outline-none"
+        />
+        <button
+          onClick={handleApplyDiscount}
+          disabled={discountDisabled}
+          className={
+            discountDisabled
+              ? "w-[6rem] h-[2.3rem] bg-black text-white rounded-md opacity-50 cursor-not-allowed"
+              : "w-[6rem] h-[2.3rem] bg-black text-white rounded-md"
+          }
+        >
           Apply
         </button>
       </div>
