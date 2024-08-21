@@ -46,10 +46,9 @@ const Table = ({ tr, data, setData }) => {
                 <td className={tdStyle}>{item?.code}</td>
                 <td className={tdStyle}>{item?.amount}</td>
                 <td className={tdStyle}>{item?.balance}</td>
-                <td className={tdStyle}>{item?.percentage}</td>
                 <td className={tdStyle}>{formatDate(item?.createdAt)}</td>
-                <td className={tdStyle}>{item?.startsAt}</td>
-                <td className={tdStyle}>{item?.expires}</td>
+                <td className={tdStyle}>{formatDate(item?.startsAt)}</td>
+                <td className={tdStyle}>{formatDate(item?.expireAt)}</td>
                 <td className={tdStyle}>{item?.status}</td>
                 <td className={tdStyle}>
                   <AiFillDelete

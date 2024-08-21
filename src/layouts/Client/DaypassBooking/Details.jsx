@@ -179,9 +179,7 @@ const Details = () => {
                     }}
                     className="flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 outline-none border-2 border-[#C8D5E0]"
                   >
-                    <option value="" disabled>
-                      Gender
-                    </option>
+                    <option value="">Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>

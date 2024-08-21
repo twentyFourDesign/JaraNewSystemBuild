@@ -418,7 +418,7 @@ const RoomDetails = () => {
 
         {/* RESERVATION  */}
         <div className="min-w-[18rem] pr-4">
-          <div className="w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+          <div className="min-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">

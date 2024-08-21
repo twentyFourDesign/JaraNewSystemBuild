@@ -7,9 +7,15 @@ export const PriceProvider = ({ children }) => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
+  const bookingInfo = useSelector((state) => state.daypassBookingInfo);
+  const availablity = useSelector((state) => state.daypassAvailablity);
+  const guestInfo = useSelector((state) => state.daypassUserInfo);
   const [discount, setDiscount] = useState(null);
   const [voucher, setVoucher] = useState(null);
+  const [daypassDiscount, setDaypassDiscount] = useState(null);
+  const [daypassVoucher, setDaypassVoucher] = useState(null);
   const [price, setPrice] = useState(0);
+  const [daypassPrice, setDaypassPrice] = useState(0);
   console.log(voucher);
   const calPrice = () => {
     let totalRoomPrice = 0;
@@ -47,9 +53,58 @@ export const PriceProvider = ({ children }) => {
     setPrice(calPrice());
   }, [guestCount, roomDetails, guestDetails, discount, voucher]);
 
+  let taxamount =
+    (12.5 / 100) * bookingInfo.adultsAlcoholic * 45000 +
+    bookingInfo.childTotal * 17500 +
+    bookingInfo.adultsNonAlcoholic * 35000 +
+    bookingInfo.Nanny * 15000;
+
+  const totalPrice =
+    bookingInfo.adultsAlcoholic * 45000 +
+    bookingInfo.childTotal * 17500 +
+    bookingInfo.adultsNonAlcoholic * 35000 +
+    bookingInfo.Nanny * 15000 +
+    taxamount;
+
+  useEffect(() => {
+    setDaypassPrice(totalPrice);
+    if (daypassVoucher) {
+      setDaypassPrice(daypassVoucher.newPrice);
+    }
+    if (daypassDiscount) {
+      let newDaypassPrice =
+        daypassPrice - (daypassDiscount.percentage / 100) * daypassPrice;
+      setDaypassPrice(newDaypassPrice);
+    }
+  }, [
+    bookingInfo,
+    taxamount,
+    availablity,
+    guestInfo,
+    daypassDiscount,
+    daypassVoucher,
+  ]);
+
   return (
     <PriceContext.Provider
-      value={{ price, setPrice, discount, setDiscount, voucher, setVoucher }}
+      value={{
+        price,
+        daypassPrice,
+        taxamount,
+        setDaypassPrice,
+        daypassDiscount,
+        setDaypassDiscount,
+        daypassVoucher,
+        setDaypassVoucher,
+        setPrice,
+        discount,
+        setDiscount,
+        voucher,
+        setVoucher,
+        bookingInfo,
+        availablity,
+        guestInfo,
+      }}
     >
       {children}
     </PriceContext.Provider>

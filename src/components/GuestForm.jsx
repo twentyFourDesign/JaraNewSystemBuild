@@ -18,10 +18,10 @@ const GuestForm = ({ guests, guestCount, updateGuest }) => {
 
   return (
     <div
-      className="px-4 py-2 w-[90%] border-2 mt-4 border-[#75A9BF] rounded-xl "
+      className="px-4 py-2 w-[90%] border-2 mt-4 flex flex-col items-start md:items-center border-[#75A9BF] rounded-xl "
       style={{ fontFamily: "Inter, sans-serif" }}
     >
-      <div className="flex justify-between  items-center">
+      <div className="flex flex-col md:flex-row justify-between  gap-4 w-full items-start md:items-center">
         <div>
           <h2 className="text-2xl font-bold mb-4">Names of guests</h2>
           <p className="mb-4">

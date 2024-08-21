@@ -6,7 +6,7 @@ import Fb from "../../../assets/fb.svg";
 import arrow from "../../../assets/arrowLeft.png";
 
 import arrowR from "../../../assets/arrowLeft.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PriceContext } from "../../../Context/PriceContext";
 import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
@@ -15,24 +15,25 @@ import { useNavigate } from "react-router-dom";
 const Confirmation = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const { setPrice, setDiscount, setVoucher } = useContext(PriceContext);
+  const { setDaypassPrice, setDaypassDiscount, setDaypassVoucher } =
+    useContext(PriceContext);
   const guestInfo = useSelector((state) => state.daypassUserInfo);
   const handleAnotherBooking = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
     dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
+    setDaypassPrice(0);
+    setDaypassDiscount(null);
+    setDaypassVoucher(null);
     nav("/daypass/guest");
   };
   const handleHome = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
     dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
+    setDaypassPrice(0);
+    setDaypassDiscount(null);
+    setDaypassVoucher(null);
     nav("/");
   };
   return (

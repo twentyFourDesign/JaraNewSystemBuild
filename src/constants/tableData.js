@@ -224,9 +224,6 @@ export const DaypassVouchersRow = [
   {
     title: "Status",
   },
-  {
-    title: "Options",
-  },
 ];
 
 export const paymentRow = [

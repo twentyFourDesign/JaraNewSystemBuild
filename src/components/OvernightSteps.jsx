@@ -45,7 +45,7 @@ const OvernightSteps = ({ step }) => {
         </div>
         <span className="md: w-3/4">Stay & Room Details</span>
       </div>
-      <div className="flex flex-col justify-center  gap-2">
+      <div className="flex flex-col justify-center gap-2">
         <div className="flex items-center">
           <div
             className={`w-[60px] h-[60px] flex items-center justify-center rounded-full ${getStepClass(
@@ -55,7 +55,7 @@ const OvernightSteps = ({ step }) => {
             {getStepContent(3)}
           </div>
         </div>
-        <span className="md: w-full">Guest(s) info</span>
+        <span className="w-3/4 lg:w-full">Guest(s) info</span>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ const Popup = ({ setshowPopup, setData }) => {
     balance: 0,
     startsAt: "",
     expireAt: "",
-    status: "",
+    status: "active",
   });
 
   const submitData = () => {
@@ -96,7 +96,8 @@ const Popup = ({ setshowPopup, setData }) => {
         type="text"
         name="status"
         id=""
-        placeholder="Status"
+        placeholder="Status (active or Active)"
+        defaultValue={"active"}
         className="w-[100%] h-[2.3rem] px-3 border-2 border-gray-300 mt-4 rounded-md outline-none"
       />
       <button

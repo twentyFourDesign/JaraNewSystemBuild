@@ -1,30 +1,46 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../constants/baseurl";
 import toast from "react-hot-toast";
 import { PaystackButton } from "react-paystack";
+import { PriceContext } from "../Context/PriceContext";
 const DaypassSummary = () => {
   const nav = useNavigate();
-  const bookingInfo = useSelector((state) => state.daypassBookingInfo);
-  const availablity = useSelector((state) => state.daypassAvailablity);
-  const guestInfo = useSelector((state) => state.daypassUserInfo);
+  const {
+    daypassPrice,
+    daypassDiscount,
+    daypassVoucher,
+    taxamount,
+    bookingInfo,
+    availablity,
+    guestInfo,
+    setDaypassPrice,
+    setDaypassDiscount,
+    setDaypassVoucher,
+  } = useContext(PriceContext);
+  // const bookingInfo = useSelector((state) => state.daypassBookingInfo);
+  // const availablity = useSelector((state) => state.daypassAvailablity);
+  // const guestInfo = useSelector((state) => state.daypassUserInfo);
+  const [discountCode, setDiscountCode] = useState("");
+  const [voucherCode, setVoucherCode] = useState("");
+  const [discountDisabled, setDiscountDisabled] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   console.log("guest info", guestInfo);
-  let taxamount =
-    (12.5 / 100) * bookingInfo.adultsAlcoholic * 45000 +
-    bookingInfo.childTotal * 17500 +
-    bookingInfo.adultsNonAlcoholic * 35000 +
-    bookingInfo.Nanny * 15000;
+  // let taxamount =
+  //   (12.5 / 100) * bookingInfo.adultsAlcoholic * 45000 +
+  //   bookingInfo.childTotal * 17500 +
+  //   bookingInfo.adultsNonAlcoholic * 35000 +
+  //   bookingInfo.Nanny * 15000;
 
-  const totalPrice =
-    bookingInfo.adultsAlcoholic * 45000 +
-    bookingInfo.childTotal * 17500 +
-    bookingInfo.adultsNonAlcoholic * 35000 +
-    bookingInfo.Nanny * 15000 +
-    taxamount;
+  // const totalPrice =
+  //   bookingInfo.adultsAlcoholic * 45000 +
+  //   bookingInfo.childTotal * 17500 +
+  //   bookingInfo.adultsNonAlcoholic * 35000 +
+  //   bookingInfo.Nanny * 15000 +
+  //   taxamount;
 
   const formData = new FormData();
   formData.append("guestCount", bookingInfo);
@@ -72,11 +88,71 @@ const DaypassSummary = () => {
     bookingInfo.childTotal * 17500 +
     bookingInfo.adultsNonAlcoholic * 35000 +
     bookingInfo.Nanny * 15000;
+
+  const handleApplyVoucher = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/daypass/voucher/validate`, {
+        code: voucherCode,
+        price: daypassPrice,
+      });
+      console.log(response.data);
+      setDaypassVoucher(response.data);
+      toast.success(`Voucher applied successfully`);
+      if (response.data.newPrice == 0) {
+        if (!isChecked) {
+          toast.error(
+            "You must accept the terms and conditions first to proceed"
+          );
+          return;
+        }
+        confirmBooking("Success", "Voucher");
+      }
+    } catch (error) {
+      toast.error(
+        error.response.data.message || "Invalid Voucher Code or Expired"
+      );
+    }
+  };
+  const handleApplyDiscount = async () => {
+    try {
+      const response = await axios.post(
+        `${baseUrl}/daypass/discount/validate`,
+        {
+          code: discountCode,
+        }
+      );
+      console.log(response.data);
+      setDaypassDiscount(response.data);
+      toast.success(`Discount applied successfully`);
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error.response.data.message || "Invalid Discount Code or Expired"
+      );
+    }
+  };
+  useEffect(() => {
+    if (daypassDiscount) {
+      setDiscountDisabled(true);
+    }
+  }, [daypassDiscount]);
+
+  useEffect(() => {
+    if (isChecked) {
+      if (daypassPrice == 0) {
+        if (daypassVoucher) {
+          confirmBooking("Success", "Voucher");
+        } else if (discount) {
+          confirmBooking("Success", "Discount");
+        }
+      }
+    }
+  }, [isChecked]);
   const createPayment = async (bookingId, status, method) => {
     try {
       let result = await axios.post(`${baseUrl}/payment/create`, {
         name: guestInfo.firstname + " " + guestInfo.lastname,
-        amount: totalPrice,
+        amount: daypassPrice,
         status: status,
         ref: bookingId,
         method: method,
@@ -84,7 +160,7 @@ const DaypassSummary = () => {
         roomDetails: JSON.stringify(availablity),
         subTotal: subTotal,
         vat: taxamount,
-        totalCost: totalPrice,
+        totalCost: daypassPrice,
       });
     } catch (err) {
       toast.error("An error occurred while creating payment");
@@ -152,7 +228,7 @@ const DaypassSummary = () => {
 
   const componentProps = {
     email: guestInfo.email,
-    amount: totalPrice * 100,
+    amount: daypassPrice * 100,
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     text: "Pay with Paystack",
     metadata: {
@@ -171,6 +247,12 @@ const DaypassSummary = () => {
   };
   const handleCheckbox = (event) => {
     setIsChecked(event.target.checked);
+  };
+  const handlePaystackClick = () => {
+    if (!isChecked) {
+      toast.error("You must accept the terms and conditions first");
+      return;
+    }
   };
   return (
     <div className="font-robotoFont py-4 px-2 h-[100%]  relative">
@@ -193,11 +275,37 @@ const DaypassSummary = () => {
       <div className="flex justify-between items-center gap-x-3 mt-4">
         <input
           type="text"
-          placeholder="Enter Discount Code / Voucher"
+          placeholder="Enter Voucher Code"
           name=""
+          value={voucherCode}
+          onChange={(e) => setVoucherCode(e.target.value)}
           className="flex-1 h-[2.3rem] border-2 border-[black] pl-3 pr-3 rounded-md outline-none"
         />
-        <button className="w-[6rem] h-[2.3rem] bg-black text-white rounded-md">
+        <button
+          onClick={handleApplyVoucher}
+          className="w-[6rem] h-[2.3rem] bg-black text-white rounded-md"
+        >
+          Apply
+        </button>
+      </div>
+      <div className="flex justify-between items-center gap-x-3 mt-4">
+        <input
+          type="text"
+          placeholder="Enter Discount Code"
+          name=""
+          value={discountCode}
+          onChange={(e) => setDiscountCode(e.target.value)}
+          className="flex-1 h-[2.3rem] border-2 border-[black] pl-3 pr-3 rounded-md outline-none"
+        />
+        <button
+          onClick={handleApplyDiscount}
+          disabled={discountDisabled}
+          className={
+            discountDisabled
+              ? "w-[6rem] h-[2.3rem] bg-black text-white rounded-md opacity-50 cursor-not-allowed"
+              : "w-[6rem] h-[2.3rem] bg-black text-white rounded-md"
+          }
+        >
           Apply
         </button>
       </div>

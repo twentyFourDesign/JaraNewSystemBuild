@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightFooter from "../../../components/OvernightFooter";
@@ -11,8 +11,10 @@ import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestIn
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 import { useDispatch } from "react-redux";
+import { PriceContext } from "../../../Context/PriceContext";
 const Summary = () => {
   const nav = useNavigate();
+  const { setPrice, setDiscount, setVoucher } = useContext(PriceContext);
   const dispatch = useDispatch();
   const reservationRef = useRef(null);
   const summaryRef = useRef(null);
@@ -21,6 +23,9 @@ const Summary = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
     dispatch(resetRoomDetails());
+    setPrice(0);
+    setDiscount(null);
+    setVoucher(null);
     nav("/");
   };
   useEffect(() => {
@@ -30,7 +35,7 @@ const Summary = () => {
   }, [reservationRef.current]);
   return (
     <div className="flex flex-col  justify-center items-center ">
-      <div className="flex w-screen  justify-center items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap gap-x-4">
+      <div className="flex  w-screen  justify-center items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap gap-x-4">
         {/* RESERVATION  */}
         <div
           ref={reservationRef}
