@@ -5,8 +5,7 @@ const OvernightReservation = () => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const data = useSelector((state) => state.overnightRoomInfo);
-  const { price, setPrice, discount, setDiscount, voucher, setVoucher } =
-    useContext(PriceContext);
+  const { price, discount, multiNightDiscount } = useContext(PriceContext);
   // const calPrice = () => {
   //   let totalRoomPrice = 0;
   //   if (roomDetails?.selectedRooms?.length > 0) {
@@ -33,7 +32,7 @@ const OvernightReservation = () => {
   // };
 
   return (
-    <div className="font-robotoFont  p-4 mb-10">
+    <div className="font-robotoFont p-4 mb-10">
       <h1 className="text-xl font-bold">Your Reservation</h1>
       <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
 
@@ -118,6 +117,10 @@ const OvernightReservation = () => {
           <h1 className="text-base font-bold">
             {discount?.percentage ? discount?.percentage : 0}%
           </h1>
+        </div>
+        <div className="flex justify-between items-center">
+          <h1 className="text-base font-bold">Multi-Night Discount (%)</h1>
+          <h1 className="text-base font-bold">{multiNightDiscount}%</h1>
         </div>
       </div>
 

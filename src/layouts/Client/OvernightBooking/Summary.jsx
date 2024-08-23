@@ -39,7 +39,7 @@ const Summary = () => {
         {/* RESERVATION  */}
         <div
           ref={reservationRef}
-          className="min-w-[100%] sm:min-w-[24rem] sm:w-[24rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-lg"
+          className="max-w-[100%] sm:min-w-[24rem] sm:w-[24rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-lg"
         >
           <OvernightReservation />
         </div>

@@ -226,8 +226,8 @@ const Guest = () => {
         </div>
 
         {/* RESERVATION  */}
-        <div className="min-w-[18rem] mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
-          <div className="min-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+        <div className="max-w-[18rem] mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
+          <div className="max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">

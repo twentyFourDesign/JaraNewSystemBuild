@@ -42,7 +42,7 @@ const RoomDetails = () => {
     nav("/");
   };
   const guestCount = useSelector((state) => state.overnightGuestCount);
-
+  console.log(guestCount.ages);
   const incrementQuantity = (maxCapacity) => {
     setQuantity((currentQuantity) =>
       currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity
@@ -95,6 +95,7 @@ const RoomDetails = () => {
         const groupedRooms = res.data.reduce((acc, room) => {
           const { title, price } = room.roomId;
           const existingGroup = acc.find((group) => group.ref === title);
+          console.log("existingGroup", existingGroup);
           if (existingGroup) {
             existingGroup.details.push({
               title: room.title,
@@ -126,6 +127,7 @@ const RoomDetails = () => {
           }
           return acc;
         }, []);
+        console.log("grouped rooms", groupedRooms);
         setModifiedRoom(groupedRooms);
         // console.log("grouped rooms", groupedRooms);
       });
@@ -339,7 +341,7 @@ const RoomDetails = () => {
                               {room.title}
                             </p>
                             {showPopup && roomId === room.id && (
-                              <div className="absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50">
+                              <div className="absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-auto bg-white shadow-shadow1  rounded-md p-2 z-50">
                                 <h1 className="text-lg font-bold text-center">
                                   Capacity of {room.title}
                                 </h1>
@@ -355,17 +357,29 @@ const RoomDetails = () => {
                                       </span>
                                       : {room.adult} <br />
                                       <span className="font-bold text-[#75A9BF]">
-                                        Children
-                                      </span>
-                                      : {room.children} <br />
-                                      <span className="font-bold text-[#75A9BF]">
-                                        Infants
+                                        Infant
                                       </span>
                                       : {room.infant} <br />
+                                      <span>OR</span> <br />
+                                      {room.adult - 1} :{" "}
                                       <span className="font-bold text-[#75A9BF]">
+                                        Adult
+                                      </span>{" "}
+                                      <br />
+                                      {room.children}:{" "}
+                                      <span className="font-bold text-[#75A9BF]">
+                                        {" "}
+                                        child or Toodler
+                                      </span>{" "}
+                                      <br />
+                                      {room.infant}:{" "}
+                                      <span className="font-bold text-[#75A9BF]">
+                                        Infant
+                                      </span>
+                                      {/* <span className="font-bold text-[#75A9BF]">
                                         Toodlers
                                       </span>
-                                      : {room.toodler} <br />
+                                      : {room.toodler} <br /> */}
                                     </p>
                                   </div>
                                   {/* <div className="flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl">
@@ -417,8 +431,8 @@ const RoomDetails = () => {
         </div>
 
         {/* RESERVATION  */}
-        <div className="min-w-[18rem] pr-4">
-          <div className="min-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+        <div className="max-w-[18rem] pr-4">
+          <div className="max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">

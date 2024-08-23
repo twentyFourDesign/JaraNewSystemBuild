@@ -17,8 +17,15 @@ const OvernightSummary = () => {
 
   const [discountDisabled, setDiscountDisabled] = useState(false);
 
-  const { price, setPrice, discount, setDiscount, voucher, setVoucher } =
-    useContext(PriceContext);
+  const {
+    price,
+    setPrice,
+    discount,
+    setDiscount,
+    voucher,
+    setVoucher,
+    multiNightDiscount,
+  } = useContext(PriceContext);
   const nav = useNavigate();
   console.log(price);
 
@@ -168,6 +175,7 @@ const OvernightSummary = () => {
         totalCost: (12.5 / 100) * price + price,
         discount: discount ? discount.percentage : 0,
         voucher: voucher ? voucher.voucher.balance : 0,
+        multiNightDiscount: multiNightDiscount,
       });
     } catch (err) {
       toast.error("An error occurred while creating payment");
