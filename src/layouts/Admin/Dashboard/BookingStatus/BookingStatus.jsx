@@ -24,7 +24,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       );
       setPaymentInfo(result.data);
     } catch (err) {
-      console.log("failed to fetch", err);
+      console.log("failed to fetch");
     }
   };
   // console.log(booking);
@@ -45,7 +45,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   const cancelBooking = async () => {
     try {
       const result = await axios.post(`${baseUrl}/payment/cancel/${id}`);
-      console.log(result);
+      // console.log(result);
       setIsCancelModalOpen(false);
       toast.success("Booking cancelled successfully");
       fetchPayment();

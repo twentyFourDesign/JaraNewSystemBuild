@@ -6,6 +6,7 @@ import { baseUrl } from "../constants/baseurl";
 import toast from "react-hot-toast";
 import { PaystackButton } from "react-paystack";
 import { PriceContext } from "../Context/PriceContext";
+import Modal from "react-modal";
 const DaypassSummary = () => {
   const nav = useNavigate();
   const {
@@ -20,27 +21,32 @@ const DaypassSummary = () => {
     setDaypassDiscount,
     setDaypassVoucher,
   } = useContext(PriceContext);
-  // const bookingInfo = useSelector((state) => state.daypassBookingInfo);
-  // const availablity = useSelector((state) => state.daypassAvailablity);
-  // const guestInfo = useSelector((state) => state.daypassUserInfo);
   const [discountCode, setDiscountCode] = useState("");
   const [voucherCode, setVoucherCode] = useState("");
   const [discountDisabled, setDiscountDisabled] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  console.log("guest info", guestInfo);
-  // let taxamount =
-  //   (12.5 / 100) * bookingInfo.adultsAlcoholic * 45000 +
-  //   bookingInfo.childTotal * 17500 +
-  //   bookingInfo.adultsNonAlcoholic * 35000 +
-  //   bookingInfo.Nanny * 15000;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState({
+    heading: "",
+    desc: "",
+    type: "Term",
+    id: "",
+  });
 
-  // const totalPrice =
-  //   bookingInfo.adultsAlcoholic * 45000 +
-  //   bookingInfo.childTotal * 17500 +
-  //   bookingInfo.adultsNonAlcoholic * 35000 +
-  //   bookingInfo.Nanny * 15000 +
-  //   taxamount;
+  const getData = async () => {
+    let response = await axios.get(`${baseUrl}/terms/condition/get`);
+    setData({
+      heading: response.data[0].heading,
+      desc: response.data[0].desc,
+      type: response.data[0].type,
+      id: response.data[0]._id,
+    });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const formData = new FormData();
   formData.append("guestCount", bookingInfo);
@@ -72,7 +78,7 @@ const DaypassSummary = () => {
       }
     } catch (error) {
       setDisabled(false);
-      console.log(error);
+      // console.log(error);
       toast.error(
         error.response.data.message || "an error occured while creating booking"
       );
@@ -95,7 +101,7 @@ const DaypassSummary = () => {
         code: voucherCode,
         price: daypassPrice,
       });
-      console.log(response.data);
+      // console.log(response.data);
       setDaypassVoucher(response.data);
       toast.success(`Voucher applied successfully`);
       if (response.data.newPrice == 0) {
@@ -121,11 +127,11 @@ const DaypassSummary = () => {
           code: discountCode,
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       setDaypassDiscount(response.data);
       toast.success(`Discount applied successfully`);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(
         error.response.data.message || "Invalid Discount Code or Expired"
       );
@@ -181,7 +187,7 @@ const DaypassSummary = () => {
         console.log("Guest already exists");
       } else {
         // Handle unexpected status codes
-        console.error("Unexpected response status:", guestResponse.status);
+        console.error("Unexpected response status:");
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -197,11 +203,11 @@ const DaypassSummary = () => {
           });
           console.log("Guest created successfully");
         } catch (createErr) {
-          console.error("Error creating guest:", createErr);
+          console.error("Error creating guest:");
         }
       } else {
         // Handle other errors
-        console.error("Error checking guest:", err);
+        console.error("Error checking guest:");
       }
     }
   };
@@ -270,7 +276,14 @@ const DaypassSummary = () => {
           onChange={handleCheckbox}
         />
         <p className="text-xs">
-          Agree with the Booking Terms and Conditions and Proceed to payment.
+          Agree with the Booking {" "}
+          <span
+            onClick={() => setIsModalOpen(true)}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Terms and Conditions
+          </span>{" "}
+           and Proceed to payment.
         </p>
       </div>
 
@@ -342,6 +355,43 @@ const DaypassSummary = () => {
           className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
         /> */}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="Confirm Payment Modal"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            transform: "translate(-50%, -50%)",
+            minWidth: "300px",
+            maxWidth: "400px",
+            maxHeight: "80vh",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "scroll",
+          },
+        }}
+      >
+        <div className="h-full w-full overflow-scroll">
+          <h2 className="text-lg font-semibold mb-4 text-center">
+            {data.heading}
+          </h2>
+          <p className="text-gray-600 text-center">{data.desc}</p>
+          <button
+            className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

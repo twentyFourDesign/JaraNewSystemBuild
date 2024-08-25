@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { PaystackButton } from "react-paystack";
 import { PriceContext } from "../Context/PriceContext";
+import Modal from "react-modal";
 const OvernightSummary = () => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
@@ -14,8 +15,24 @@ const OvernightSummary = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [voucherCode, setVoucherCode] = useState("");
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [discountDisabled, setDiscountDisabled] = useState(false);
+  const [data, setData] = useState({
+    heading: "",
+    desc: "",
+    type: "Term",
+    id: "",
+  });
+
+  const getData = async () => {
+    let response = await axios.get(`${baseUrl}/terms/condition/get`);
+    setData({
+      heading: response.data[0].heading,
+      desc: response.data[0].desc,
+      type: response.data[0].type,
+      id: response.data[0]._id,
+    });
+  };
 
   const {
     price,
@@ -27,40 +44,6 @@ const OvernightSummary = () => {
     multiNightDiscount,
   } = useContext(PriceContext);
   const nav = useNavigate();
-  console.log(price);
-
-  // const calPrice = () => {
-  //   let totalRoomPrice = 0;
-  //   if (roomDetails?.selectedRooms?.length > 0) {
-  //     for (const room of roomDetails?.selectedRooms) {
-  //       const roomPrice = parseInt(room.price, 10);
-  //       if (isNaN(roomPrice)) {
-  //         console.error("Error: Invalid price format for room", room);
-  //         continue;
-  //       }
-  //       totalRoomPrice += roomPrice;
-  //     }
-  //   }
-  //   if (roomDetails?.finalData?.length > 0) {
-  //     for (const extra of roomDetails?.finalData) {
-  //       const extraPrice = parseInt(extra.price, 10);
-  //       if (isNaN(extraPrice)) {
-  //         console.error("Error: Invalid price format for extra", extra);
-  //         continue;
-  //       }
-  //       totalRoomPrice += extraPrice;
-  //     }
-  //   }
-
-  //   if (discount) {
-  //     totalRoomPrice -= (discount.percentage / 100) * totalRoomPrice;
-  //   }
-
-  //   if (voucher) {
-  //     totalRoomPrice -= voucher.balance;
-  //   }
-  //   return totalRoomPrice;
-  // };
 
   const handleApplyVoucher = async () => {
     try {
@@ -68,7 +51,7 @@ const OvernightSummary = () => {
         code: voucherCode,
         price: price,
       });
-      console.log(response.data);
+      // console.log(response.data);
       setVoucher(response.data);
       toast.success(`Voucher applied successfully`);
       if (response.data.newPrice == 0) {
@@ -91,11 +74,11 @@ const OvernightSummary = () => {
       const response = await axios.post(`${baseUrl}/discount/validate`, {
         code: discountCode,
       });
-      console.log(response.data);
+      // console.log(response.data);
       setDiscount(response.data);
       toast.success(`Discount applied successfully`);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(
         error.response.data.message || "Invalid Discount Code or Expired"
       );
@@ -118,6 +101,9 @@ const OvernightSummary = () => {
       }
     }
   }, [isChecked]);
+  useEffect(() => {
+    getData();
+  }, []);
   const formData = new FormData();
   formData.append("guestCount", guestCount);
   formData.append("roomDetails", JSON.stringify(roomDetails));
@@ -193,7 +179,7 @@ const OvernightSummary = () => {
         console.log("Guest already exists");
       } else {
         // Handle unexpected status codes
-        console.error("Unexpected response status:", guestResponse.status);
+        console.error("Unexpected response status:");
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -209,11 +195,11 @@ const OvernightSummary = () => {
           });
           console.log("Guest created successfully");
         } catch (createErr) {
-          console.error("Error creating guest:", createErr);
+          console.error("Error creating guest:");
         }
       } else {
         // Handle other errors
-        console.error("Error checking guest:", err);
+        console.error("Error checking guest:");
       }
     }
   };
@@ -335,7 +321,15 @@ const OvernightSummary = () => {
           checked={isChecked}
           onChange={handleCheckbox}
         />
-        <p>I accept Jara’s booking terms and conditions</p>
+        <p>
+          I accept Jara’s booking{" "}
+          <span
+            onClick={() => setIsModalOpen(true)}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Terms and Conditions
+          </span>
+        </p>
       </div>
 
       <div className="absolute bottom-2 w-[96%] ">
@@ -369,6 +363,42 @@ const OvernightSummary = () => {
           className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
         /> */}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="Confirm Payment Modal"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            transform: "translate(-50%, -50%)",
+            minWidth: "300px",
+            maxWidth: "400px",
+            maxHeight: "80vh",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+          },
+        }}
+      >
+        <div className="h-full w-full overflow-scroll">
+          <h2 className="text-lg font-semibold mb-4 text-center">
+            {data.heading}
+          </h2>
+          <p className="text-gray-600 text-center">{data.desc}</p>
+          <button
+            className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

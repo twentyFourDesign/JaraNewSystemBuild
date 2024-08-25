@@ -42,7 +42,7 @@ const RoomDetails = () => {
     nav("/");
   };
   const guestCount = useSelector((state) => state.overnightGuestCount);
-  console.log(guestCount.ages);
+  // console.log(guestCount.ages);
   const incrementQuantity = (maxCapacity) => {
     setQuantity((currentQuantity) =>
       currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity
@@ -95,7 +95,7 @@ const RoomDetails = () => {
         const groupedRooms = res.data.reduce((acc, room) => {
           const { title, price } = room.roomId;
           const existingGroup = acc.find((group) => group.ref === title);
-          console.log("existingGroup", existingGroup);
+          // console.log("existingGroup", existingGroup);
           if (existingGroup) {
             existingGroup.details.push({
               title: room.title,
@@ -127,7 +127,7 @@ const RoomDetails = () => {
           }
           return acc;
         }, []);
-        console.log("grouped rooms", groupedRooms);
+        // console.log("grouped rooms", groupedRooms);
         setModifiedRoom(groupedRooms);
         // console.log("grouped rooms", groupedRooms);
       });
@@ -201,7 +201,7 @@ const RoomDetails = () => {
   useEffect(() => {
     getSelectedCount();
   }, [selectedRooms]);
-  console.log(modifiedRoom);
+  // console.log(modifiedRoom);
 
   return (
     <div>

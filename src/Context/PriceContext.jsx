@@ -7,7 +7,7 @@ export const PriceProvider = ({ children }) => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
-  console.log(guestCount);
+  // console.log(guestCount);
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
   const availablity = useSelector((state) => state.daypassAvailablity);
   const guestInfo = useSelector((state) => state.daypassUserInfo);
@@ -18,8 +18,28 @@ export const PriceProvider = ({ children }) => {
   const [price, setPrice] = useState(0);
   const [daypassPrice, setDaypassPrice] = useState(0);
   const [multiNightDiscount, setMultiNightDiscount] = useState(0);
-  console.log(voucher);
+  // console.log(voucher);
   const calPrice = () => {
+    const pricingPercentages = {
+      "Ocean deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean deluxe 2": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean deluxe 3": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean deluxe 4": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean deluxe 5": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Family Room 6": { child: 0.3704, toddler: 0.1852, infant: 0 },
+      "Family Cabin 7": { child: 0.3704, toddler: 0.1852, infant: 0 },
+      "Family Cabin 8": { child: 0.3704, toddler: 0.1852, infant: 0 },
+      "Family Cabin 9": { child: 0.3704, toddler: 0.1852, infant: 0 },
+      "Sunrise 10": { child: 0.3148, toddler: 0.1574, infant: 0 },
+      "Sunset 11": { child: 0.3148, toddler: 0.1574, infant: 0 },
+      "Loft 12A": { child: 0.3385, toddler: 0.1693, infant: 0 },
+      "Loft 12B": { child: 0.3385, toddler: 0.1693, infant: 0 },
+      "Studio 14": { child: 0.3704, toddler: 0.1852, infant: 0 },
+      "Studio 15": { child: 0.3704, toddler: 0.1852, infant: 0 },
+      "Studio 16": { child: 0.3704, toddler: 0.1852, infant: 0 },
+      "Studio 17": { child: 0.3704, toddler: 0.1852, infant: 0 },
+    };
+
     let totalRoomPrice = 0;
     const eligibleRooms = [
       "Ocean deluxe 1",
@@ -37,14 +57,46 @@ export const PriceProvider = ({ children }) => {
       "Studio 17",
     ]; // Add other eligible room titles as needed
     if (roomDetails?.selectedRooms?.length > 0) {
-      console.log(roomDetails);
-      console.log(roomDetails.selectedRooms);
+      // console.log(roomDetails);
+      // console.log(roomDetails.selectedRooms);
       for (const room of roomDetails?.selectedRooms) {
-        const roomPrice = parseInt(room.price, 10);
+        let roomPrice = parseInt(room.price, 10);
         if (isNaN(roomPrice)) {
           console.error("Error: Invalid price format for room", room);
           continue;
         }
+        const roomType = room.title;
+        const roomPricing = pricingPercentages[roomType];
+
+        if (!roomPricing) {
+          console.error(
+            "Error: Pricing percentages not defined for room type",
+            roomType
+          );
+          continue;
+        }
+
+        const numAdults = guestCount.adults;
+        const numChildren = guestCount.ages.filter((age) =>
+          age.includes("child")
+        ).length;
+        const numToddlers = guestCount.ages.filter((age) =>
+          age.includes("toddler")
+        ).length;
+        const numInfants = guestCount.ages.filter((age) =>
+          age.includes("infant")
+        ).length;
+
+        const adultPrice = roomPrice;
+        const childPrice = adultPrice * roomPricing.child;
+        const toddlerPrice = adultPrice * roomPricing.toddler;
+        const infantPrice = adultPrice * roomPricing.infant;
+
+        roomPrice =
+          numAdults * adultPrice +
+          numChildren * childPrice +
+          numToddlers * toddlerPrice +
+          numInfants * infantPrice;
 
         totalRoomPrice += roomPrice;
       }
@@ -67,13 +119,45 @@ export const PriceProvider = ({ children }) => {
       } else if (numberOfNights >= 4) {
         discountPercentage = 20;
       }
-      console.log(discountPercentage);
 
       // Apply discount only to eligible rooms
       let eligibleRoomPrice = 0;
       for (const room of roomDetails?.selectedRooms) {
         if (eligibleRooms.includes(room.title)) {
-          eligibleRoomPrice += parseInt(room.price, 10);
+          const roomType = room.title;
+          const roomPricing = pricingPercentages[roomType];
+
+          if (!roomPricing) {
+            console.error(
+              "Error: Pricing percentages not defined for room type",
+              roomType
+            );
+            continue;
+          }
+
+          const numAdults = guestCount.adults;
+          const numChildren = guestCount.ages.filter((age) =>
+            age.includes("child")
+          ).length;
+          const numToddlers = guestCount.ages.filter((age) =>
+            age.includes("toddler")
+          ).length;
+          const numInfants = guestCount.ages.filter((age) =>
+            age.includes("infant")
+          ).length;
+
+          const adultPrice = parseInt(room.price, 10);
+          const childPrice = adultPrice * roomPricing.child;
+          const toddlerPrice = adultPrice * roomPricing.toddler;
+          const infantPrice = adultPrice * roomPricing.infant;
+
+          const roomPrice =
+            numAdults * adultPrice +
+            numChildren * childPrice +
+            numToddlers * toddlerPrice +
+            numInfants * infantPrice;
+
+          eligibleRoomPrice += roomPrice;
         }
       }
       if (eligibleRoomPrice !== 0) {
@@ -117,7 +201,7 @@ export const PriceProvider = ({ children }) => {
     if (discount) {
       totalRoomPrice -= (discount.percentage / 100) * totalRoomPrice;
     }
-
+    // console.log(totalRoomPrice);
     return totalRoomPrice;
   };
 

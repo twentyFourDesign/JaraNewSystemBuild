@@ -26,7 +26,7 @@ const Details = () => {
   const guestCount = useSelector(
     (state) => state.overnightGuestCount.adults || 0
   );
-  console.log(guestCount);
+  // console.log(guestCount);
   const handleRestart = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
@@ -34,7 +34,7 @@ const Details = () => {
     nav("/");
   };
   const guests = useSelector((state) => state.overnightGuestDetails);
-  console.log(guests);
+  // console.log(guests);
   const [isNamesValid, setIsNamesValid] = useState(false);
 
   const [userDetails, setuserDetails] = useState({
