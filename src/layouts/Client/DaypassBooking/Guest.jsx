@@ -193,7 +193,7 @@ const Guest = () => {
                 <div className="flex justify-between items-center w-[100%] lg:w-[80%]">
                   <div>
                     <p className="text-[#606970] mt-2">
-                      Aged 6-17 years (or 3 years+ after first FREE Toddler)
+                      Aged 2-17 years (or 3 years+ after first FREE Toddler)
                     </p>
                     <p className="text-[#606970] mt-2">
                       ₦{guestInfo.childTotal * 17500}
