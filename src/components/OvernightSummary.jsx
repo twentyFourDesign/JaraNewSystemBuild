@@ -230,7 +230,7 @@ const OvernightSummary = () => {
 
   const componentProps = {
     email: guestDetails.email,
-    amount: ((12.5 / 100) * price + price) * 100,
+    amount: ((12.5 / 100) * price + price) * 100, // price is already rounded
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     text: "Pay with Paystack",
     metadata: {
@@ -322,7 +322,7 @@ const OvernightSummary = () => {
           onChange={handleCheckbox}
         />
         <p>
-          I accept Jara’s booking{" "}
+          I accept Jara's booking{" "}
           <span
             onClick={() => setIsModalOpen(true)}
             className="underline text-blue-500 cursor-pointer"

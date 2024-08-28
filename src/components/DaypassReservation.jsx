@@ -93,7 +93,7 @@ const DaypassReservation = () => {
             {bookingInfo.adultsAlcoholic * 45000 +
               bookingInfo.childTotal * 17500 +
               bookingInfo.adultsNonAlcoholic * 35000 +
-              bookingInfo.Nanny * 15000}
+              bookingInfo.Nanny * 15000 || 0}
           </h1>
         </div>
         <div className="flex justify-between items-center">
@@ -111,7 +111,7 @@ const DaypassReservation = () => {
         </div>
         <div className="flex justify-between items-center mt-3 w-[100%]">
           <p className="font-bold text-lg">Total</p>
-          <p className="font-bold text-lg">₦{daypassPrice}</p>
+          <p className="font-bold text-lg">₦{daypassPrice || 0}</p>
         </div>
       </div>
     </div>

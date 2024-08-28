@@ -343,20 +343,20 @@ const Extras = ({ finalData, setFinalData, type }) => {
             <div key={index} className="mt-4">
               <h1 className="text-lg mb-3 ml-0 font-semibold">Cake</h1>
               <div className="lg:flex justify-between items-center mb-4">
-                <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                   <div>
                     <img
                       src={cake}
                       alt=""
-                      className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
+                      className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
                     />
                   </div>
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
-                    <p className="text-[#606970]">Item</p>
+                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
+                    <p className="text-[#606970] ">Item</p>
                     <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
                   </div>
                 </div>
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col lg:gap-y-2">
                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                     {/* <p className="text-[#606970]">Price</p> */}
                     <p className="font-bold">{item.price}₦</p>
@@ -379,7 +379,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
             <div key={index} className="mt-4">
               <h1 className="text-lg mb-3 ml-0 font-semibold">Massage</h1>
               <div className="lg:flex justify-between items-center mb-4">
-                <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                   <div>
                     <img
                       src={massage}
@@ -387,13 +387,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
                     />
                   </div>
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
+                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
                     <p className="text-[#606970]">Item</p>
                     <p className="lg:mt-1 mt-0 font-bold">{item?.type}</p>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col lg:gap-y-2">
                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                     {/* <p className="text-[#606970]">Price</p> */}
                     <p className="font-bold">{item.price}₦</p>
@@ -416,7 +416,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
             <div key={index} className="mt-4">
               <h1 className="text-lg mb-3 ml-0 font-semibold">Drinks</h1>
               <div className="lg:flex justify-between items-center mb-4">
-                <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                   <div>
                     <img
                       src={drinking}
@@ -424,13 +424,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
                     />
                   </div>
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
+                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
                     <p className="text-[#606970]">Item</p>
                     <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col lg:gap-y-2">
                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                     {/* <p className="text-[#606970]">Price</p> */}
                     <p className="font-bold">{item.price}₦</p>
@@ -454,7 +454,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                 Unforgettable Experiences
               </h1>
               <div className="lg:flex justify-between items-center mb-4">
-                <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                   <div>
                     <img
                       src={unforgettable}
@@ -462,13 +462,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
                     />
                   </div>
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
+                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
                     <p className="text-[#606970]">Item</p>
                     <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col lg:gap-y-2">
                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                     {/* <p className="text-[#606970]">Price</p> */}
                     <p className="font-bold">{item.price}₦</p>
@@ -494,7 +494,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                 <div key={index} className="mt-4">
                   <h1 className="text-lg mb-3 ml-0 font-semibold">Riding</h1>
                   <div className="lg:flex justify-between items-center mb-4">
-                    <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                       <div>
                         <img
                           src={riding}
@@ -502,13 +502,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
                         />
                       </div>
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
+                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
                         <p className="text-[#606970]">Item</p>
                         <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-col lg:gap-y-2">
                       <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                         {/* <p className="text-[#606970]">Price</p> */}
                         <p className="font-bold">{item.price}₦</p>
@@ -532,7 +532,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                     Room Decoration
                   </h1>
                   <div className="lg:flex justify-between items-center mb-4">
-                    <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                       <div>
                         <img
                           src={Room}
@@ -540,13 +540,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
                         />
                       </div>
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
+                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
                         <p className="text-[#606970]">Item</p>
                         <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-col lg:gap-y-2">
                       <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                         {/* <p className="text-[#606970]">Price</p> */}
                         <p className="font-bold">{item.price}₦</p>
@@ -572,7 +572,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                     Domestic Staff
                   </h1>
                   <div className="lg:flex justify-between items-center mb-4">
-                    <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                       <div>
                         <img
                           src={bedroom}
@@ -580,13 +580,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
                         />
                       </div>
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
+                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
                         <p className="text-[#606970]">Item</p>
                         <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-col lg:gap-y-2">
                       <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                         {/* <p className="text-[#606970]">Price</p> */}
                         <p className="font-bold">{item.price}₦</p>
@@ -613,7 +613,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                     {item.title}
                   </h1>
                   <div className="lg:flex justify-between items-center mb-4">
-                    <div className="lg:flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
                       <div>
                         <img
                           src={selectBg(item.title)}
@@ -621,13 +621,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
                         />
                       </div>
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2">
+                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
                         <p className="text-[#606970]">Item</p>
                         <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-y-2">
+                    <div className="flex flex-col lg:gap-y-2">
                       <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                         {/* <p className="text-[#606970]">Price</p> */}
                         <p className="font-bold">{item.price}₦</p>

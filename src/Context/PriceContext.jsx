@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
+const roundUpToNearestWhole = (number) => Math.ceil(number);
+
 export const PriceContext = createContext();
 
 export const PriceProvider = ({ children }) => {
@@ -201,8 +203,8 @@ export const PriceProvider = ({ children }) => {
     if (discount) {
       totalRoomPrice -= (discount.percentage / 100) * totalRoomPrice;
     }
-    // console.log(totalRoomPrice);
-    return totalRoomPrice;
+    // Round up the total price
+    return roundUpToNearestWhole(totalRoomPrice);
   };
 
   useEffect(() => {
@@ -223,15 +225,16 @@ export const PriceProvider = ({ children }) => {
     taxamount;
 
   useEffect(() => {
-    setDaypassPrice(totalPrice);
+    let calculatedPrice = roundUpToNearestWhole(totalPrice);
     if (daypassVoucher) {
-      setDaypassPrice(daypassVoucher.newPrice);
+      calculatedPrice = roundUpToNearestWhole(daypassVoucher.newPrice);
     }
     if (daypassDiscount) {
-      let newDaypassPrice =
-        daypassPrice - (daypassDiscount.percentage / 100) * daypassPrice;
-      setDaypassPrice(newDaypassPrice);
+      calculatedPrice = roundUpToNearestWhole(
+        calculatedPrice - (daypassDiscount.percentage / 100) * calculatedPrice
+      );
     }
+    setDaypassPrice(calculatedPrice);
   }, [
     bookingInfo,
     taxamount,

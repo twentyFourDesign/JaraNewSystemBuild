@@ -34,6 +34,7 @@ const RoomDetails = () => {
     visitDate: null,
     endDate: null,
   });
+  const [selectedRoomIds, setSelectedRoomIds] = useState([]);
 
   const handleRestart = () => {
     dispatch(resetGuestInfo());
@@ -72,6 +73,13 @@ const RoomDetails = () => {
       setSelectedRooms([...selectedRooms, { ...room, quantity, price }]);
     }
     setQuantity(1);
+    setSelectedRoomIds((prevIds) => {
+      if (prevIds.includes(room.id)) {
+        return prevIds.filter((id) => id !== room.id);
+      } else {
+        return [...prevIds, room.id];
+      }
+    });
   };
 
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
@@ -330,7 +338,11 @@ const RoomDetails = () => {
                         {item?.details.map((room, index) => (
                           <div
                             key={index}
-                            className="relative min-w-[8rem] h-[2.4rem] mt-2 flex justify-center flex-wrap items-center bg-white rounded-xl cursor-pointer"
+                            className={`relative min-w-[8rem] h-[2.4rem] mt-2 flex justify-center flex-wrap items-center rounded-xl cursor-pointer ${
+                              selectedRoomIds.includes(room.id)
+                                ? "bg-[#75A9BF] text-white"
+                                : "bg-white"
+                            }`}
                           >
                             <p
                               className="text-sm"
@@ -431,8 +443,8 @@ const RoomDetails = () => {
         </div>
 
         {/* RESERVATION  */}
-        <div className="max-w-[18rem] pr-4">
-          <div className="max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+        <div className="w-auto mt-4 xl:mt-0 mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
+          <div className="w-full xl:max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">

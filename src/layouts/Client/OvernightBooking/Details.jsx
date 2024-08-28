@@ -341,8 +341,8 @@ const Details = () => {
 
         {/* RESERVATION  */}
 
-        <div className="max-w-[18rem] pr-4">
-          <div className="max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+        <div className="w-auto  lg:mt-4 xl:mt-0 mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
+          <div className="w-full xl:max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">
