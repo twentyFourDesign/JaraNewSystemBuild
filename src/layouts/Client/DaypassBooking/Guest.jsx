@@ -59,7 +59,7 @@ const Guest = () => {
                       Adult Day Pass including Alcoholic Drinks
                     </p>
                     <p className="text-[#606970] mt-2">
-                      ₦{guestInfo.adultsAlcoholic * 45000}
+                      {/* ₦{guestInfo.adultsAlcoholic * 45000} */}
                     </p>
                   </div>
 
@@ -106,7 +106,7 @@ const Guest = () => {
                       Adult Day Pass w/ Soft Drinks
                     </p>
                     <p className="text-[#606970] mt-2">
-                      ₦{guestInfo.adultsNonAlcoholic * 35000}
+                      {/* ₦{guestInfo.adultsNonAlcoholic * 35000} */}
                     </p>
                   </div>
                   <div className="flex gap-x-4 items-center">
@@ -152,7 +152,7 @@ const Guest = () => {
                       booking.
                     </p>
                     <p className="text-[#606970] mt-2">
-                      ₦{guestInfo.Nanny * 15000}
+                      {/* ₦{guestInfo.Nanny * 15000} */}
                     </p>
                   </div>
                   <div className="flex gap-x-4 items-center">
@@ -196,7 +196,7 @@ const Guest = () => {
                       Aged 2-17 years (or 3 years+ after first FREE Toddler)
                     </p>
                     <p className="text-[#606970] mt-2">
-                      ₦{guestInfo.childTotal * 17500}
+                      {/* ₦{guestInfo.childTotal * 17500} */}
                     </p>
                   </div>
 

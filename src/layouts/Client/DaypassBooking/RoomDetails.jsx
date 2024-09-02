@@ -1,17 +1,16 @@
-import React from "react";
-import { useState } from "react";
-import Extras from "../../../components/Extras";
-import DaypassSteps from "../../../components/DaypassSteps";
-import DaypassReservation from "../../../components/DaypassReservation";
-import { insert } from "../../../store/slices/daypassAvailablity.slice";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import Extras from "../../../components/Extras";
+import DaypassSteps from "../../../components/DaypassSteps";
+import DaypassReservation from "../../../components/DaypassReservation";
+import { insert } from "../../../store/slices/daypassAvailablity.slice";
+import { PriceContext } from "../../../Context/PriceContext";
 
 const RoomDetails = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
-  // console.log(bookingInfo);
   const dispatch = useDispatch();
   const nav = useNavigate();
   const [finalData, setFinalData] = useState([]);
@@ -24,6 +23,10 @@ const RoomDetails = () => {
     adultsCount: bookingInfo.adultsAlcoholic + bookingInfo.adultsNonAlcoholic,
     childrenCount: bookingInfo.Nanny + bookingInfo.childTotal,
   });
+
+  // Add this line to get the setDaypassPrice function from the context
+  const { setDaypassPrice, setDaypassSubtotal } = useContext(PriceContext);
+
   const checkIfDateIsNotPast = (dateString) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -34,6 +37,15 @@ const RoomDetails = () => {
   const isValid = checkIfDateIsNotPast(availablityInfo.startDate);
 
   const onSubmit = () => {
+    if (
+      !bookingInfo.adultsAlcoholic &&
+      !bookingInfo.adultsNonAlcoholic &&
+      !bookingInfo.Nanny &&
+      !bookingInfo.childTotal
+    ) {
+      toast.error("Please go back and enter guest details");
+      return;
+    }
     if (!availablityInfo.startDate) {
       toast.error("please select date");
       return;
@@ -48,6 +60,47 @@ const RoomDetails = () => {
     // nav("/daypass/summary")
     nav("/daypass/details");
   };
+
+  const onDateChange = (e) => {
+    const selectedDate = new Date(e.target.value);
+    const dayOfWeek = selectedDate.getDay();
+
+    if (
+      dayType === "weekdays" &&
+      (dayOfWeek === 0 || dayOfWeek === 6 || dayOfWeek === 5)
+    ) {
+      // If the user selects a weekend day (0 = Sunday, 6 = Saturday)
+      toast.error("Please select a weekday (Monday to Thursday).");
+      return;
+    } else if (dayType === "weekends" && dayOfWeek >= 1 && dayOfWeek <= 4) {
+      // If the user selects a weekday
+      toast.error("Please select a weekend day (Friday to Sunday).");
+      return;
+    }
+
+    // Update availability info if the date is valid
+    setavailablityInfo({
+      ...availablityInfo,
+      startDate: e.target.value,
+    });
+
+    // Dispatch an action to update the Redux store with the new date
+    dispatch(insert({ ...availablityInfo, startDate: e.target.value }));
+
+    // Trigger price recalculation
+    setDaypassPrice(0); // Set to 0 to trigger recalculation
+  };
+
+  const handleDataType = (data) => {
+    setavailablityInfo({ ...availablityInfo, startDate: "" });
+    setDaypassSubtotal(0);
+    setdayType(data);
+  };
+
+  // Add this useEffect to update the Redux store when availablityInfo changes
+  useEffect(() => {
+    dispatch(insert(availablityInfo));
+  }, [availablityInfo, dispatch]);
 
   return (
     <div>
@@ -74,7 +127,7 @@ const RoomDetails = () => {
               <div className="mt-4">
                 <div className="flex gap-x-4 items-center">
                   <div
-                    onClick={() => setdayType("weekdays")}
+                    onClick={() => handleDataType("weekdays")}
                     className="cursor-pointer"
                   >
                     <p
@@ -89,7 +142,7 @@ const RoomDetails = () => {
                   </div>
                   <div
                     className="cursor-pointer"
-                    onClick={() => setdayType("weekends")}
+                    onClick={() => handleDataType("weekends")}
                   >
                     <p
                       className={`${
@@ -103,7 +156,7 @@ const RoomDetails = () => {
                   </div>
                   <div
                     className="cursor-pointer"
-                    onClick={() => setdayType("Seasonal")}
+                    onClick={() => handleDataType("Seasonal")}
                   >
                     <p
                       className={`${
@@ -121,13 +174,9 @@ const RoomDetails = () => {
                   <input
                     type="date"
                     className="mr-10 w-[100%] lg:mb-0 mb-2 lg:w-[20rem] h-[2.3rem] px-3 rounded-md"
-                    onChange={(e) =>
-                      setavailablityInfo({
-                        ...availablityInfo,
-                        startDate: e.target.value,
-                      })
-                    }
+                    onChange={onDateChange} // Use the new onDateChange function
                     min={new Date().toISOString().split("T")[0]}
+                    value={availablityInfo.startDate}
                   />
                 </div>
               </div>

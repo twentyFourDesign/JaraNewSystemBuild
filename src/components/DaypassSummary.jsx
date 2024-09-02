@@ -13,13 +13,13 @@ const DaypassSummary = () => {
     daypassPrice,
     daypassDiscount,
     daypassVoucher,
-    taxamount,
     bookingInfo,
     availablity,
     guestInfo,
-    setDaypassPrice,
     setDaypassDiscount,
     setDaypassVoucher,
+    daypassSubtotal,
+    daypassTaxAmount,
   } = useContext(PriceContext);
   const [discountCode, setDiscountCode] = useState("");
   const [voucherCode, setVoucherCode] = useState("");
@@ -89,11 +89,6 @@ const DaypassSummary = () => {
       nav(`/daypass/confirmation`);
     }
   };
-  const subTotal =
-    bookingInfo.adultsAlcoholic * 45000 +
-    bookingInfo.childTotal * 17500 +
-    bookingInfo.adultsNonAlcoholic * 35000 +
-    bookingInfo.Nanny * 15000;
 
   const handleApplyVoucher = async () => {
     try {
@@ -164,8 +159,8 @@ const DaypassSummary = () => {
         method: method,
         guestDetails: JSON.stringify(guestInfo),
         roomDetails: JSON.stringify(availablity),
-        subTotal: subTotal,
-        vat: taxamount,
+        subTotal: daypassSubtotal,
+        vat: daypassTaxAmount,
         totalCost: daypassPrice,
         discount: daypassDiscount ? daypassDiscount.percentage : 0,
         voucher: daypassVoucher ? daypassVoucher.voucher.balance : 0,
@@ -255,6 +250,11 @@ const DaypassSummary = () => {
   };
   const handleCheckbox = (event) => {
     setIsChecked(event.target.checked);
+    if (event.target.checked) {
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
+    }
   };
   const handlePaystackClick = () => {
     if (!isChecked) {

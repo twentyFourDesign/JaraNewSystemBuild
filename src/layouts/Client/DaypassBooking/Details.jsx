@@ -5,12 +5,13 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DaypassSteps from "../../../components/DaypassSteps";
 import DaypassReservation from "../../../components/DaypassReservation";
 import { insert } from "../../../store/slices/daypassUserInfo.slice";
 import toast from "react-hot-toast";
 const Details = () => {
+  const bookingInfo = useSelector((state) => state.daypassBookingInfo);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex =
     /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/;
@@ -58,6 +59,15 @@ const Details = () => {
   const emailPhoneValid =
     emailRegex.test(userDetails.email) && phoneRegex.test(userDetails.phone);
   const onSubmit = () => {
+    if (
+      !bookingInfo.adultsAlcoholic &&
+      !bookingInfo.adultsNonAlcoholic &&
+      !bookingInfo.Nanny &&
+      !bookingInfo.childTotal
+    ) {
+      toast.error("Please go back and enter guest details");
+      return;
+    }
     if (!isValid) {
       toast.error("Please fill all the fields");
       return;
@@ -202,12 +212,12 @@ const Details = () => {
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                   />
                 </div>
-                <textarea
+                {/* <textarea
                   type="text"
                   placeholder="State any dietary or setup requirements (i.e baby bathtub or children’s cot)"
                   name=""
                   className=" lg:w-[83%] w-[100%] h-[5rem] rounded-md bg-white outline-none border-2 border-[#C8D5E0] mt-4 resize-none p-4"
-                />
+                /> */}
                 <p className="mt-2">
                   Upload Image [face] identification (i.e. passport, national
                   ID, driver's license) - Max: 5 MB

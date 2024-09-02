@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightReservation from "../../../components/OvernightReservation";
@@ -21,6 +21,8 @@ import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestIn
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 import { ImCross } from "react-icons/im";
+import { PriceContext } from "../../../Context/PriceContext";
+
 const RoomDetails = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -35,6 +37,7 @@ const RoomDetails = () => {
     endDate: null,
   });
   const [selectedRoomIds, setSelectedRoomIds] = useState([]);
+  const { calPrice } = useContext(PriceContext);
 
   const handleRestart = () => {
     dispatch(resetGuestInfo());
@@ -80,6 +83,7 @@ const RoomDetails = () => {
         return [...prevIds, room.id];
       }
     });
+    calPrice(); // Recalculate price when a room is selected
   };
 
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
@@ -141,6 +145,12 @@ const RoomDetails = () => {
       });
   }, [selectedDate]);
 
+  useEffect(() => {
+    if (selectedDate.visitDate && selectedDate.endDate) {
+      calPrice(); // Recalculate price when dates change
+    }
+  }, [selectedDate, calPrice]);
+
   const handleNext = () => {
     let totalAdults = 0;
     let totalChildren = 0;
@@ -148,18 +158,11 @@ const RoomDetails = () => {
     let totalToddlers = 0;
 
     selectedRooms.forEach((room) => {
-      // console.log(room, "rooom");
       totalAdults += room.adult * room.quantity;
       totalChildren += room.children * room.quantity;
       totalInfants += room.infant * room.quantity;
       totalToddlers += room.toodler * room.quantity;
     });
-    // console.log("Calculated Totals:");
-    // console.log("Adults:", totalAdults, "vs Booked:", guestCount.adults);
-    // console.log("Children:", totalChildren, "vs Booked:", guestCount.children);
-    // console.log("Infants:", totalInfants, "vs Booked:", guestCount.infants);
-    // console.log("Toddlers:", totalToddlers, "vs Booked:", guestCount.toddler);
-    // console.log("GUest Adults", guestCount.adults);
 
     if (!guestCount.adults) {
       toast.error("Please Return back and Select Number of Adults");

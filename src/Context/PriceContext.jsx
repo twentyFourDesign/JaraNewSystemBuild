@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 const roundUpToNearestWhole = (number) => Math.ceil(number);
@@ -19,9 +19,13 @@ export const PriceProvider = ({ children }) => {
   const [daypassVoucher, setDaypassVoucher] = useState(null);
   const [price, setPrice] = useState(0);
   const [daypassPrice, setDaypassPrice] = useState(0);
+  const [overnightTaxAmount, setOvernightTaxAmount] = useState(0);
+  const [overnightSubtotal, setOvernightSubtotal] = useState(0);
+  const [daypassSubtotal, setDaypassSubtotal] = useState(0);
+  const [daypassTaxAmount, setDaypassTaxAmount] = useState(0);
   const [multiNightDiscount, setMultiNightDiscount] = useState(0);
   // console.log(voucher);
-  const calPrice = () => {
+  const calPrice = useCallback(() => {
     const pricingPercentages = {
       "Ocean deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
       "Ocean deluxe 2": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
@@ -203,53 +207,70 @@ export const PriceProvider = ({ children }) => {
     if (discount) {
       totalRoomPrice -= (discount.percentage / 100) * totalRoomPrice;
     }
+    setOvernightSubtotal(totalRoomPrice);
+    let taxamount = (12.5 / 100) * totalRoomPrice;
+    totalRoomPrice += taxamount;
+    setOvernightTaxAmount(taxamount);
     // Round up the total price
     return roundUpToNearestWhole(totalRoomPrice);
-  };
+  }, [guestCount, roomDetails, discount, voucher]);
 
   useEffect(() => {
     setPrice(calPrice());
-  }, [guestCount, roomDetails, guestDetails, discount, voucher]);
-
-  let taxamount =
-    (12.5 / 100) * bookingInfo.adultsAlcoholic * 45000 +
-    bookingInfo.childTotal * 17500 +
-    bookingInfo.adultsNonAlcoholic * 35000 +
-    bookingInfo.Nanny * 15000;
-
-  const totalPrice =
-    bookingInfo.adultsAlcoholic * 45000 +
-    bookingInfo.childTotal * 17500 +
-    bookingInfo.adultsNonAlcoholic * 35000 +
-    bookingInfo.Nanny * 15000 +
-    taxamount;
+  }, [calPrice]);
 
   useEffect(() => {
-    let calculatedPrice = roundUpToNearestWhole(totalPrice);
-    if (daypassVoucher) {
-      calculatedPrice = roundUpToNearestWhole(daypassVoucher.newPrice);
-    }
-    if (daypassDiscount) {
-      calculatedPrice = roundUpToNearestWhole(
-        calculatedPrice - (daypassDiscount.percentage / 100) * calculatedPrice
-      );
-    }
-    setDaypassPrice(calculatedPrice);
-  }, [
-    bookingInfo,
-    taxamount,
-    availablity,
-    guestInfo,
-    daypassDiscount,
-    daypassVoucher,
-  ]);
+    const calculateDaypassPrice = () => {
+      if (!availablity.startDate) {
+        setDaypassSubtotal(0);
+        return 0;
+      }
+
+      const selectedDate = new Date(availablity.startDate);
+      const dayOfWeek = selectedDate.getDay();
+      const isWeekend = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0; // Friday, Saturday, or Sunday
+
+      const prices = {
+        adultsAlcoholic: isWeekend ? 45000 : 40000,
+        adultsNonAlcoholic: isWeekend ? 35000 : 30000,
+        child: isWeekend ? 17500 : 15000,
+        Nanny: 15000,
+      };
+
+      const subtotal =
+        bookingInfo.adultsAlcoholic * prices.adultsAlcoholic +
+        bookingInfo.adultsNonAlcoholic * prices.adultsNonAlcoholic +
+        bookingInfo.childTotal * prices.child +
+        bookingInfo.Nanny * prices.Nanny;
+
+      const taxAmount = subtotal * 0.125; // 12.5% tax
+      let total = subtotal + taxAmount;
+
+      if (daypassVoucher) {
+        total = daypassVoucher.newPrice;
+      }
+      if (daypassDiscount) {
+        total -= (daypassDiscount.percentage / 100) * total;
+      }
+
+      setDaypassSubtotal(roundUpToNearestWhole(subtotal));
+      setDaypassTaxAmount(roundUpToNearestWhole(taxAmount));
+      return roundUpToNearestWhole(total);
+    };
+
+    setDaypassPrice(calculateDaypassPrice());
+  }, [bookingInfo, availablity, daypassDiscount, daypassVoucher]);
 
   return (
     <PriceContext.Provider
       value={{
         price,
         daypassPrice,
-        taxamount,
+        overnightTaxAmount,
+        overnightSubtotal,
+        daypassSubtotal,
+        setDaypassSubtotal,
+        daypassTaxAmount,
         setDaypassPrice,
         daypassDiscount,
         setDaypassDiscount,
@@ -264,6 +285,7 @@ export const PriceProvider = ({ children }) => {
         availablity,
         guestInfo,
         multiNightDiscount,
+        calPrice, // Add this line to expose calPrice function
       }}
     >
       {children}

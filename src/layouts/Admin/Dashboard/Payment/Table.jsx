@@ -20,6 +20,21 @@ const Table = ({ tr, data }) => {
     const formattedDate = date.toLocaleDateString("en-US", options);
     return formattedDate;
   }
+
+  const shortenRef = (ref) => {
+    // Check if ref is defined and is a string
+    if (ref && typeof ref === "string") {
+      // MongoDB ObjectIds are 24 characters long
+      // We'll show the first 6 and last 4 characters
+      if (ref.length === 24) {
+        return `${ref.slice(0, 6)}`;
+      }
+      return ref;
+    }
+    // Return a placeholder or empty string if ref is undefined or not a string
+    return "";
+  };
+
   return (
     <div className="w-full overflow-x-scroll md:overflow-x-auto bg-white h-[25rem] ">
       {data?.length > 0 ? (
@@ -56,8 +71,9 @@ const Table = ({ tr, data }) => {
                   <span
                     className="cursor-pointer hover:underline"
                     onClick={() => handleRefClick(item?.ref, item?._id)}
+                    title={item?.ref}
                   >
-                    {item?.ref}
+                    {shortenRef(item?.ref)}
                   </span>
                 </td>
                 <td className={tdStyle}>{formatDate(item?.createdAt)}</td>

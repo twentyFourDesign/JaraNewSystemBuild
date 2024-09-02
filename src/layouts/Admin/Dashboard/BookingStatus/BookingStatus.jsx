@@ -27,8 +27,8 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       console.log("failed to fetch");
     }
   };
-  // console.log(booking);
-  // console.log(paymentInfo);
+  console.log(booking);
+  console.log(paymentInfo);
 
   const confirmPayment = async () => {
     try {
@@ -392,11 +392,24 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
               </div>
               <div className="flex justify-between min-w-[350px] ">
                 <p className="text-gray-600">Discount</p>
-                <span className="font-semibold">None</span>
+                <span className="font-semibold">
+                  {paymentInfo?.discount ? `${paymentInfo?.discount}%` : "None"}
+                </span>
               </div>
               <div className="flex justify-between min-w-[350px] ">
-                <p className="text-gray-600">Voucher</p>
-                <span className="font-semibold">None</span>
+                <p className="text-gray-600">Voucher Balance</p>
+                <span className="font-semibold">
+                  {paymentInfo?.voucher ? paymentInfo?.voucher : "None"}
+                </span>
+              </div>
+
+              <div className="flex justify-between min-w-[350px] ">
+                <p className="text-gray-600">Multi Night Discount</p>
+                <span className="font-semibold">
+                  {paymentInfo?.multiNightDiscount
+                    ? `${paymentInfo?.multiNightDiscount}%`
+                    : "None"}
+                </span>
               </div>
             </div>
           </div>

@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
-import { useSelector } from "react-redux";
 import { PriceContext } from "../Context/PriceContext";
+
 const DaypassReservation = () => {
-  const { bookingInfo, availablity, taxamount, daypassPrice, daypassDiscount } =
-    useContext(PriceContext);
-  // const bookingInfo = useSelector((state) => state.daypassBookingInfo);
-  // const availablity = useSelector((state) => state.daypassAvailablity);
-  // let taxamount =
-  //   (12.5 / 100) * bookingInfo.adultsAlcoholic * 45000 +
-  //   bookingInfo.childTotal * 17500 +
-  //   bookingInfo.adultsNonAlcoholic * 35000 +
-  //   bookingInfo.Nanny * 15000;
+  const {
+    bookingInfo,
+    availablity,
+    daypassPrice,
+    daypassSubtotal,
+    daypassTaxAmount,
+    daypassDiscount,
+  } = useContext(PriceContext);
+
   return (
     <div className="font-robotoFont p-4">
       <h1 className="text-xl font-bold">Your Reservation</h1>
@@ -88,18 +88,12 @@ const DaypassReservation = () => {
       <div className="mt-3">
         <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Sub-total</h1>
-          <h1 className="text-base font-bold">
-            ₦
-            {bookingInfo.adultsAlcoholic * 45000 +
-              bookingInfo.childTotal * 17500 +
-              bookingInfo.adultsNonAlcoholic * 35000 +
-              bookingInfo.Nanny * 15000 || 0}
-          </h1>
+          <h1 className="text-base font-bold">₦{daypassSubtotal.toFixed(2)}</h1>
         </div>
         <div className="flex justify-between items-center">
-          <h1 className="text-base font-bold">Room Discount (%)</h1>
+          <h1 className="text-base font-bold">Discount (%)</h1>
           <h1 className="text-base font-bold">
-            {daypassDiscount?.percentage ? daypassDiscount?.percentage : 0}%
+            {daypassDiscount?.percentage ? daypassDiscount.percentage : 0}%
           </h1>
         </div>
       </div>
@@ -107,11 +101,11 @@ const DaypassReservation = () => {
       <div className="bg-[#F1F5F8] mt-3 h-[6rem] rounded-md shadow-shadow1 p-2 flex justify-center items-start flex-col">
         <div className="flex justify-between items-center w-[100%]">
           <p className="text-sm ">Consumption Tax and VAT (12.5%)</p>
-          <p className="text-sm font-bold">₦{taxamount}</p>
+          <p className="text-sm font-bold">₦{daypassTaxAmount.toFixed(2)}</p>
         </div>
         <div className="flex justify-between items-center mt-3 w-[100%]">
           <p className="font-bold text-lg">Total</p>
-          <p className="font-bold text-lg">₦{daypassPrice || 0}</p>
+          <p className="font-bold text-lg">₦{daypassPrice.toFixed(2)}</p>
         </div>
       </div>
     </div>

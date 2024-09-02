@@ -1,5 +1,5 @@
 import React from "react";
-import HeaderImage from "../assets/headerday.png";
+import HeaderImage from "../assets/daypassHeader.png";
 import logo from "../assets/jaralogo.png";
 import { Link } from "react-router-dom";
 

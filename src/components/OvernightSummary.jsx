@@ -17,6 +17,7 @@ const OvernightSummary = () => {
   const [voucherCode, setVoucherCode] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [discountDisabled, setDiscountDisabled] = useState(false);
+
   const [data, setData] = useState({
     heading: "",
     desc: "",
@@ -42,6 +43,9 @@ const OvernightSummary = () => {
     voucher,
     setVoucher,
     multiNightDiscount,
+    overnightTaxAmount,
+    calPrice,
+    overnightSubtotal,
   } = useContext(PriceContext);
   const nav = useNavigate();
 
@@ -150,15 +154,15 @@ const OvernightSummary = () => {
     try {
       let result = await axios.post(`${baseUrl}/payment/create`, {
         name: guestDetails.firstname + " " + guestDetails.lastname,
-        amount: (12.5 / 100) * price + price,
+        amount: price,
         status: status,
         ref: bookingId,
         method: method,
         guestDetails: JSON.stringify(guestDetails),
         roomDetails: JSON.stringify(roomDetails),
-        subTotal: price,
-        vat: (12.5 / 100) * price,
-        totalCost: (12.5 / 100) * price + price,
+        subTotal: overnightSubtotal,
+        vat: overnightTaxAmount,
+        totalCost: price,
         discount: discount ? discount.percentage : 0,
         voucher: voucher ? voucher.voucher.balance : 0,
         multiNightDiscount: multiNightDiscount,
@@ -230,7 +234,7 @@ const OvernightSummary = () => {
 
   const componentProps = {
     email: guestDetails.email,
-    amount: ((12.5 / 100) * price + price) * 100, // price is already rounded
+    amount: price * 100, // price is already rounded
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     text: "Pay with Paystack",
     metadata: {
@@ -240,6 +244,7 @@ const OvernightSummary = () => {
     onSuccess: (reference) => onSuccess(reference),
     onClose: onClose,
   };
+
   const handleHold = () => {
     if (!isChecked) {
       toast.error("You must accept the terms and conditions first");
@@ -247,8 +252,14 @@ const OvernightSummary = () => {
     }
     confirmBooking("Pending", "Bank Transfer");
   };
+
   const handleCheckbox = (event) => {
     setIsChecked(event.target.checked);
+    if (event.target.checked) {
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
+    }
   };
   const handlePaystackClick = () => {
     if (!isChecked) {
@@ -366,7 +377,7 @@ const OvernightSummary = () => {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="Confirm Payment Modal"
+        contentLabel="Terms and Conditions"
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.75)",

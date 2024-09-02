@@ -90,7 +90,7 @@ const Confirmation = () => {
             className="w-[100%] sm:w-[13rem] h-[2.4rem] bg-[#C8D5E0] text-black font-bold flex justify-center items-center gap-x-2 rounded-md cursor-pointer font-robotoFont"
           >
             <img src={arrow} alt="icon" className="w-[1rem]" />
-            Make an other booking
+            Make another booking
           </button>
           <button
             onClick={handleHome}
