@@ -259,7 +259,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
   };
 
   return (
-    <div className="w-[100%] max-h-[19rem] overflow-y-auto  bg-white rounded-md mt-4 font-robotoFont p-4">
+    <div className="w-[100%] max-h-[19rem] overflow-y-auto border-2 border-[#C8D5E0] rounded-md mt-4 font-robotoFont p-4">
       <h1 className="text-xl font-bold">Want to add some Extras</h1>
 
       <div className="flex justify-between items-center gap-x-4">

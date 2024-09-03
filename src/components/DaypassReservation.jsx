@@ -11,8 +11,10 @@ const DaypassReservation = () => {
     daypassDiscount,
   } = useContext(PriceContext);
 
+  // console.log(bookingInfo);
+  // console.log(availablity);
   return (
-    <div className="font-robotoFont p-4">
+    <div className="font-robotoFont p-4 h-auto">
       <h1 className="text-xl font-bold">Your Reservation</h1>
       <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
 
@@ -84,6 +86,27 @@ const DaypassReservation = () => {
         </div>
         <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
       </div>
+      <div className="mt-3">
+        <h1 className="text-lg font-bold">Extras</h1>
+        {availablity?.extras?.length > 0 ? (
+          <div className="flex gap-2 flex-wrap items-center">
+            {availablity?.extras?.map((item, index) => {
+              if (index == availablity?.extras?.length - 1) {
+                return (
+                  <p key={item.id}>{item.title ? item.title : item.type}</p>
+                );
+              } else {
+                return (
+                  <p key={item.id}>{item.title ? item.title : item.type}, </p>
+                );
+              }
+            })}
+          </div>
+        ) : (
+          <p className="mt-1">No extras are selected yet.</p>
+        )}
+        <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
+      </div>
 
       <div className="mt-3">
         <div className="flex justify-between items-center">
@@ -98,7 +121,7 @@ const DaypassReservation = () => {
         </div>
       </div>
 
-      <div className="bg-[#F1F5F8] mt-3 h-[6rem] rounded-md shadow-shadow1 p-2 flex justify-center items-start flex-col">
+      <div className="bg-[#F1F5F8] mt-3 h-auto rounded-md shadow-shadow1 p-2 flex justify-center items-start flex-col">
         <div className="flex justify-between items-center w-[100%]">
           <p className="text-sm ">Consumption Tax and VAT (12.5%)</p>
           <p className="text-sm font-bold">₦{daypassTaxAmount.toFixed(2)}</p>

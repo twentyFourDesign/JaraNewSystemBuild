@@ -102,7 +102,7 @@ const Details = () => {
 
   return (
     <div>
-      <div className="xl:flex w-screen justify-between items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap">
+      <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap">
         <div className="flex-1 gap-x-3">
           {/* SETPS  */}
           <div className="w-[100%] flex justify-center items-center">
@@ -254,7 +254,7 @@ const Details = () => {
         </div>
 
         {/* RESERVATION  */}
-        <div className="min-w-[18rem] h-[30rem] mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+        <div className="min-w-[18rem] xl:max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
           <DaypassReservation />
         </div>
       </div>
@@ -294,9 +294,9 @@ const Details = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center bg-[#9DD4D3] text-black px-7 mt-3 pb-3">
-          <p>© 2023 JARA BEACH RESORT</p>
-          <p>owned and operated by Little Company Nigeria Limited</p>
+        <div className="flex justify-between items-center bg-[#9DD4D3] text-black font-rubic px-7 mt-3 py-2">
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+          <p>Owned and Operated By Little Company Nigeria Limited</p>
         </div>
       </div>
     </div>

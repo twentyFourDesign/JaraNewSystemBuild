@@ -35,7 +35,7 @@ const Summary = () => {
   }, [reservationRef.current]);
   return (
     <div className="flex flex-col  justify-center items-center ">
-      <div className="flex  w-screen  justify-center items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap gap-x-4">
+      <div className="flex  w-screen  justify-center items-start bg-[white] p-[1rem] font-robotoFont flex-wrap gap-x-4">
         {/* RESERVATION  */}
         <div
           ref={reservationRef}
@@ -71,10 +71,10 @@ const Summary = () => {
           <p className="font-[500] text-xl">Restart Booking</p>
         </div>
       </div>
-      <div className="w-screen bg-[#9DD4D3] text-black">
+      <div className="w-screen bg-[#9DD4D3] text-black font-rubic">
         <div className="flex justify-between items-center px-7 mt-3 pb-3">
-          <p>© 2023 JARA BEACH RESORT</p>
-          <p>owned and operated by Little Company Nigeria Limited</p>
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+          <p>Owned and Operated By Little Company Nigeria Limited</p>
         </div>
       </div>
     </div>

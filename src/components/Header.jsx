@@ -11,7 +11,7 @@ const Header = () => {
             src={JaraLogo}
             loading="true"
             alt="jaralogo"
-            className="h-[100%] w-[8rem] p-2 z-10 hover:cursor-pointer"
+            className="h-[4rem] w-[6rem] p-2 z-10 hover:cursor-pointer"
           />
         </Link>
       </div>

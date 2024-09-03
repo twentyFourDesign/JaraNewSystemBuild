@@ -38,7 +38,7 @@ const Confirmation = () => {
   };
   return (
     <>
-      <div className=" bg-[#eff6ff] font-robotoFont">
+      <div className=" bg-[white] font-robotoFont">
         <div className="flex justify-center items-center">
           <div className=" w-[97%] sm:w-[70%] h-fit bg-white mt-4 mb-4 rounded-lg pb-4">
             <div className="flex justify-center items-center">
@@ -101,10 +101,10 @@ const Confirmation = () => {
           </button>
         </div>
       </div>
-      <div className="w-screen bg-[#9DD4D3] text-black">
-        <div className="flex justify-between items-center px-7 mt-3 pb-3">
-          <p>© 2023 JARA BEACH RESORT</p>
-          <p>owned and operated by Little Company Nigeria Limited</p>
+      <div className="w-screen bg-[#9DD4D3] text-black font-rubic">
+        <div className="flex justify-between items-center px-7 mt-3 py-2">
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+          <p>Owned and Operated By Little Company Nigeria Limited</p>
         </div>
       </div>
     </>

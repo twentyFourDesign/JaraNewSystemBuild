@@ -56,7 +56,7 @@ const BookingType = () => {
           src={JaraLogo}
           loading="true"
           alt="jaralogo"
-          className="h-[100%] p-2 z-10"
+          className="h-[4rem] w-[6rem] p-2 z-10"
         />
       </div>
 
@@ -64,11 +64,11 @@ const BookingType = () => {
 
       <div className="w-full h-full flex flex-col z-20 items-center">
         <div className="flex items-center flex-col md:flex-row md:gap-0 gap-2 w-full justify-center pt-36">
-          <span className="px-3 py-4 md:py-0 text-[#f8e3e3]  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins border-b-2  border-b-[#bcb9b9] md:border-b-0  md:border-r-2">
+          <span className="px-3 py-4 md:py-0 text-black  text-2xl z-20 font-[600] tracking-[10px] leading-[24px] font-poppins border-b-2  border-b-[#bcb9b9] md:border-b-0  md:border-r-2">
             All-Inclusive
           </span>
           {/* <hr className="md:w-2 md:h-9 z-10" /> */}
-          <span className=" pl-5 py-4 md:py-0 pr-3 text-[#f8e3e3]  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins  md:border-l-2">
+          <span className=" pl-5 py-4 md:py-0 pr-3 text-black  text-2xl z-20 font-[600] tracking-[10px] leading-[24px] font-poppins  md:border-l-2">
             Beach Experience
           </span>
         </div>
@@ -187,13 +187,13 @@ const BookingType = () => {
       )}
 
       {/* FOOTER CONTACT  */}
-      <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-cursive py-3 md:px-5  px-2 text-sm z-10">
+      <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm z-10">
         <div>
-          <p>© 2023 JARA BEACH RESORT</p>
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
         </div>
         <div>
           <p className="text-right max-w-[300px] md:max-w-full">
-            owned and operated by Little Company Nigeria Limited
+            Owned and Operated By Little Company Nigeria Limited
           </p>
         </div>
       </div>

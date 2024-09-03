@@ -60,7 +60,7 @@ const Guest = () => {
   ];
   return (
     <div>
-      <div className="xl:flex w-screen justify-between items-start bg-[#eff6ff] pt-4  font-robotoFont flex-wrap">
+      <div className="xl:flex w-screen justify-between items-start bg-[white] pt-4  font-robotoFont flex-wrap">
         <div className="flex-1 gap-x-3">
           {/* className="flex-1 gap-x-3  */}
           {/* SETPS  */}
@@ -257,13 +257,13 @@ const Guest = () => {
           </div>
         </div>
 
-        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-cursive py-3 md:px-5  px-2 text-sm z-10">
+        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm z-10">
           <div>
-            <p>© 2023 JARA BEACH RESORT</p>
+            <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
           </div>
           <div>
             <p className="text-right max-w-[300px] md:max-w-full">
-              owned and operated by Little Company Nigeria Limited
+              Owned and Operated By Little Company Nigeria Limited
             </p>
           </div>
         </div>

@@ -145,7 +145,7 @@ const Details = () => {
   };
   return (
     <div style={{ fontFamily: "Inter sans-serif" }}>
-      <div className="xl:flex w-screen justify-between items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap">
+      <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap">
         <div className="flex-1 gap-x-3">
           {/* SETPS  */}
           <div className="w-[100%] flex justify-center items-center">
@@ -385,10 +385,10 @@ const Details = () => {
 
       {/* FOOTER  */}
 
-      <div className="w-screen bg-[#9DD4D3] text-black">
+      <div className="w-screen bg-[#9DD4D3] text-black font-rubic">
         <div className="flex justify-between items-center px-7 mt-3 pb-3">
-          <p>© 2023 JARA BEACH RESORT</p>
-          <p>owned and operated by Little Company Nigeria Limited</p>
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+          <p>Owned and Operated By Little Company Nigeria Limited</p>
         </div>
       </div>
     </div>
