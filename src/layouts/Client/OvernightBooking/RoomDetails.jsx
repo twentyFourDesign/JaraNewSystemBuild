@@ -22,7 +22,8 @@ import { reset as resetGuestCount } from "../../../store/slices/overnight/overni
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 import { ImCross } from "react-icons/im";
 import { PriceContext } from "../../../Context/PriceContext";
-
+import RoomSelect from '../../../components/RoomSelect'
+// import CombinedComponent from '../../../components/DateSelector'
 const RoomDetails = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const RoomDetails = () => {
   });
   const [selectedRoomIds, setSelectedRoomIds] = useState([]);
   const { calPrice } = useContext(PriceContext);
-
+const [roomsOption, setRoomsOption] = useState([])
   const handleRestart = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
@@ -58,6 +59,23 @@ const RoomDetails = () => {
       currentQuantity > 1 ? currentQuantity - 1 : currentQuantity
     );
   };
+
+
+  const handleRoomSelected = (values) => {
+    console.log(values)
+  for (let i = 0; i < values.length; i++) {
+    handleClickSave(values[i], values[i].price)
+  }
+  }
+
+
+
+
+
+
+
+
+
 
   const handleClickSave = (room, price) => {
     setshowPopup(false);
@@ -104,8 +122,17 @@ const RoomDetails = () => {
     axios
       .post(`${baseUrl}/main/rooms/sub/get/dynamic/all`, requestData)
       .then((res) => {
+        // let rooms = res.data.map(room => {
+        //   return {
+        //     ...room,
+        //     price: room.roomId.price
+        //   }
+        // })
+        
+        setRoomsOption(res.data)
         const groupedRooms = res.data.reduce((acc, room) => {
           const { title, price } = room.roomId;
+          console.log("result..........",res.data)
           const existingGroup = acc.find((group) => group.ref === title);
           // console.log("existingGroup", existingGroup);
           if (existingGroup) {
@@ -428,6 +455,17 @@ const RoomDetails = () => {
                   ))}
               </div>
 
+
+
+
+{/* <CombinedComponent/> */}
+
+
+
+
+
+    {/* <Select [options]={modifiedRoom}/> */}
+         <RoomSelect options={roomsOption} setSelected={handleRoomSelected}/>
               <p className="text-[#606970] text-sm mt-3">
                 *Available rooms are showing based on your selected check-in and
                 check-out dates above.

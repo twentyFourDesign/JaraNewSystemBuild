@@ -10,4 +10,10 @@ export default defineConfig({
       overlay: false,
     },
   },
+  resolve: {
+    alias: {
+      '@emotion/react': '@emotion/react',
+      '@emotion/styled': '@emotion/styled',
+    },
+  },
 });

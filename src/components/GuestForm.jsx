@@ -6,7 +6,9 @@ import Edit from "../assets/edit.png";
 import { useSelector, useDispatch } from "react-redux";
 import { insert as insertGuestCount } from "../store/slices/overnight/overnightGuest.slice";
 import { insert as insertGuestInfo } from "../store/slices/overnight/guestInfo.slice";
-const GuestForm = ({ guests, guestCount, updateGuest }) => {
+
+
+const GuestForm = ({ guests, guestCount, updateGuest, setGuest }) => {
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -15,7 +17,7 @@ const GuestForm = ({ guests, guestCount, updateGuest }) => {
     // dispatch(insertGuestCount({ guestCount: guestCount }));
     setShowModal(true);
   };
-
+  
   return (
     <div
       className="px-4 py-2 w-[90%] border-2 mt-4 flex flex-col items-start md:items-center border-[#75A9BF] rounded-xl "
@@ -45,6 +47,7 @@ const GuestForm = ({ guests, guestCount, updateGuest }) => {
             </>
           )}
         </button>
+
       </div>
 
       <GuestList guests={guests} />
@@ -55,6 +58,7 @@ const GuestForm = ({ guests, guestCount, updateGuest }) => {
           onSave={() => setShowModal(false)}
           guests={guests}
           updateGuest={updateGuest}
+          setGuest={setGuest}
         />
       )}
     </div>

@@ -63,6 +63,14 @@ const Details = () => {
       ),
     }));
   };
+  const setGuest = (value) => {
+    setuserDetails((prevState) => ({
+      ...prevState,
+      guests: prevState.guests.map((guest) =>
+        guest.id === value.id ? { ...guest, value } : guest
+      ),
+    }));
+  };
 
   const validateGuests = () => {
     if (!userDetails.guests) return;
@@ -332,6 +340,7 @@ const Details = () => {
                     guests={userDetails.guests}
                     guestCount={guestCount}
                     updateGuest={updateGuest}
+                    setGuest={setGuest}
                   />
                 </div>
               </div>

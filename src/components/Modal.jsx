@@ -1,19 +1,31 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import { useSelector } from "react-redux";
-
-const Modal = ({ onClose, onSave, guests, updateGuest }) => {
+import GuestSelect from "./GuestSelect";
+import axios from 'axios'
+import { baseUrl } from '../constants/baseurl'
+const Modal = ({ onClose, onSave, guests, updateGuest, setGuest }) => {
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
+  const [showNav, setShowNav] = useState(false)
+  const [allGuests, setAllGuests] = useState([])
 
   const handleInputChange = (id, field, value) => {
     updateGuest(id, field, value);
   };
-
+  useEffect(()=>{
+    axios.get(`${baseUrl}/guest/get/all`)
+    .then((res)=>{
+        if(res.status){
+            setAllGuests(res.data)
+        }
+    })
+},[])
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg max-w-xl w-full">
         <h2 className="text-xl font-bold mb-4">Guests Info</h2>
         <div className="space-y-4">
+          <GuestSelect options={allGuests} setSelected={setGuest}/>
           {guests.map((guest) => (
             <div key={guest.id} className="flex space-x-4">
               <div className="w-1/4">
