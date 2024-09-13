@@ -3,7 +3,12 @@ const Table = ({ tr, data }) => {
     "pb-2 pt-2 pl-4 pr-4 text-lg text-start font-normal whitespace-nowrap border-2 border-[#E9EBED] tracking-wider";
   const tdStyle =
     "p-4 text-sm text-gray-600 whitespace-nowrap text-start border-2 border-[#E9EBED] tracking-wider";
-
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  }
   return (
     <div className="w-full overflow-x-scroll md:overflow-x-auto bg-white h-[25rem] ">
       {data?.length > 0 ? (
@@ -33,8 +38,16 @@ const Table = ({ tr, data }) => {
                 <td className={tdStyle}>{item?.totalGuest?.toddler}</td>
                 <td className={tdStyle}>{item?.totalGuest?.infants}</td>
 
-                <td className={tdStyle}>{item?.bookingDetails?.visitDate}</td>
-                <td className={tdStyle}>{item?.bookingDetails?.endDate}</td>
+                <td className={tdStyle}>
+                  {item?.bookingDetails?.visitDate
+                    ? formatDate(item?.bookingDetails?.visitDate)
+                    : ""}
+                </td>
+                <td className={tdStyle}>
+                  {item?.bookingDetails?.endDate
+                    ? formatDate(item?.bookingDetails?.endDate)
+                    : ""}
+                </td>
 
                 <td className={tdStyle}>
                   {item?.bookingDetails?.selectedRooms?.map((i, index) => (

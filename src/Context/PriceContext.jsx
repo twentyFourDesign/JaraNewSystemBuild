@@ -11,7 +11,9 @@ export const PriceProvider = ({ children }) => {
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   // console.log(guestCount);
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
+  // console.log(bookingInfo);
   const availablity = useSelector((state) => state.daypassAvailablity);
+  // console.log(availablity);
   const guestInfo = useSelector((state) => state.daypassUserInfo);
   const [discount, setDiscount] = useState(null);
   const [voucher, setVoucher] = useState(null);
@@ -237,12 +239,21 @@ export const PriceProvider = ({ children }) => {
         Nanny: 15000,
       };
 
-      const subtotal =
+      let subtotal =
         bookingInfo.adultsAlcoholic * prices.adultsAlcoholic +
         bookingInfo.adultsNonAlcoholic * prices.adultsNonAlcoholic +
         bookingInfo.childTotal * prices.child +
         bookingInfo.Nanny * prices.Nanny;
-
+      if (availablity?.extras?.length > 0) {
+        for (const extra of availablity?.extras) {
+          const extraPrice = parseInt(extra.price, 10);
+          if (isNaN(extraPrice)) {
+            console.error("Error: Invalid price format for extra", extra);
+            continue;
+          }
+          subtotal += extraPrice;
+        }
+      }
       const taxAmount = subtotal * 0.125; // 12.5% tax
       let total = subtotal + taxAmount;
 

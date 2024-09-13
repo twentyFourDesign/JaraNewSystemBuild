@@ -21,7 +21,7 @@ import Disable from "./Popup/Disable";
 import RoomDecoration from "./Popup/RoomDecoration";
 import DomesticStaff from "./Popup/DomesticStaff";
 import UnforgettableExp from "./Popup/UnforgettableExperiences";
-
+import SeasonalDates from "./Popup/SeasonalDates";
 const Setting = ({ setShowNav, showNav }) => {
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
 
@@ -46,6 +46,7 @@ const Setting = ({ setShowNav, showNav }) => {
     roomDecoration: false,
     domesticStaff: false,
     unforgettableExp: false,
+    seasonal: false,
   });
 
   return (
@@ -214,6 +215,12 @@ const Setting = ({ setShowNav, showNav }) => {
           >
             <p>Domestic Staff</p>
           </div>
+          <div
+            onClick={() => setShowPopups({ ...showPopups, seasonal: true })}
+            className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
+          >
+            <p>Seasonal Dates</p>
+          </div>
         </div>
       </div>
 
@@ -366,6 +373,16 @@ const Setting = ({ setShowNav, showNav }) => {
         <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
           <div className="flex justify-center items-center h-[100%] w-[100%]">
             <UnforgettableExp
+              setShowPopups={setShowPopups}
+              showPopups={showPopups}
+            />
+          </div>
+        </div>
+      )}
+      {showPopups.seasonal && (
+        <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
+          <div className="flex justify-center items-center h-[100%] w-[100%]">
+            <SeasonalDates
               setShowPopups={setShowPopups}
               showPopups={showPopups}
             />

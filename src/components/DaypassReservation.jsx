@@ -10,6 +10,13 @@ const DaypassReservation = () => {
     daypassTaxAmount,
     daypassDiscount,
   } = useContext(PriceContext);
+  console.log(availablity.startDate);
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  }
 
   // console.log(bookingInfo);
   // console.log(availablity);
@@ -82,7 +89,11 @@ const DaypassReservation = () => {
         <h1 className="text-lg font-bold">Visiting Date</h1>
         <div className="flex justify-between items-center">
           <p className="text-[#606970]">Selected Date</p>
-          <p>{availablity.startDate || "Not Selected Yet"}</p>
+          <p>
+            {availablity?.startDate
+              ? formatDate(availablity?.startDate)
+              : "Not Selected Yet"}
+          </p>
         </div>
         <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
       </div>

@@ -1,6 +1,12 @@
 import React from "react";
 
 const Table2 = ({ tr, data }) => {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  }
   const trStyle =
     "pb-2 pt-2 pl-4 pr-4 text-lg text-start font-normal whitespace-nowrap border-2 border-[#E9EBED] tracking-wider";
   const tdStyle =
@@ -36,7 +42,11 @@ const Table2 = ({ tr, data }) => {
                 <td className={tdStyle}>{item?.totalGuest?.Nanny}</td>
                 <td className={tdStyle}>{item?.totalGuest?.childTotal}</td>
 
-                <td className={tdStyle}>{item?.bookingDetails?.startDate}</td>
+                <td className={tdStyle}>
+                  {item?.bookingDetails?.startDate
+                    ? formatDate(item?.bookingDetails?.startDate)
+                    : ""}
+                </td>
                 <td className={tdStyle}>{item?.bookingDetails?.dayType}</td>
 
                 <td className={tdStyle}>

@@ -2,31 +2,47 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { baseUrl } from "../../../constants/baseurl";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Extras from "../../../components/Extras";
 import DaypassSteps from "../../../components/DaypassSteps";
 import DaypassReservation from "../../../components/DaypassReservation";
 import { insert } from "../../../store/slices/daypassAvailablity.slice";
 import { PriceContext } from "../../../Context/PriceContext";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
 const RoomDetails = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
   const dispatch = useDispatch();
   const nav = useNavigate();
   const [finalData, setFinalData] = useState([]);
   const [dayType, setdayType] = useState("weekdays");
+  const [seasonalDates, setSeasonalDates] = useState([]);
+  console.log(seasonalDates);
   const [availablityInfo, setavailablityInfo] = useState({
-    dayType: dayType,
+    dayType: "",
     startDate: "",
     extras: finalData,
     groups: bookingInfo,
     adultsCount: bookingInfo.adultsAlcoholic + bookingInfo.adultsNonAlcoholic,
     childrenCount: bookingInfo.Nanny + bookingInfo.childTotal,
   });
-
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  }
   // Add this line to get the setDaypassPrice function from the context
   const { setDaypassPrice, setDaypassSubtotal } = useContext(PriceContext);
-
+  useEffect(() => {
+    const fetchSeasonalDates = async () => {
+      const response = await axios.get(`${baseUrl}/seasonal/get`);
+      setSeasonalDates(response.data.map((date) => new Date(date.date)));
+    };
+    fetchSeasonalDates();
+  }, []);
   const checkIfDateIsNotPast = (dateString) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -54,16 +70,24 @@ const RoomDetails = () => {
       toast.error("Select a date not in the past");
       return;
     }
-
-    setavailablityInfo({ ...availablityInfo, extras: finalData });
-    dispatch(insert({ ...availablityInfo, extras: [...finalData] }));
+    console.log(availablityInfo);
+    setavailablityInfo({
+      ...availablityInfo,
+      dayType: dayType,
+      extras: finalData,
+    });
+    dispatch(
+      insert({ ...availablityInfo, dayType: dayType, extras: [...finalData] })
+    );
     // nav("/daypass/summary")
     nav("/daypass/details");
   };
 
-  const onDateChange = (e) => {
-    const selectedDate = new Date(e.target.value);
+  const onDateChange = (date) => {
+    const selectedDate = new Date(date);
+    // console.log(selectedDate);
     const dayOfWeek = selectedDate.getDay();
+    console.log(dayOfWeek);
 
     if (
       dayType === "weekdays" &&
@@ -76,16 +100,24 @@ const RoomDetails = () => {
       // If the user selects a weekday
       toast.error("Please select a weekend day (Friday to Sunday).");
       return;
+    } else if (
+      dayType === "Seasonal" &&
+      !seasonalDates.some(
+        (date) => date.toDateString() === selectedDate.toDateString()
+      )
+    ) {
+      toast.error("Please select a valid seasonal date.");
+      return;
     }
 
     // Update availability info if the date is valid
     setavailablityInfo({
       ...availablityInfo,
-      startDate: e.target.value,
+      startDate: formatDate(date),
     });
 
     // Dispatch an action to update the Redux store with the new date
-    dispatch(insert({ ...availablityInfo, startDate: e.target.value }));
+    dispatch(insert({ ...availablityInfo, startDate: formatDate(date) }));
 
     // Trigger price recalculation
     setDaypassPrice(0); // Set to 0 to trigger recalculation
@@ -171,12 +203,36 @@ const RoomDetails = () => {
                 </div>
 
                 <div className="mt-3">
-                  <input
+                  {/* <input
                     type="date"
                     className="mr-10 w-[100%] lg:mb-0 mb-2 lg:w-[20rem] h-[2.3rem] px-3 rounded-md"
                     onChange={onDateChange} // Use the new onDateChange function
                     min={new Date().toISOString().split("T")[0]}
                     value={availablityInfo.startDate}
+                  /> */}
+                  <DatePicker
+                    selected={availablityInfo.startDate}
+                    onChange={onDateChange}
+                    minDate={new Date()}
+                    filterDate={(date) => {
+                      const dayOfWeek = date.getDay();
+                      if (dayType === "weekdays") {
+                        return dayOfWeek >= 1 && dayOfWeek <= 4; // Monday to Thursday
+                      } else if (dayType === "weekends") {
+                        return (
+                          dayOfWeek === 0 || dayOfWeek === 5 || dayOfWeek === 6
+                        ); // Friday to Sunday
+                      } else if (dayType === "Seasonal") {
+                        return seasonalDates.some(
+                          (seasonalDate) =>
+                            seasonalDate.toDateString() === date.toDateString()
+                        );
+                      }
+                      return true;
+                    }}
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Select a date"
+                    className="mr-10 w-[100%] border-2 lg:mb-0 mb-2 lg:w-[20rem] h-[2.3rem] px-3 rounded-md"
                   />
                 </div>
               </div>

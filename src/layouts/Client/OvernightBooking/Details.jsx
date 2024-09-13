@@ -48,6 +48,7 @@ const Details = () => {
     mailLitst: false,
     keepInfo: false,
     file: "",
+    aboutUs: "",
     guests: Array.from({ length: guestCount }, (_, i) => ({
       id: i + 1,
       firstName: "",
@@ -96,6 +97,7 @@ const Details = () => {
     userDetails.phone &&
     userDetails.gender &&
     userDetails.dateOfBirth &&
+    userDetails.aboutUs &&
     userDetails.file;
 
   const acceptedFileTypes = [
@@ -252,6 +254,9 @@ const Details = () => {
                 </div>
 
                 <textarea
+                  onChange={(e) => {
+                    setuserDetails({ ...userDetails, para: e.target.value });
+                  }}
                   type="text"
                   placeholder="State any dietary or setup requirements (i.e baby bathtub or children’s cot)"
                   name=""
@@ -284,14 +289,30 @@ const Details = () => {
                     />
                   </div>
 
-                  <input
-                    onChange={(e) => {
-                      setuserDetails({ ...userDetails, para: e.target.value });
-                    }}
+                  {/* <input
                     type="text"
                     placeholder="How did you hear about us?"
                     className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  />
+                  /> */}
+                  <select
+                    name="aboutus"
+                    className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
+                    id="aboutus"
+                    onChange={(e) => {
+                      setuserDetails({
+                        ...userDetails,
+                        aboutUs: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="" selected disabled>
+                      How did you hear about us?
+                    </option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Other">Google</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
                   <div className="flex items-center mt-4">

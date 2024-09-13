@@ -24,6 +24,7 @@ const Details = () => {
     phone: "",
     gender: "",
     para: "",
+    aboutUs: "",
     dateOfBirth: "",
     file: "",
   });
@@ -48,6 +49,7 @@ const Details = () => {
     userDetails.phone &&
     userDetails.gender &&
     userDetails.dateOfBirth &&
+    userDetails.aboutUs &&
     userDetails.file;
 
   const acceptedFileTypes = [
@@ -230,14 +232,33 @@ const Details = () => {
                     onChange={handleFileChange}
                     className=""
                   />
-                  <input
+                  {/* <input
                     onChange={(e) => {
                       setuserDetails({ ...userDetails, para: e.target.value });
                     }}
                     type="text"
                     placeholder="How did you hear about us?"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  />
+                  /> */}
+                  <select
+                    name="aboutus"
+                    className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
+                    id="aboutus"
+                    onChange={(e) => {
+                      setuserDetails({
+                        ...userDetails,
+                        aboutUs: e.target.value,
+                      });
+                    }}
+                  >
+                    <option value="" selected disabled>
+                      How did you hear about us?
+                    </option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Other">Google</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
               </div>
 
