@@ -117,7 +117,7 @@ export const PriceProvider = ({ children }) => {
       const visitDate = new Date(roomDetails?.visitDate);
       const endDate = new Date(roomDetails?.endDate);
       const numberOfNights = (endDate - visitDate) / (1000 * 60 * 60 * 24);
-
+      totalRoomPrice *= numberOfNights;
       // Apply multi-night discount
       let discountPercentage = 0;
       if (numberOfNights >= 2 && numberOfNights < 3) {
