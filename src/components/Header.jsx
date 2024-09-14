@@ -15,7 +15,7 @@ const Header = () => {
           />
         </Link>
       </div>
-      <img src={HeaderImage} alt="overnight" className="h-[160px] w-full" />
+      <img src={HeaderImage} alt="overnight" className="h-full w-full" />
     </div>
   );
 };

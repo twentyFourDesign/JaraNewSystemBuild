@@ -1,14 +1,15 @@
-import React from 'react'
-import DayPassHeader from '../../../components/DayPassHeader'
-import Summary from '../../../layouts/Client/DaypassBooking/Summary'
-
+import React from "react";
+import DayPassHeader from "../../../components/DayPassHeader";
+import Summary from "../../../layouts/Client/DaypassBooking/Summary";
+import WhatsAppChatButton from "../../../components/WhatsappSupport";
 const SummaryScreen = () => {
   return (
     <div>
-        <DayPassHeader />
-        <Summary />
+      <DayPassHeader />
+      <WhatsAppChatButton />
+      <Summary />
     </div>
-  )
-}
+  );
+};
 
-export default SummaryScreen
+export default SummaryScreen;

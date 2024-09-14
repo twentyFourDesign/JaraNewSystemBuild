@@ -63,7 +63,7 @@ const BookingType = () => {
       {/* MAIN CARDS FOR BOOKING  */}
 
       <div className="w-full h-full flex flex-col z-20 items-center">
-        <div className="flex items-center flex-col md:flex-row md:gap-0 gap-2 w-full justify-center pt-36">
+        <div className="flex items-center text-center flex-col md:flex-row md:gap-0 gap-2 w-full justify-center pt-36">
           <span className="px-3 py-4 md:py-0 text-white text-outline text-2xl z-20 font-[600] tracking-[10px] leading-[24px] font-poppins border-b-2  border-b-[#bcb9b9] md:border-b-0  md:border-r-2">
             All-Inclusive
           </span>
@@ -85,7 +85,7 @@ const BookingType = () => {
           </button>
 
           <button
-            className="z-10 mt-2 w-[250px] gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
+            className="z-10 mb-4 sm:mb-0 w-[250px] gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
             onClick={() => nav("/daypass/guest")}
           >
             Daypass Booking
