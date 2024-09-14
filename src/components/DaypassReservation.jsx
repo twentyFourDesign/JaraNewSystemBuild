@@ -121,13 +121,15 @@ const DaypassReservation = () => {
 
       <div className="mt-3">
         <div className="flex justify-between items-center">
-          <h1 className="text-base font-bold">Sub-total</h1>
-          <h1 className="text-base font-bold">₦{daypassSubtotal.toFixed(2)}</h1>
-        </div>
-        <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Discount (%)</h1>
           <h1 className="text-base font-bold">
             {daypassDiscount?.percentage ? daypassDiscount.percentage : 0}%
+          </h1>
+        </div>
+        <div className="flex justify-between items-center">
+          <h1 className="text-base font-bold">Sub-total</h1>
+          <h1 className="text-base font-bold">
+            ₦{daypassSubtotal?.toFixed(2)}
           </h1>
         </div>
       </div>

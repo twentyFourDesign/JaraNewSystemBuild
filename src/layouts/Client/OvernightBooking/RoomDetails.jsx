@@ -233,8 +233,8 @@ const RoomDetails = () => {
                   Stay & Room Details
                 </h1>
                 <p className="text-[#606970] text-sm mt-1">
-                  Select the check-in and check-out dates you would like to stay
-                  (nights you will be sleeping).
+                  Select the check-in and check-out dates you would like to
+                  stay.
                 </p>
               </div>
 

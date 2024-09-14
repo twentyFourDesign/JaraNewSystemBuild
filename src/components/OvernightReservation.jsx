@@ -95,12 +95,6 @@ const OvernightReservation = () => {
       </div>
       <div className="mt-3">
         <div className="flex justify-between items-center">
-          <h1 className="text-base font-bold">Sub-total</h1>
-          <h1 className="text-base font-bold">
-            ₦{overnightSubtotal.toFixed(2)}
-          </h1>
-        </div>
-        <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Room Discount (%)</h1>
           <h1 className="text-base font-bold">
             {discount?.percentage ? discount?.percentage : 0}%
@@ -109,6 +103,12 @@ const OvernightReservation = () => {
         <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Multi-Night Discount (%)</h1>
           <h1 className="text-base font-bold">{multiNightDiscount}%</h1>
+        </div>
+        <div className="flex justify-between items-center">
+          <h1 className="text-base font-bold">Sub-total</h1>
+          <h1 className="text-base font-bold">
+            ₦{overnightSubtotal.toFixed(2)}
+          </h1>
         </div>
       </div>
 
