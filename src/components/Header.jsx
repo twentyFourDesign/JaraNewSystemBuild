@@ -5,17 +5,17 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div>
-      <div className="flex w-screen justify-center items-center h-[13vh] bg-[#9DD4D3] ">
+      <div className="flex w-screen justify-center items-center h-[8vh] bg-[#9DD4D3] ">
         <Link to="/">
           <img
             src={JaraLogo}
             loading="true"
             alt="jaralogo"
-            className="h-[4rem] w-[6rem] p-2 z-10 hover:cursor-pointer"
+            className="h-[4rem] w-[6rem] p-3 z-10 hover:cursor-pointer"
           />
         </Link>
       </div>
-      <img src={HeaderImage} alt="overnight" className="h-[fit] w-full" />
+      <img src={HeaderImage} alt="overnight" className="h-[160px] w-full" />
     </div>
   );
 };

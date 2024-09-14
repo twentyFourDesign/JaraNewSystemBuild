@@ -103,26 +103,11 @@ const Guest = () => {
                         className="w-[100%]  py-4 md:py-0 md:w-[9rem] h-[3rem] md:h-[2rem] px-3 border-2 border-gray-300  rounded-md outline-none"
                       />
                       <div
-                        className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF] flex border-r-2 border-[#b2d7e7] justify-center items-center rounded-md cursor-pointer"
+                        className="w-[2rem] h-[3rem] md:h-[2rem] border-r-2 border-[#b2d7e7] bg-[#75A9BF] flex justify-center items-center rounded-md cursor-pointer"
                         style={{
                           borderRadius: "10px 0 0 10px",
                           marginLeft: "-8px",
                         }}
-                      >
-                        <AiOutlinePlus
-                          onClick={() =>
-                            setguestNumber({
-                              ...guestNumber,
-                              adults: guestNumber.adults + 1,
-                            })
-                          }
-                          className="text-white h-[3rem] md:h-[2rem] text-2xl"
-                        />
-                      </div>
-
-                      <div
-                        className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF] flex justify-center items-center rounded-md cursor-pointer"
-                        style={{ borderRadius: "0 10px 10px 0" }}
                       >
                         <AiOutlineMinus
                           onClick={() =>
@@ -132,6 +117,22 @@ const Guest = () => {
                                 guestNumber.adults > 0
                                   ? guestNumber.adults - 1
                                   : guestNumber.adults,
+                            })
+                          }
+                          className="text-white h-[3rem] md:h-[2rem] text-2xl"
+                        />
+                      </div>
+                      <div
+                        className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF] flex  justify-center items-center rounded-md cursor-pointer"
+                        style={{
+                          borderRadius: "0 10px 10px 0",
+                        }}
+                      >
+                        <AiOutlinePlus
+                          onClick={() =>
+                            setguestNumber({
+                              ...guestNumber,
+                              adults: guestNumber.adults + 1,
                             })
                           }
                           className="text-white h-[3rem] md:h-[2rem] text-2xl"
@@ -161,27 +162,11 @@ const Guest = () => {
                         className="w-[100%]  py-4 md:py-0 md:w-[9rem] h-[3rem] md:h-[2rem] px-3 border-2 border-gray-300  rounded-md outline-none"
                       />
                       <div
-                        className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF]  border-r-2 border-[#b2d7e7] flex justify-center items-center rounded-md cursor-pointer"
+                        className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF] border-r-2 border-[#b2d7e7] flex justify-center items-center rounded-md cursor-pointer"
                         style={{
                           borderRadius: "10px 0 0 10px",
                           marginLeft: "-8px",
                         }}
-                      >
-                        <AiOutlinePlus
-                          onClick={() => {
-                            setguestNumber({
-                              ...guestNumber,
-                              children: guestNumber.children + 1,
-                            });
-                            handleNumChildrenChange(true);
-                          }}
-                          className="text-white  text-2xl"
-                        />
-                      </div>
-
-                      <div
-                        className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF] flex justify-center items-center rounded-md cursor-pointer"
-                        style={{ borderRadius: "0 10px 10px 0" }}
                       >
                         <AiOutlineMinus
                           onClick={() => {
@@ -195,6 +180,23 @@ const Guest = () => {
                             handleNumChildrenChange(false);
                           }}
                           className="text-white h-[3rem] md:h-[2rem] text-2xl"
+                        />
+                      </div>
+                      <div
+                        className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF]   flex justify-center items-center rounded-md cursor-pointer"
+                        style={{
+                          borderRadius: "0 10px 10px 0",
+                        }}
+                      >
+                        <AiOutlinePlus
+                          onClick={() => {
+                            setguestNumber({
+                              ...guestNumber,
+                              children: guestNumber.children + 1,
+                            });
+                            handleNumChildrenChange(true);
+                          }}
+                          className="text-white  text-2xl"
                         />
                       </div>
                     </div>
