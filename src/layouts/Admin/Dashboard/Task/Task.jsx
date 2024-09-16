@@ -1,13 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import Input from "../../../../components/Input";
 import Button from "../../../../components/Button";
+import { baseUrl } from "../../../../constants/baseurl";
+import axios from "axios";
 import Card from "./Card";
+import Popup from "./Popup";
 
 const Task = ({ setShowNav, showNav }) => {
   const [searchValue, setSearchValue] = useState("");
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
+  const [data, setData] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/task/get`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
 
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
@@ -36,31 +54,28 @@ const Task = ({ setShowNav, showNav }) => {
           />
           <Button
             buttonTitle={"Create New Task"}
+            onClickFunc={() => setShowPopup(true)}
             className={
               "w-[11rem] h-[2.5rem] font-bold rounded-md text-white font-cursive bg-blue-800"
             }
           />
         </div>
 
-        <div className="flex gap-x-3 items-start overflow-x-auto p-2">
-          <Card />
-          {/* <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/> */}
+        <div className="flex flex-wrap gap-x-3 items-start gap-y-3 p-2">
+          {data.map((taskGroup) => (
+            <div key={taskGroup._id}>
+              <Card taskGroup={taskGroup} setData={setData} />
+            </div>
+          ))}
         </div>
       </div>
+      {showPopup && (
+        <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50">
+          <div className="flex justify-center items-center h-[100%]">
+            <Popup setShowPopup={setShowPopup} setData={setData} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

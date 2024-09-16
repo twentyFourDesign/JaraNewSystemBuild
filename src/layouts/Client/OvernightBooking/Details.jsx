@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import upload from "../../../assets/Vector.png";
 import OvernightReservation from "../../../components/OvernightReservation";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import OvernightFooter from "../../../components/OvernightFooter";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import OvernightSteps from "../../../components/OvernightSteps";
@@ -99,6 +101,7 @@ const Details = () => {
     userDetails.dateOfBirth &&
     userDetails.aboutUs &&
     userDetails.file;
+  // console.log(userDetails.dateOfBirth);
 
   const acceptedFileTypes = [
     "image/jpeg",
@@ -233,7 +236,7 @@ const Details = () => {
                     <option value="Female">Female</option>
                   </select>
 
-                  <input
+                  {/* <input
                     onChange={(e) => {
                       setuserDetails({
                         ...userDetails,
@@ -248,9 +251,28 @@ const Details = () => {
                         .toISOString()
                         .split("T")[0]
                     }
-                    placeholder=""
+                    placeholder="Date of Birth"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  />
+                  /> */}
+                  <div className="w-[100%] lg:mt-0 mt-3 flex-1 flex rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0]">
+                    <DatePicker
+                      selected={userDetails.dateOfBirth}
+                      onChange={(date) => {
+                        setuserDetails({
+                          ...userDetails,
+                          dateOfBirth: date,
+                        });
+                      }}
+                      dateFormat="yyyy-MM-dd"
+                      maxDate={
+                        new Date(
+                          new Date().setFullYear(new Date().getFullYear() - 18)
+                        )
+                      }
+                      className=" h-[2.4rem]  w-[100%] outline-none"
+                      placeholderText="Date of Birth"
+                    />
+                  </div>
                 </div>
 
                 <textarea

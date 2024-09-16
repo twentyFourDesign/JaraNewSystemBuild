@@ -32,6 +32,7 @@ const RoomDetails = () => {
   const [selectedRooms, setSelectedRooms] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [finalData, setFinalData] = useState([]);
+  const [numberOfNights, setNumberOfNights] = useState(0);
   const [selectedDate, setSelectedDate] = useState({
     visitDate: null,
     endDate: null,
@@ -92,9 +93,13 @@ const RoomDetails = () => {
 
   useEffect(() => {
     let requestData = null;
+
     if (selectedDate.visitDate && selectedDate.endDate) {
       const visitDateObj = new Date(selectedDate.visitDate);
       const endDateObj = new Date(selectedDate.endDate);
+      const numberOfNights =
+        (endDateObj - visitDateObj) / (1000 * 60 * 60 * 24);
+      setNumberOfNights(numberOfNights);
       requestData = {
         visitDate: visitDateObj.toLocaleDateString("en-CA"),
         endDate: endDateObj.toLocaleDateString("en-CA"),
@@ -316,7 +321,14 @@ const RoomDetails = () => {
                 </div>
               </LocalizationProvider>
               {/* FOR ROOM TYPES  */}
-
+              <div className="mt-4 flex flex-col">
+                <h1>How Long are you staying?</h1>
+                <span className="px-3 py-2 bg-[#75A9BF] text-white rounded-md max-w-max ">
+                  {numberOfNights === 1
+                    ? `${numberOfNights} Night`
+                    : `${numberOfNights} Nights`}
+                </span>
+              </div>
               <div className="mt-4">
                 <h1 className="text-lg font-bold ">
                   Which room you are staying in?

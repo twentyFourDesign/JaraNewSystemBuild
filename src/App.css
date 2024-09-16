@@ -79,3 +79,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 a:hover {
   transform: scale(1.05);
 }
+.custom-datepicker {
+  width: 100%;
+}
+
+.custom-datepicker input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+.react-datepicker-wrapper {
+  width: 100%;
+}
