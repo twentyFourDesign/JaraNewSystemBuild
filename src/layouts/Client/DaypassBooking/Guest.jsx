@@ -65,20 +65,6 @@ const Guest = () => {
 
                   <div className="flex gap-x-4 items-center">
                     <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
-                      <AiOutlinePlus
-                        onClick={() => {
-                          setGuestInfo({
-                            ...guestInfo,
-                            adultsAlcoholic: guestInfo.adultsAlcoholic + 1,
-                          });
-                        }}
-                        className="text-white"
-                      />
-                    </div>
-                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
-                      {guestInfo.adultsAlcoholic}
-                    </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -88,6 +74,20 @@ const Guest = () => {
                                 ? prevState.adultsAlcoholic - 1
                                 : prevState.adultsAlcoholic,
                           }));
+                        }}
+                        className="text-white"
+                      />
+                    </div>
+                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
+                      {guestInfo.adultsAlcoholic}
+                    </div>
+                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                      <AiOutlinePlus
+                        onClick={() => {
+                          setGuestInfo({
+                            ...guestInfo,
+                            adultsAlcoholic: guestInfo.adultsAlcoholic + 1,
+                          });
                         }}
                         className="text-white"
                       />
@@ -111,21 +111,6 @@ const Guest = () => {
                   </div>
                   <div className="flex gap-x-4 items-center">
                     <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
-                      <AiOutlinePlus
-                        onClick={() => {
-                          setGuestInfo({
-                            ...guestInfo,
-                            adultsNonAlcoholic:
-                              guestInfo.adultsNonAlcoholic + 1,
-                          });
-                        }}
-                        className="text-white"
-                      />
-                    </div>
-                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
-                      {guestInfo.adultsNonAlcoholic}
-                    </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -135,6 +120,21 @@ const Guest = () => {
                                 ? prevState.adultsNonAlcoholic - 1
                                 : prevState.adultsNonAlcoholic,
                           }));
+                        }}
+                        className="text-white"
+                      />
+                    </div>
+                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
+                      {guestInfo.adultsNonAlcoholic}
+                    </div>
+                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                      <AiOutlinePlus
+                        onClick={() => {
+                          setGuestInfo({
+                            ...guestInfo,
+                            adultsNonAlcoholic:
+                              guestInfo.adultsNonAlcoholic + 1,
+                          });
                         }}
                         className="text-white"
                       />
@@ -157,20 +157,6 @@ const Guest = () => {
                   </div>
                   <div className="flex gap-x-4 items-center">
                     <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
-                      <AiOutlinePlus
-                        onClick={() => {
-                          setGuestInfo({
-                            ...guestInfo,
-                            Nanny: guestInfo.Nanny + 1,
-                          });
-                        }}
-                        className="text-white"
-                      />
-                    </div>
-                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
-                      {guestInfo.Nanny}
-                    </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -180,6 +166,20 @@ const Guest = () => {
                                 ? prevState.Nanny - 1
                                 : prevState.Nanny,
                           }));
+                        }}
+                        className="text-white"
+                      />
+                    </div>
+                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
+                      {guestInfo.Nanny}
+                    </div>
+                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                      <AiOutlinePlus
+                        onClick={() => {
+                          setGuestInfo({
+                            ...guestInfo,
+                            Nanny: guestInfo.Nanny + 1,
+                          });
                         }}
                         className="text-white"
                       />
@@ -202,20 +202,6 @@ const Guest = () => {
 
                   <div className="flex gap-x-4 items-center">
                     <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
-                      <AiOutlinePlus
-                        onClick={() => {
-                          setGuestInfo({
-                            ...guestInfo,
-                            childTotal: guestInfo.childTotal + 1,
-                          });
-                        }}
-                        className="text-white"
-                      />
-                    </div>
-                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
-                      {guestInfo.childTotal}
-                    </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -225,6 +211,20 @@ const Guest = () => {
                                 ? prevState.childTotal - 1
                                 : prevState.childTotal,
                           }));
+                        }}
+                        className="text-white"
+                      />
+                    </div>
+                    <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
+                      {guestInfo.childTotal}
+                    </div>
+                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                      <AiOutlinePlus
+                        onClick={() => {
+                          setGuestInfo({
+                            ...guestInfo,
+                            childTotal: guestInfo.childTotal + 1,
+                          });
                         }}
                         className="text-white"
                       />
