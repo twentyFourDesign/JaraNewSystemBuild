@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import OvernightReservation from "../../../components/OvernightReservation";
-import OvernightFooter from "../../../components/OvernightFooter";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import OvernightSteps from "../../../components/OvernightSteps";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +26,8 @@ const Details = () => {
     aboutUs: "",
     dateOfBirth: "",
     file: "",
+    mailLitst: false,
+    keepInfo: false,
   });
   const calculateAge = (dateOfBirth) => {
     const today = new Date();
@@ -195,31 +196,28 @@ const Details = () => {
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
-                  <input
-                    onChange={(e) => {
-                      setuserDetails({
-                        ...userDetails,
-                        dateOfBirth: e.target.value,
-                      });
-                    }}
-                    type="date"
-                    max={
-                      new Date(
-                        new Date().setFullYear(new Date().getFullYear() - 18)
-                      )
-                        .toISOString()
-                        .split("T")[0]
-                    }
-                    placeholder=""
-                    className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  />
+
+                  <div className="w-[100%] lg:mt-0 mt-3 flex-1 flex rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0]">
+                    <DatePicker
+                      selected={userDetails.dateOfBirth}
+                      onChange={(date) => {
+                        setuserDetails({
+                          ...userDetails,
+                          dateOfBirth: date,
+                        });
+                      }}
+                      dateFormat="yyyy-MM-dd"
+                      maxDate={
+                        new Date(
+                          new Date().setFullYear(new Date().getFullYear() - 18)
+                        )
+                      }
+                      className=" h-[2.4rem]  w-[100%] outline-none"
+                      placeholderText="Date of Birth"
+                    />
+                  </div>
                 </div>
-                {/* <textarea
-                  type="text"
-                  placeholder="State any dietary or setup requirements (i.e baby bathtub or children’s cot)"
-                  name=""
-                  className=" lg:w-[83%] w-[100%] h-[5rem] rounded-md bg-white outline-none border-2 border-[#C8D5E0] mt-4 resize-none p-4"
-                /> */}
+
                 <p className="mt-2">
                   Upload Image [face] identification (i.e. passport, national
                   ID, driver's license) - Max: 5 MB
@@ -232,14 +230,7 @@ const Details = () => {
                     onChange={handleFileChange}
                     className=""
                   />
-                  {/* <input
-                    onChange={(e) => {
-                      setuserDetails({ ...userDetails, para: e.target.value });
-                    }}
-                    type="text"
-                    placeholder="How did you hear about us?"
-                    className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  /> */}
+
                   <select
                     name="aboutus"
                     className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
@@ -261,15 +252,6 @@ const Details = () => {
                   </select>
                 </div>
               </div>
-
-              {/* <div className='w-[100%] lg:w-[90%] mt-4'>
-                                <h1 className='text-xl font-bold '>Names of guests</h1>
-
-                                <div className='flex justify-between items-center lg:w-[83%] flex-wrap'>
-                                    <p className='text-[#606970] text-sm mt-2'>Please give us some information about your guests.</p>
-                                    <button className='min-w-[10rem] sm:mt-0 mt-2 h-[2.4rem] bg-black text-white rounded-md'>Add Guests Info</button>
-                                </div>
-                            </div> */}
             </div>
           </div>
         </div>
