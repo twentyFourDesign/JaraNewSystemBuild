@@ -257,6 +257,14 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return tie;
     }
   };
+  const [showCake, setshowCake] = useState(false);
+  const [showMassage, setshowMassage] = useState(false);
+  const [showDrink, setshowDrink] = useState(false);
+  const [showRiding, setshowRiding] = useState(false);
+  const [showPersonal, setshowPersonal] = useState(false);
+  const [showDomesticStaff, setshowDomesticStaff] = useState(false);
+  const [showRoomDecoration, setshowRoomDecoration] = useState(false);
+  const [showUnforgettable, setshowUnforgettable] = useState(false);
 
   return (
     <div className="w-[100%] max-h-[19rem] overflow-y-auto border-2 border-[#C8D5E0] rounded-md mt-4 font-robotoFont p-4">
@@ -338,315 +346,542 @@ const Extras = ({ finalData, setFinalData, type }) => {
               })}
             </div>
           ))} */}
-
-          {cakeExtra?.map((item, index) => (
-            <div key={index} className="mt-4">
-              <h1 className="text-lg mb-3 ml-0 font-semibold">Cake</h1>
-              <div className="lg:flex justify-between items-center mb-4">
-                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                  <div>
-                    <img
-                      src={cake}
-                      alt=""
-                      className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-                    />
-                  </div>
-                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                    <p className="text-[#606970] ">Item</p>
-                    <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                  </div>
+          {cakeExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={cake}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">Cake</h1>
                 </div>
-                <div className="flex flex-col lg:gap-y-2">
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                    {/* <p className="text-[#606970]">Price</p> */}
-                    <p className="font-bold">{item.price}₦</p>
-                  </div>
 
-                  <div className="lg:mt-0 mt-4">
-                    <button
-                      onClick={() => handleAddRemoveCake(item)}
-                      className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
-                    >
-                      {isCakeAdded(item) ? "Remove Cake" : "Add Cake"}
-                    </button>
-                  </div>
-                </div>
+                <img
+                  onClick={() => setshowCake(!showCake)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
               </div>
+              {showCake && (
+                <>
+                  {cakeExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className=" flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970] ">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveCake(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.title}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
+
+                          {/* <div className="lg:mt-0 mt-4">
+                            <button
+                              onClick={() => handleAddRemoveCake(item)}
+                              className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
+                            >
+                              {isCakeAdded(item) ? "Remove Cake" : "Add Cake"}
+                            </button>
+                          </div> */}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
-          ))}
+          )}
 
-          {massageExtra?.map((item, index) => (
-            <div key={index} className="mt-4">
-              <h1 className="text-lg mb-3 ml-0 font-semibold">Massage</h1>
-              <div className="lg:flex justify-between items-center mb-4">
-                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                  <div>
-                    <img
-                      src={massage}
-                      alt=""
-                      className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                    />
-                  </div>
-                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                    <p className="text-[#606970]">Item</p>
-                    <p className="lg:mt-1 mt-0 font-bold">{item?.type}</p>
-                  </div>
+          {massageExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={massage}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">Massage</h1>
                 </div>
 
-                <div className="flex flex-col lg:gap-y-2">
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                    {/* <p className="text-[#606970]">Price</p> */}
-                    <p className="font-bold">{item.price}₦</p>
-                  </div>
-
-                  <div className="lg:mt-0 mt-4">
-                    <button
-                      onClick={() => handleAddRemoveMassage(item)}
-                      className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
-                    >
-                      {isMassageAdded(item) ? "Remove Massage" : "Add Massage"}
-                    </button>
-                  </div>
-                </div>
+                <img
+                  onClick={() => setshowMassage(!showMassage)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
               </div>
+              {showMassage && (
+                <>
+                  {massageExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className=" flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970]">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveMassage(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.type}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
+
+                          {/* <div className="lg:mt-0 mt-4">
+                            <button
+                              onClick={() => handleAddRemoveMassage(item)}
+                              className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
+                            >
+                              {isMassageAdded(item)
+                                ? "Remove Massage"
+                                : "Add Massage"}
+                            </button>
+                          </div> */}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
-          ))}
+          )}
 
-          {drinkExtra?.map((item, index) => (
-            <div key={index} className="mt-4">
-              <h1 className="text-lg mb-3 ml-0 font-semibold">Drinks</h1>
-              <div className="lg:flex justify-between items-center mb-4">
-                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                  <div>
-                    <img
-                      src={drinking}
-                      alt=""
-                      className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                    />
-                  </div>
-                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                    <p className="text-[#606970]">Item</p>
-                    <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                  </div>
+          {drinkExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={drinking}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">Drinks</h1>
                 </div>
 
-                <div className="flex flex-col lg:gap-y-2">
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                    {/* <p className="text-[#606970]">Price</p> */}
-                    <p className="font-bold">{item.price}₦</p>
-                  </div>
-
-                  <div className="lg:mt-0 mt-4">
-                    <button
-                      onClick={() => handleAddRemoveDrink(item)}
-                      className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
-                    >
-                      {isDrinkAdded(item) ? "Remove Drink" : "Add Drink"}
-                    </button>
-                  </div>
-                </div>
+                <img
+                  onClick={() => setshowDrink(!showDrink)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
               </div>
+              {showDrink && (
+                <>
+                  {drinkExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970]">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveDrink(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.title}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
+
+                          {/* <div className="lg:mt-0 mt-4">
+                            <button
+                              onClick={() => handleAddRemoveDrink(item)}
+                              className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
+                            >
+                              {isDrinkAdded(item)
+                                ? "Remove Drink"
+                                : "Add Drink"}
+                            </button>
+                          </div> */}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
-          ))}
-          {unforgettableExtra?.map((item, index) => (
-            <div key={index} className="mt-4">
-              <h1 className="text-lg mb-3 ml-0 font-semibold">
-                Unforgettable Experiences
-              </h1>
-              <div className="lg:flex justify-between items-center mb-4">
-                <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                  <div>
-                    <img
-                      src={unforgettable}
-                      alt="exp"
-                      className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                    />
-                  </div>
-                  <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                    <p className="text-[#606970]">Item</p>
-                    <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                  </div>
+          )}
+
+          {unforgettableExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={unforgettable}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">
+                    Unforgettable Experiences
+                  </h1>
                 </div>
 
-                <div className="flex flex-col lg:gap-y-2">
-                  <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                    {/* <p className="text-[#606970]">Price</p> */}
-                    <p className="font-bold">{item.price}₦</p>
-                  </div>
-
-                  <div className="lg:mt-0 mt-4">
-                    <button
-                      onClick={() => handleAddRemoveUnforgettable(item)}
-                      className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
-                    >
-                      {isUnforgettableAdded(item)
-                        ? "Remove Experience"
-                        : "Add Experience"}
-                    </button>
-                  </div>
-                </div>
+                <img
+                  onClick={() => setshowUnforgettable(!showUnforgettable)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
               </div>
+              {showUnforgettable && (
+                <>
+                  {unforgettableExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970]">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveUnforgettable(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.title}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
+
+                          {/* <div className="lg:mt-0 mt-4">
+                            <button
+                              onClick={() => handleAddRemoveUnforgettable(item)}
+                              className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
+                            >
+                              {isUnforgettableAdded(item)
+                                ? "Remove Experience"
+                                : "Add Experience"}
+                            </button>
+                          </div> */}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
-          ))}
+          )}
           {type == "overnight" && (
             <div>
-              {rindingExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">Riding</h1>
-                  <div className="lg:flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div>
-                        <img
-                          src={riding}
-                          alt=""
-                          className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                        />
-                      </div>
-                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                        <p className="text-[#606970]">Item</p>
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                      </div>
+              {rindingExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      <img
+                        src={riding}
+                        alt=""
+                        className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                      />
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Rinding
+                      </h1>
                     </div>
 
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
-
-                      <div className="lg:mt-0 mt-4">
-                        <button
-                          onClick={() => handleAddRemoveRiding(item)}
-                          className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
-                        >
-                          {isRidingAdded(item) ? "Remove Riding" : "Add Ridng"}
-                        </button>
-                      </div>
-                    </div>
+                    <img
+                      onClick={() => setshowRiding(!showRiding)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
                   </div>
+                  {showRiding && (
+                    <>
+                      {rindingExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemoveRiding(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
+
+                              {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() => handleAddRemoveRiding(item)}
+                                  className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isRidingAdded(item)
+                                    ? "Remove Riding"
+                                    : "Add Ridng"}
+                                </button>
+                              </div> */}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
-              ))}
-              {roomDecorationExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">
-                    Room Decoration
-                  </h1>
-                  <div className="lg:flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div>
-                        <img
-                          src={Room}
-                          alt=""
-                          className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                        />
-                      </div>
-                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                        <p className="text-[#606970]">Item</p>
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                      </div>
+              )}
+              {roomDecorationExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      <img
+                        src={Room}
+                        alt=""
+                        className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                      />
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Room Decoration
+                      </h1>
                     </div>
 
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
-
-                      <div className="lg:mt-0 mt-4">
-                        <button
-                          onClick={() => handleAddRemoveRoomDecoration(item)}
-                          className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
-                        >
-                          {isRoomDecorationAdded(item)
-                            ? "Remove Decoration"
-                            : "Add Decoration"}
-                        </button>
-                      </div>
-                    </div>
+                    <img
+                      onClick={() => setshowRoomDecoration(!showRoomDecoration)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
                   </div>
+                  {showRoomDecoration && (
+                    <>
+                      {roomDecorationExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemoveRoomDecoration(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
+
+                              {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() =>
+                                    handleAddRemoveRoomDecoration(item)
+                                  }
+                                  className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isRoomDecorationAdded(item)
+                                    ? "Remove Decoration"
+                                    : "Add Decoration"}
+                                </button>
+                              </div> */}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
-              ))}
-              {domesticStaffExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">
-                    Domestic Staff
-                  </h1>
-                  <div className="lg:flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div>
-                        <img
-                          src={bedroom}
-                          alt=""
-                          className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                        />
-                      </div>
-                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                        <p className="text-[#606970]">Item</p>
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                      </div>
+              )}
+
+              {domesticStaffExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      <img
+                        src={bedroom}
+                        alt=""
+                        className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                      />
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Domestic Staff
+                      </h1>
                     </div>
 
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
-
-                      <div className="lg:mt-0 mt-4">
-                        <button
-                          onClick={() => handleAddRemoveDomesticStaff(item)}
-                          className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
-                        >
-                          {isDomesticStaffAdded(item)
-                            ? "Remove Staff"
-                            : "Add Staff"}
-                        </button>
-                      </div>
-                    </div>
+                    <img
+                      onClick={() => setshowDomesticStaff(!showDomesticStaff)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
                   </div>
+                  {showDomesticStaff && (
+                    <>
+                      {domesticStaffExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemoveDomesticStaff(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
+
+                              {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() =>
+                                    handleAddRemoveDomesticStaff(item)
+                                  }
+                                  className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isDomesticStaffAdded(item)
+                                    ? "Remove Staff"
+                                    : "Add Staff"}
+                                </button>
+                              </div> */}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
-              ))}
-
-              {personalExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">
-                    {item.title}
-                  </h1>
-                  <div className="lg:flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div>
-                        <img
-                          src={selectBg(item.title)}
-                          alt=""
-                          className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                        />
-                      </div>
-                      <div className="lg:block flex-col gap-x-3 lt:mt-0 mt-2">
-                        <p className="text-[#606970]">Item</p>
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                      </div>
+              )}
+              {personalExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      {/* <img
+                        src={bedroom}
+                        alt=""
+                        className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                      /> */}
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Personal Extras
+                      </h1>
                     </div>
 
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
-
-                      <div className="lg:mt-0 mt-4">
-                        <button
-                          onClick={() => handleAddRemovePersonal(item)}
-                          className="w-[fit] px-1 h-[2.4rem] rounded-lg text-white bg-black"
-                        >
-                          {isPersonalAdded(item)
-                            ? `Remove ${item.title}`
-                            : `Add ${item.title}`}
-                        </button>
-                      </div>
-                    </div>
+                    <img
+                      onClick={() => setshowPersonal(!showPersonal)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
                   </div>
+                  {showPersonal && (
+                    <>
+                      {personalExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div>
+                                <img
+                                  src={selectBg(item.title)}
+                                  alt=""
+                                  className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
+                                />
+                              </div>
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemovePersonal(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
+
+                              {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() => handleAddRemovePersonal(item)}
+                                  className="w-[fit] px-1 h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isPersonalAdded(item)
+                                    ? `Remove ${item.title}`
+                                    : `Add ${item.title}`}
+                                </button>
+                              </div> */}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
-              ))}
+              )}
             </div>
           )}
         </>

@@ -19,7 +19,7 @@ const RoomDetails = () => {
   const [finalData, setFinalData] = useState([]);
   const [dayType, setdayType] = useState("weekdays");
   const [seasonalDates, setSeasonalDates] = useState([]);
-  console.log(seasonalDates);
+  // console.log(seasonalDates);
   const [availablityInfo, setavailablityInfo] = useState({
     dayType: "",
     startDate: "",
@@ -70,7 +70,7 @@ const RoomDetails = () => {
       toast.error("Select a date not in the past");
       return;
     }
-    console.log(availablityInfo);
+    // console.log(availablityInfo);
     setavailablityInfo({
       ...availablityInfo,
       dayType: dayType,
@@ -87,7 +87,7 @@ const RoomDetails = () => {
     const selectedDate = new Date(date);
     // console.log(selectedDate);
     const dayOfWeek = selectedDate.getDay();
-    console.log(dayOfWeek);
+    // console.log(dayOfWeek);
 
     if (
       dayType === "weekdays" &&
@@ -202,7 +202,7 @@ const RoomDetails = () => {
                   </div>
                 </div>
 
-                <div className="mt-3">
+                <div className="mt-3 max-w-[300px]">
                   {/* <input
                     type="date"
                     className="mr-10 w-[100%] lg:mb-0 mb-2 lg:w-[20rem] h-[2.3rem] px-3 rounded-md"
@@ -286,11 +286,10 @@ const RoomDetails = () => {
             </button>
           </div>
         </div>
-
-        <div className="flex justify-between items-center bg-[#9DD4D3] text-black font-rubic px-7 mt-3 py-2">
-          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
-          <p>Owned and Operated By Little Company Nigeria Limited</p>
-        </div>
+      </div>
+      <div className=" w-full flex justify-between items-center bg-[#9DD4D3] text-black font-rubic px-7 mt-3 py-2">
+        <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+        <p>Owned and Operated By Little Company Nigeria Limited</p>
       </div>
     </div>
   );

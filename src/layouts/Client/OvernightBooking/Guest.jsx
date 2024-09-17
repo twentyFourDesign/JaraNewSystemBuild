@@ -259,7 +259,7 @@ const Guest = () => {
           </div>
         </div>
 
-        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm z-10">
+        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
           <div>
             <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
           </div>

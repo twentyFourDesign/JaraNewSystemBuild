@@ -66,25 +66,44 @@ const RoomDetails = () => {
     const existingRoomIndex = selectedRooms.findIndex(
       (selectedRoom) => selectedRoom.id === room.id
     );
-    if (existingRoomIndex !== -1) {
-      const updatedRooms = selectedRooms.map((selectedRoom, index) =>
-        index === existingRoomIndex
-          ? { ...selectedRoom, quantity, price }
-          : selectedRoom
-      );
-      setSelectedRooms(updatedRooms);
-    } else {
+    if (existingRoomIndex === -1) {
       setSelectedRooms([...selectedRooms, { ...room, quantity, price }]);
+    } else {
+      setSelectedRooms(
+        selectedRooms.filter((selectedRoom) => selectedRoom.id !== room.id)
+      );
     }
     setQuantity(1);
-    setSelectedRoomIds((prevIds) => {
-      if (prevIds.includes(room.id)) {
-        return prevIds.filter((id) => id !== room.id);
-      } else {
-        return [...prevIds, room.id];
-      }
-    });
-    calPrice(); // Recalculate price when a room is selected
+    setSelectedRoomIds((prevIds) =>
+      existingRoomIndex === -1
+        ? [...prevIds, room.id]
+        : prevIds.filter((id) => id !== room.id)
+    );
+    calPrice();
+    // setshowPopup(false);
+    // setroomId(null);
+    // const existingRoomIndex = selectedRooms.findIndex(
+    //   (selectedRoom) => selectedRoom.id === room.id
+    // );
+    // if (existingRoomIndex !== -1) {
+    //   const updatedRooms = selectedRooms.map((selectedRoom, index) =>
+    //     index === existingRoomIndex
+    //       ? { ...selectedRoom, quantity, price }
+    //       : selectedRoom
+    //   );
+    //   setSelectedRooms(updatedRooms);
+    // } else {
+    //   setSelectedRooms([...selectedRooms, { ...room, quantity, price }]);
+    // }
+    // setQuantity(1);
+    // setSelectedRoomIds((prevIds) => {
+    //   if (prevIds.includes(room.id)) {
+    //     return prevIds.filter((id) => id !== room.id);
+    //   } else {
+    //     return [...prevIds, room.id];
+    //   }
+    // });
+    // calPrice(); // Recalculate price when a room is selected
   };
 
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
@@ -368,70 +387,58 @@ const RoomDetails = () => {
                               {room.title}
                             </p>
                             {showPopup && roomId === room.id && (
-                              <div className="absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-auto bg-white shadow-shadow1  rounded-md p-2 z-50">
-                                <h1 className="text-lg font-bold text-center">
-                                  Capacity of {room.title}
-                                </h1>
-                                <ImCross
-                                  onClick={() => setshowPopup(false)}
-                                  className="absolute top-2 right-2 text-sm cursor-pointer"
-                                />
-                                <div className="flex justify-center items-center mt-1">
-                                  <div>
-                                    <p className="text-sm text-center">
-                                      <span className="font-bold text-[#75A9BF]">
-                                        Adults
-                                      </span>
-                                      : {room.adult} <br />
-                                      <span className="font-bold text-[#75A9BF]">
-                                        Infant
-                                      </span>
-                                      : {room.infant} <br />
-                                      <span>OR</span> <br />
-                                      {room.adult - 1} :{" "}
-                                      <span className="font-bold text-[#75A9BF]">
-                                        Adult
-                                      </span>{" "}
-                                      <br />
-                                      {room.children}:{" "}
-                                      <span className="font-bold text-[#75A9BF]">
-                                        {" "}
-                                        child or Toodler
-                                      </span>{" "}
-                                      <br />
-                                      {room.infant}:{" "}
-                                      <span className="font-bold text-[#75A9BF]">
-                                        Infant
-                                      </span>
-                                      {/* <span className="font-bold text-[#75A9BF]">
-                                        Toodlers
-                                      </span>
-                                      : {room.toodler} <br /> */}
-                                    </p>
-                                  </div>
-                                  {/* <div className="flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl">
-                                    <AiOutlineMinus
-                                      className="cursor-pointer"
-                                      onClick={() => decrementQuantity()}
-                                    />
-                                    <p>{quantity}</p>
-                                    <AiOutlinePlus
-                                      className="cursor-pointer"
+                              <>
+                                <div className="absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-auto bg-white text-black shadow-shadow1  rounded-md p-2 z-50">
+                                  <h1 className="text-lg text-black font-bold text-center">
+                                    Capacity of {room.title}
+                                  </h1>
+                                  <ImCross
+                                    onClick={() => setshowPopup(false)}
+                                    className="absolute top-2 right-2 text-sm text-blackcursor-pointer"
+                                  />
+                                  <div className="flex flex-col justify-center items-center mt-1">
+                                    <div>
+                                      <p className="text-sm text-center text-black">
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Adults
+                                        </span>
+                                        : {room.adult} <br />
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Infant
+                                        </span>
+                                        : {room.infant} <br />
+                                        <span>OR</span> <br />
+                                        {room.adult - 1} :{" "}
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Adult
+                                        </span>{" "}
+                                        <br />
+                                        {room.children}:{" "}
+                                        <span className="font-bold text-[#75A9BF]">
+                                          {" "}
+                                          child or Toodler
+                                        </span>{" "}
+                                        <br />
+                                        {room.infant}:{" "}
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Infant
+                                        </span>
+                                      </p>
+                                    </div>
+
+                                    <button
                                       onClick={() =>
-                                        incrementQuantity(room.capacity)
+                                        handleClickSave(room, item.price)
                                       }
-                                    />
-                                  </div> */}
+                                      className="mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50"
+                                    >
+                                      {selectedRoomIds.includes(room.id)
+                                        ? "Remove"
+                                        : "Save"}
+                                    </button>
+                                  </div>
                                 </div>
-                                <button
-                                  onClick={() =>
-                                    handleClickSave(room, item.price)
-                                  }
-                                  className="mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50"
-                                >
-                                  Save
-                                </button>
-                              </div>
+                              </>
                             )}
                           </div>
                         ))}
