@@ -286,7 +286,7 @@ const Details = () => {
                 />
                 <p className="mt-2">
                   Upload Image [face] identification (i.e. passport, national
-                  ID, driver's license) - Max: 5 MB
+                  ID, driver's license)
                 </p>
 
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
@@ -332,7 +332,14 @@ const Details = () => {
                     </option>
                     <option value="Instagram">Instagram</option>
                     <option value="Facebook">Facebook</option>
-                    <option value="Other">Google</option>
+                    <option value="Google">Google</option>
+                    <option value="Linkedin">Linkedin</option>
+                    <option value="Friend/Associate">Friend/Associate</option>
+                    <option value="Billbaord">Billbaord</option>
+                    <option value="Branded Vehicle">Branded Vehicle</option>
+                    <option value="Agent / Tour Operator">
+                      Agent / Tour Operator
+                    </option>
                     <option value="Other">Other</option>
                   </select>
                 </div>

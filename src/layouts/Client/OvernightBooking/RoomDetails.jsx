@@ -38,7 +38,7 @@ const RoomDetails = () => {
     endDate: null,
   });
   const [selectedRoomIds, setSelectedRoomIds] = useState([]);
-  const { calPrice } = useContext(PriceContext);
+  const { calPrice, setPrice } = useContext(PriceContext);
 
   const handleRestart = () => {
     dispatch(resetGuestInfo());
@@ -47,18 +47,17 @@ const RoomDetails = () => {
     nav("/");
   };
   const guestCount = useSelector((state) => state.overnightGuestCount);
-  // console.log(guestCount.ages);
-  const incrementQuantity = (maxCapacity) => {
-    setQuantity((currentQuantity) =>
-      currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity
-    );
-  };
+  // const incrementQuantity = (maxCapacity) => {
+  //   setQuantity((currentQuantity) =>
+  //     currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity
+  //   );
+  // };
 
-  const decrementQuantity = () => {
-    setQuantity((currentQuantity) =>
-      currentQuantity > 1 ? currentQuantity - 1 : currentQuantity
-    );
-  };
+  // const decrementQuantity = () => {
+  //   setQuantity((currentQuantity) =>
+  //     currentQuantity > 1 ? currentQuantity - 1 : currentQuantity
+  //   );
+  // };
 
   const handleClickSave = (room, price) => {
     setshowPopup(false);
@@ -69,9 +68,10 @@ const RoomDetails = () => {
     if (existingRoomIndex === -1) {
       setSelectedRooms([...selectedRooms, { ...room, quantity, price }]);
     } else {
-      setSelectedRooms(
-        selectedRooms.filter((selectedRoom) => selectedRoom.id !== room.id)
+      const updatedRooms = selectedRooms.filter(
+        (selectedRoom) => selectedRoom.id !== room.id
       );
+      setSelectedRooms([...updatedRooms]);
     }
     setQuantity(1);
     setSelectedRoomIds((prevIds) =>
@@ -79,7 +79,7 @@ const RoomDetails = () => {
         ? [...prevIds, room.id]
         : prevIds.filter((id) => id !== room.id)
     );
-    calPrice();
+    // Recalculate price when a room is selected
     // setshowPopup(false);
     // setroomId(null);
     // const existingRoomIndex = selectedRooms.findIndex(
@@ -103,9 +103,25 @@ const RoomDetails = () => {
     //     return [...prevIds, room.id];
     //   }
     // });
-    // calPrice(); // Recalculate price when a room is selected
-  };
 
+    // setPrice(calPrice()); // Recalculate price when a room is selected
+  };
+  useEffect(() => {
+    if (selectedRooms.length > 0) {
+      const visitDateObj2 = new Date(selectedDate.visitDate);
+      const endDateObj2 = new Date(selectedDate.endDate);
+      const serializableSelectedDate = {
+        ...selectedDate,
+        visitDate: visitDateObj2.toLocaleDateString("en-CA"),
+        endDate: endDateObj2.toLocaleDateString("en-CA"),
+      };
+
+      dispatch(
+        insert({ selectedRooms, ...serializableSelectedDate, finalData })
+      );
+      setPrice(calPrice()); // Recalculate price when a room is selected
+    }
+  }, [selectedRooms]);
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
@@ -163,17 +179,9 @@ const RoomDetails = () => {
           }
           return acc;
         }, []);
-        // console.log("grouped rooms", groupedRooms);
         setModifiedRoom(groupedRooms);
-        // console.log("grouped rooms", groupedRooms);
       });
   }, [selectedDate]);
-
-  useEffect(() => {
-    if (selectedDate.visitDate && selectedDate.endDate) {
-      calPrice(); // Recalculate price when dates change
-    }
-  }, [selectedDate, calPrice]);
 
   const handleNext = () => {
     let totalAdults = 0;
@@ -181,7 +189,7 @@ const RoomDetails = () => {
     let totalInfants = 0;
     let totalToddlers = 0;
 
-    selectedRooms.forEach((room) => {
+    selectedRooms?.forEach((room) => {
       totalAdults += room.adult * room.quantity;
       totalChildren += room.children * room.quantity;
       totalInfants += room.infant * room.quantity;
@@ -211,18 +219,23 @@ const RoomDetails = () => {
         visitDate: visitDateObj2.toLocaleDateString("en-CA"),
         endDate: endDateObj2.toLocaleDateString("en-CA"),
       };
-
-      selectedRooms.forEach((room) => {
-        room.guestCount = {
+      const updatedRooms = selectedRooms.map((room) => ({
+        ...room,
+        guestCount: {
           adults: guestCount.adults,
           children: guestCount.children,
           infants: guestCount.infants,
           toodler: guestCount.toddler,
           ages: guestCount.ages,
-        };
-      });
+        },
+      }));
+
       dispatch(
-        insert({ selectedRooms, ...serializableSelectedDate, finalData })
+        insert({
+          selectedRooms: updatedRooms,
+          ...serializableSelectedDate,
+          finalData,
+        })
       );
       nav("/overnight/details");
     } else {

@@ -7,6 +7,7 @@ export const PriceContext = createContext();
 
 export const PriceProvider = ({ children }) => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
+  // console.log(guestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   // console.log(guestCount);
@@ -29,11 +30,11 @@ export const PriceProvider = ({ children }) => {
   // console.log(voucher);
   const calPrice = useCallback(() => {
     const pricingPercentages = {
-      "Ocean deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
-      "Ocean deluxe 2": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
-      "Ocean deluxe 3": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
-      "Ocean deluxe 4": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
-      "Ocean deluxe 5": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean Deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean Deluxe 2": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean Deluxe 3": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean Deluxe 4": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
+      "Ocean Deluxe 5": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
       "Family Room 6": { child: 0.3704, toddler: 0.1852, infant: 0 },
       "Family Cabin 7": { child: 0.3704, toddler: 0.1852, infant: 0 },
       "Family Cabin 8": { child: 0.3704, toddler: 0.1852, infant: 0 },
@@ -50,11 +51,11 @@ export const PriceProvider = ({ children }) => {
 
     let totalRoomPrice = 0;
     const eligibleRooms = [
-      "Ocean deluxe 1",
-      "Ocean deluxe 2",
-      "Ocean deluxe 3",
-      "Ocean deluxe 4",
-      "Ocean deluxe 5",
+      "Ocean Deluxe 1",
+      "Ocean Deluxe 2",
+      "Ocean Deluxe 3",
+      "Ocean Deluxe 4",
+      "Ocean Deluxe 5",
       "Family Room 6",
       "Family Cabin 7",
       "Family Cabin 8",
@@ -219,7 +220,7 @@ export const PriceProvider = ({ children }) => {
 
   useEffect(() => {
     setPrice(calPrice());
-  }, [calPrice]);
+  }, [calPrice, guestCount, roomDetails, discount, voucher]);
 
   useEffect(() => {
     const calculateDaypassPrice = () => {

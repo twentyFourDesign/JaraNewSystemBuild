@@ -207,7 +207,7 @@ const Guest = () => {
                 className="mt-4"
                 style={{
                   display: "grid",
-                  width: "80%",
+                  width: "100%",
                   gridTemplateColumns: "repeat(2, 1fr)",
                   gap: "1rem",
                   alignContent: "center",
