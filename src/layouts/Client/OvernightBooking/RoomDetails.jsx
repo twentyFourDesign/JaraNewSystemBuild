@@ -121,7 +121,7 @@ const RoomDetails = () => {
       );
       setPrice(calPrice()); // Recalculate price when a room is selected
     }
-  }, [selectedRooms]);
+  }, [selectedRooms, finalData]);
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
