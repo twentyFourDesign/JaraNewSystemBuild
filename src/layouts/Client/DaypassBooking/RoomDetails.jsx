@@ -34,8 +34,11 @@ const RoomDetails = () => {
     const formattedDate = date.toLocaleDateString("en-US", options);
     return formattedDate;
   }
+
   // Add this line to get the setDaypassPrice function from the context
-  const { setDaypassPrice, setDaypassSubtotal } = useContext(PriceContext);
+  const { setDaypassPrice, setDaypassSubtotal, calculateDaypassPrice } =
+    useContext(PriceContext);
+
   useEffect(() => {
     const fetchSeasonalDates = async () => {
       const response = await axios.get(`${baseUrl}/seasonal/get`);
@@ -51,7 +54,16 @@ const RoomDetails = () => {
   };
 
   const isValid = checkIfDateIsNotPast(availablityInfo.startDate);
-
+  useEffect(() => {
+    setavailablityInfo({
+      ...availablityInfo,
+      dayType: dayType,
+      extras: finalData,
+    });
+    dispatch(
+      insert({ ...availablityInfo, dayType: dayType, extras: [...finalData] })
+    );
+  }, [dayType, finalData, availablityInfo.startDate]);
   const onSubmit = () => {
     if (
       !bookingInfo.adultsAlcoholic &&
@@ -111,16 +123,17 @@ const RoomDetails = () => {
     }
 
     // Update availability info if the date is valid
+    const formattedDate = formatDate(date);
     setavailablityInfo({
       ...availablityInfo,
-      startDate: formatDate(date),
+      startDate: formattedDate,
     });
 
     // Dispatch an action to update the Redux store with the new date
-    dispatch(insert({ ...availablityInfo, startDate: formatDate(date) }));
+    dispatch(insert({ ...availablityInfo, startDate: formattedDate }));
 
     // Trigger price recalculation
-    setDaypassPrice(0); // Set to 0 to trigger recalculation
+    setDaypassPrice(calculateDaypassPrice()); // Set to 0 to trigger recalculation
   };
 
   const handleDataType = (data) => {

@@ -222,54 +222,83 @@ export const PriceProvider = ({ children }) => {
     setPrice(calPrice());
   }, [calPrice, guestCount, roomDetails, discount, voucher]);
 
-  useEffect(() => {
-    const calculateDaypassPrice = () => {
-      if (!availablity.startDate) {
-        setDaypassSubtotal(0);
-        return 0;
-      }
+  const calculateDaypassPrice = () => {
+    if (!availablity.startDate) {
+      setDaypassSubtotal(0);
+      setDaypassTaxAmount(0);
+      return 0;
+    }
 
-      const selectedDate = new Date(availablity.startDate);
-      const dayOfWeek = selectedDate.getDay();
-      const isWeekend = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0; // Friday, Saturday, or Sunday
+    // const selectedDate = new Date(availablity.startDate);
+    // const dayOfWeek = selectedDate.getDay();
+    // const isWeekend = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0; // Friday, Saturday, or Sunday
 
-      const prices = {
-        adultsAlcoholic: isWeekend ? 45000 : 40000,
-        adultsNonAlcoholic: isWeekend ? 35000 : 30000,
-        child: isWeekend ? 17500 : 15000,
-        Nanny: 15000,
-      };
-
-      let subtotal =
-        bookingInfo.adultsAlcoholic * prices.adultsAlcoholic +
-        bookingInfo.adultsNonAlcoholic * prices.adultsNonAlcoholic +
-        bookingInfo.childTotal * prices.child +
-        bookingInfo.Nanny * prices.Nanny;
-      if (availablity?.extras?.length > 0) {
-        for (const extra of availablity?.extras) {
-          const extraPrice = parseInt(extra.price, 10);
-          if (isNaN(extraPrice)) {
-            console.error("Error: Invalid price format for extra", extra);
-            continue;
-          }
-          subtotal += extraPrice;
-        }
-      }
-      const taxAmount = subtotal * 0.125; // 12.5% tax
-      let total = subtotal + taxAmount;
-
-      if (daypassVoucher) {
-        total = daypassVoucher.newPrice;
-      }
-      if (daypassDiscount) {
-        total -= (daypassDiscount.percentage / 100) * total;
-      }
-
-      setDaypassSubtotal(roundUpToNearestWhole(subtotal));
-      setDaypassTaxAmount(roundUpToNearestWhole(taxAmount));
-      return roundUpToNearestWhole(total);
+    const prices = {
+      adultsAlcoholic:
+        availablity?.dayType === "weekdays"
+          ? 50000
+          : availablity?.dayType === "weekends"
+          ? 55000
+          : availablity?.dayType === "Seasonal"
+          ? 75000
+          : 0,
+      adultsNonAlcoholic:
+        availablity?.dayType === "weekdays"
+          ? 40000
+          : availablity?.dayType === "weekends"
+          ? 45000
+          : availablity?.dayType === "Seasonal"
+          ? 60000
+          : 0,
+      child:
+        availablity?.dayType === "weekdays"
+          ? 20000
+          : availablity?.dayType === "weekends"
+          ? 25000
+          : availablity?.dayType === "Seasonal"
+          ? 35000
+          : 0,
+      Nanny:
+        availablity?.dayType === "weekdays"
+          ? 20000
+          : availablity?.dayType === "weekends"
+          ? 25000
+          : availablity?.dayType === "Seasonal"
+          ? 35000
+          : 0,
     };
 
+    let subtotal =
+      bookingInfo.adultsAlcoholic * prices.adultsAlcoholic +
+      bookingInfo.adultsNonAlcoholic * prices.adultsNonAlcoholic +
+      bookingInfo.childTotal * prices.child +
+      bookingInfo.Nanny * prices.Nanny;
+    if (availablity?.extras?.length > 0) {
+      for (const extra of availablity?.extras) {
+        const extraPrice = parseInt(extra.price, 10);
+        if (isNaN(extraPrice)) {
+          console.error("Error: Invalid price format for extra", extra);
+          continue;
+        }
+        subtotal += extraPrice;
+      }
+    }
+    const taxAmount = subtotal * 0.125; // 12.5% tax
+    let total = subtotal + taxAmount;
+
+    if (daypassVoucher) {
+      total = daypassVoucher.newPrice;
+    }
+    if (daypassDiscount) {
+      total -= (daypassDiscount.percentage / 100) * total;
+    }
+    console.log(availablity?.dayType);
+    setDaypassSubtotal(roundUpToNearestWhole(subtotal));
+    setDaypassTaxAmount(roundUpToNearestWhole(taxAmount));
+
+    return roundUpToNearestWhole(total);
+  };
+  useEffect(() => {
     setDaypassPrice(calculateDaypassPrice());
   }, [bookingInfo, availablity, daypassDiscount, daypassVoucher]);
 
@@ -297,7 +326,8 @@ export const PriceProvider = ({ children }) => {
         availablity,
         guestInfo,
         multiNightDiscount,
-        calPrice, // Add this line to expose calPrice function
+        calPrice,
+        calculateDaypassPrice,
       }}
     >
       {children}
