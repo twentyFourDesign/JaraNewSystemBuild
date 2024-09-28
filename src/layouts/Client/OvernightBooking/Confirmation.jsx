@@ -16,7 +16,8 @@ import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomD
 const Confirmation = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const { setPrice, setDiscount, setVoucher } = useContext(PriceContext);
+  const { setPrice, setDiscount, setVoucher, setPreviousCost } =
+    useContext(PriceContext);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   const handleAnotherBooking = () => {
     dispatch(resetGuestInfo());
@@ -25,6 +26,7 @@ const Confirmation = () => {
     setPrice(0);
     setDiscount(null);
     setVoucher(null);
+    setPreviousCost(0);
     nav("/overnight/guest");
   };
   const handleHome = () => {
@@ -34,6 +36,7 @@ const Confirmation = () => {
     setPrice(0);
     setDiscount(null);
     setVoucher(null);
+    setPreviousCost(0);
     nav("/");
   };
   return (
@@ -78,8 +81,12 @@ const Confirmation = () => {
             </h1>
 
             <div className="flex justify-center items-center gap-x-4 mt-4">
-              <img src={Insta} alt="" className="h-[2rem]" />
-              <img src={Fb} alt="" className="h-[2rem]" />
+              <a href="https://www.instagram.com/jarabeachresortng/">
+                <img src={Insta} alt="" className="h-[2rem]" />
+              </a>
+              <a href="https://www.facebook.com/jarabeachresortnigeria">
+                <img src={Fb} alt="" className="h-[2rem]" />
+              </a>
             </div>
           </div>
         </div>

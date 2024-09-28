@@ -27,7 +27,10 @@ export const PriceProvider = ({ children }) => {
   const [daypassSubtotal, setDaypassSubtotal] = useState(0);
   const [daypassTaxAmount, setDaypassTaxAmount] = useState(0);
   const [multiNightDiscount, setMultiNightDiscount] = useState(0);
-  // console.log(voucher);
+  const [previousCost, setPreviousCost] = useState(0);
+  const [previousPaymentStatus, setPreviousPaymentStatus] = useState("");
+
+  console.log(previousCost);
   const calPrice = useCallback(() => {
     const pricingPercentages = {
       "Ocean Deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
@@ -228,11 +231,6 @@ export const PriceProvider = ({ children }) => {
       setDaypassTaxAmount(0);
       return 0;
     }
-
-    // const selectedDate = new Date(availablity.startDate);
-    // const dayOfWeek = selectedDate.getDay();
-    // const isWeekend = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0; // Friday, Saturday, or Sunday
-
     const prices = {
       adultsAlcoholic:
         availablity?.dayType === "weekdays"
@@ -326,8 +324,13 @@ export const PriceProvider = ({ children }) => {
         availablity,
         guestInfo,
         multiNightDiscount,
+        setMultiNightDiscount,
         calPrice,
         calculateDaypassPrice,
+        previousCost,
+        setPreviousCost,
+        previousPaymentStatus,
+        setPreviousPaymentStatus,
       }}
     >
       {children}

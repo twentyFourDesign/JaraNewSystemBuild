@@ -38,26 +38,20 @@ const RoomDetails = () => {
     endDate: null,
   });
   const [selectedRoomIds, setSelectedRoomIds] = useState([]);
-  const { calPrice, setPrice } = useContext(PriceContext);
+  const { calPrice, setPrice, setPreviousCost, setDiscount, setVoucher } =
+    useContext(PriceContext);
 
   const handleRestart = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
     dispatch(resetRoomDetails());
+    setPrice(0);
+    setDiscount(null);
+    setVoucher(null);
+    setPreviousCost(0);
     nav("/");
   };
   const guestCount = useSelector((state) => state.overnightGuestCount);
-  // const incrementQuantity = (maxCapacity) => {
-  //   setQuantity((currentQuantity) =>
-  //     currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity
-  //   );
-  // };
-
-  // const decrementQuantity = () => {
-  //   setQuantity((currentQuantity) =>
-  //     currentQuantity > 1 ? currentQuantity - 1 : currentQuantity
-  //   );
-  // };
 
   const handleClickSave = (room, price) => {
     setshowPopup(false);

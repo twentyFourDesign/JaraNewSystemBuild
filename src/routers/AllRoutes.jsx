@@ -20,6 +20,7 @@ import OverNightSummaryScreen from "../screens/Client/Overnight/SummaryScreen";
 import OverNightConfirmationScreen from "../screens/Client/Overnight/ConfirmationScreen";
 import OvernightRoomDetailsScreen from "../screens/Client/Overnight/RoomDetailsScreen";
 import BookingStatusScreen from "../screens/Admin/Dashboard/BookingStatusScreen";
+import ManageBookingScreen from "../screens/Client/Overnight/ManageBookingScreen";
 
 import DaypassGuestScreen from "../screens/Client/Daypass/GuestScreen";
 import DaypassSummaryScreen from "../screens/Client/Daypass/Summary";
@@ -184,6 +185,7 @@ const AllRoutes = () => {
         path="/daypass/confirmation"
         element={<DaypassConfirmationScreen />}
       />
+      <Route path="/booking/manage" element={<ManageBookingScreen />} />
 
       <Route path="*" element={<BookingTypeScreen />} />
     </Routes>

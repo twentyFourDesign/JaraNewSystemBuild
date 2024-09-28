@@ -46,6 +46,9 @@ const OvernightSummary = () => {
     overnightTaxAmount,
     calPrice,
     overnightSubtotal,
+    previousCost,
+
+    previousPaymentStatus,
   } = useContext(PriceContext);
   const nav = useNavigate();
 
@@ -133,7 +136,14 @@ const OvernightSummary = () => {
       if (result.status === 200) {
         await createPayment(result.data._id, paymentStatus, method);
         success = 1;
-        toast.success("Booking Created");
+        if (previousCost > 0) {
+          toast.success("Your Previous Booking Will Be Canceled!");
+          toast.success(
+            "You will get an email with the Updated Booking Details"
+          );
+        } else {
+          toast.success("Booking Created");
+        }
       } else {
         toast.error(result.data.message || "Failed to create booking");
         setDisabled(false);
@@ -154,7 +164,15 @@ const OvernightSummary = () => {
     try {
       let result = await axios.post(`${baseUrl}/payment/create`, {
         name: guestDetails.firstname + " " + guestDetails.lastname,
-        amount: price,
+        // amount: price,
+        amount:
+          previousCost > 0
+            ? previousPaymentStatus == "Pending"
+              ? price
+              : price - previousCost > 0
+              ? price - previousCost
+              : 0
+            : price,
         status: status,
         ref: bookingId,
         method: method,
@@ -234,7 +252,15 @@ const OvernightSummary = () => {
 
   const componentProps = {
     email: guestDetails.email,
-    amount: price * 100, // price is already rounded
+    // amount: price * 100,
+    amount:
+      previousCost > 0
+        ? previousPaymentStatus == "Pending"
+          ? price * 100
+          : price - previousCost > 0
+          ? (price - previousCost) * 100
+          : 0
+        : price * 100,
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     text: "Pay with Paystack",
     metadata: {

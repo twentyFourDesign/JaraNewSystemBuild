@@ -258,15 +258,15 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
               <div className="flex justify-between min-w-[350px]  ">
                 <p className="text-gray-600">Arrival Date</p>
                 <span className="font-semibold text-start">
-                  {booking?.bookingDetails?.visitDate ||
-                    booking?.bookingDetails?.startDate}
+                  {formatDate(booking?.bookingDetails?.visitDate) ||
+                    formatDate(booking?.bookingDetails?.startDate)}
                 </span>
               </div>
               <div className="flex justify-between min-w-[350px] ">
                 <p className="text-gray-600">Departure Date</p>
                 <span className="font-semibold">
-                  {booking?.bookingDetails?.endDate ||
-                    booking?.bookingDetails?.startDate}
+                  {formatDate(booking?.bookingDetails?.endDate) ||
+                    formatDate(booking?.bookingDetails?.startDate)}
                 </span>
               </div>
               <div className="flex justify-between items-start min-w-[350px] ">

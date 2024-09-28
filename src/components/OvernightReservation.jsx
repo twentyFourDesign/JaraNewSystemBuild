@@ -9,6 +9,8 @@ const OvernightReservation = () => {
     discount,
     overnightSubtotal,
     multiNightDiscount,
+    previousCost,
+    previousPaymentStatus,
   } = useContext(PriceContext);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestCount = useSelector((state) => state.overnightGuestCount);
@@ -122,6 +124,31 @@ const OvernightReservation = () => {
           <p className="font-bold text-lg">₦{price.toFixed(2)}</p>
         </div>
       </div>
+      {previousCost > 0 && (
+        <div className="bg-[#F1F5F8] mt-3 h-[6rem] rounded-md shadow-shadow1 p-2 flex justify-center items-start flex-col z-50">
+          <div className="flex justify-between items-center w-[100%]">
+            <p className="text-sm ">Previous Booking Cost</p>
+            <p className="text-sm font-bold">₦{previousCost}</p>
+          </div>
+          <div className="flex justify-between items-center w-[100%]">
+            <p className="text-sm ">Previous Booking Status</p>
+            <p className="text-sm font-bold">
+              {previousPaymentStatus == "Pending" ? "Unpaid" : "Paid"}
+            </p>
+          </div>
+          <div className="flex justify-between items-center mt-3 w-[100%]">
+            <p className="font-bold text-lg">Difference To Pay</p>
+            <p className="font-bold text-lg">
+              ₦
+              {previousPaymentStatus == "Pending"
+                ? price.toFixed(2)
+                : price - previousCost > 0
+                ? (price - previousCost).toFixed(2)
+                : 0}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

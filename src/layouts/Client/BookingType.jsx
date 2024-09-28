@@ -40,7 +40,7 @@ const BookingType = () => {
     setModalIsOpen(false);
 
     if (bookingType === "overnight") {
-      window.location.href = "https://booking.jarabeachresort.com/manage";
+      nav("/booking/manage");
     } else if (bookingType === "daypass") {
       window.location.href = "https://booking.jarabeachresort.com/manage";
     }

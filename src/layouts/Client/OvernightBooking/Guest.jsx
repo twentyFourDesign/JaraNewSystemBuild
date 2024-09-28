@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightReservation from "../../../components/OvernightReservation";
@@ -6,10 +6,16 @@ import { useNavigate } from "react-router-dom";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { insert } from "../../../store/slices/overnight/overnightGuest.slice";
+
+import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
+import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 import CustomSelect from "../../../components/CustomSelect";
 import Edit from "../../../assets/editBlack.png";
 import arrowR from "../../../assets/arrowRIght.png";
+import { PriceContext } from "../../../Context/PriceContext";
 const Guest = () => {
+  const { previousCost, setPreviousCost } = useContext(PriceContext);
   const [guestNumber, setguestNumber] = useState({
     adults: 0,
     children: 0,
@@ -58,6 +64,20 @@ const Guest = () => {
     { value: "1-3 years - toddler", label: "1-3 years - Toddler" },
     { value: "4-17 years - child", label: "4-17 years - Child or Nanny" },
   ];
+  const handleManageBooking = () => {
+    if (previousCost > 0) {
+      dispatch(resetGuestInfo());
+      dispatch(resetGuestCount());
+      dispatch(resetRoomDetails());
+      setPrice(0);
+      setDiscount(null);
+      setVoucher(null);
+      setPreviousCost(0);
+      nav("/");
+    } else {
+      nav("/booking/manage");
+    }
+  };
   return (
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[white] pt-4  font-robotoFont flex-wrap">
@@ -250,10 +270,12 @@ const Guest = () => {
               </div>
               <div
                 className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-md gap-x-2 justify-center items-center text-black cursor-pointer"
-                onClick={() => nav("/")}
+                onClick={handleManageBooking}
               >
                 <img src={Edit} alt="icon" className="w-[1rem]" />
-                <p className="font-[500] text-xl">Manage Booking</p>
+                <p className="font-[500] text-xl">
+                  {previousCost > 0 ? "Cancel Editing" : "Manage Booking"}
+                </p>
               </div>
             </div>
           </div>

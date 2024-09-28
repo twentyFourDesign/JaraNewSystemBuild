@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import upload from "../../../assets/Vector.png";
 import OvernightReservation from "../../../components/OvernightReservation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import OvernightFooter from "../../../components/OvernightFooter";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { insert } from "../../../store/slices/overnight/guestInfo.slice";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import GuestForm from "../../../components/GuestForm";
-import { Photo } from "@mui/icons-material";
 import { FiRefreshCcw } from "react-icons/fi";
 import toast from "react-hot-toast";
 import arrow from "../../../assets/arrowLeft.png";
@@ -21,6 +17,7 @@ import arrowR from "../../../assets/arrowRIght.png";
 import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
+import { PriceContext } from "../../../Context/PriceContext";
 
 const Details = () => {
   const dispatch = useDispatch();
@@ -28,11 +25,16 @@ const Details = () => {
   const guestCount = useSelector(
     (state) => state.overnightGuestCount.adults || 0
   );
-  // console.log(guestCount);
+  const { setPrice, setPreviousCost, setDiscount, setVoucher } =
+    useContext(PriceContext);
   const handleRestart = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
     dispatch(resetRoomDetails());
+    setPrice(0);
+    setDiscount(null);
+    setVoucher(null);
+    setPreviousCost(0);
     nav("/");
   };
   const guests = useSelector((state) => state.overnightGuestDetails);

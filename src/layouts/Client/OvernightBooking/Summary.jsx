@@ -14,7 +14,8 @@ import { useDispatch } from "react-redux";
 import { PriceContext } from "../../../Context/PriceContext";
 const Summary = () => {
   const nav = useNavigate();
-  const { setPrice, setDiscount, setVoucher } = useContext(PriceContext);
+  const { setPrice, setDiscount, setVoucher, setPreviousCost } =
+    useContext(PriceContext);
   const dispatch = useDispatch();
   const reservationRef = useRef(null);
   const summaryRef = useRef(null);
@@ -26,6 +27,7 @@ const Summary = () => {
     setPrice(0);
     setDiscount(null);
     setVoucher(null);
+    setPreviousCost(0);
     nav("/");
   };
   useEffect(() => {
