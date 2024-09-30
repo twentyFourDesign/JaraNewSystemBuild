@@ -11,6 +11,7 @@ const OvernightReservation = () => {
     multiNightDiscount,
     previousCost,
     previousPaymentStatus,
+    numberOfNights,
   } = useContext(PriceContext);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestCount = useSelector((state) => state.overnightGuestCount);
@@ -57,6 +58,12 @@ const OvernightReservation = () => {
             {roomDetails?.visitDate} To {roomDetails?.endDate}
           </p>
         )}
+        <h1 className="text-lg font-bold">Number of Nights</h1>
+        <p>
+          {numberOfNights === 1
+            ? `${numberOfNights} Night`
+            : `${numberOfNights} Nights`}
+        </p>
         <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
       </div>
 

@@ -75,7 +75,7 @@ const BookingType = () => {
 
         <div className="flex flex-col md:flex-row gap-5 justify-center items-center mt-4">
           <button
-            className="z-10 mt-2 w-[250px] gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(0,0,0,0.8)] rounded-xl font-inter items-center justify-center text-white text-center font-[400] text-md"
+            className="z-10 mt-2 w-[250px] lg:h-40 gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(0,0,0,0.8)] rounded-xl font-inter items-center justify-center text-white text-center font-[400] text-md"
             onClick={() => openModal("overnight")}
           >
             Overnight Booking
@@ -85,7 +85,7 @@ const BookingType = () => {
           </button>
 
           <button
-            className="z-10 mb-4 sm:mb-0 w-[250px] gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
+            className="z-10 mb-4 sm:mb-0 w-[250px] lg:h-40 gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
             onClick={() => nav("/daypass/guest")}
           >
             Daypass Booking
@@ -141,6 +141,15 @@ const BookingType = () => {
             </div>
 
             <div className="flex flex-col gap-4 md:flex-row justify-center items-center mt-2">
+              <div className="border-2 border-black px-6 py-8 gap-4 flex flex-col rounded-lg justify-center items-center bg-black ">
+                <img src={newbooking} alt="new booking" className="w-16 h16" />
+                <button
+                  className="bg-white text-black font-inter font-[500] px-4 py-2 rounded-md"
+                  onClick={handleNewBookingClick}
+                >
+                  New Booking
+                </button>
+              </div>
               <div className="border-2 border-black px-4 py-8 gap-4 flex flex-col justify-center rounded-lg items-center ">
                 <img
                   src={existing}
@@ -152,15 +161,6 @@ const BookingType = () => {
                   onClick={handleExistingBookingClick}
                 >
                   Existing Booking
-                </button>
-              </div>
-              <div className="border-2 border-black px-4 py-8 gap-4 flex flex-col rounded-lg justify-center items-center bg-black ">
-                <img src={newbooking} alt="new booking" className="w-16 h16" />
-                <button
-                  className="bg-white text-black font-inter font-[500] px-4 py-2 rounded-md"
-                  onClick={handleNewBookingClick}
-                >
-                  New Booking
                 </button>
               </div>
             </div>

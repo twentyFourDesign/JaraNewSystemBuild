@@ -32,14 +32,21 @@ const RoomDetails = () => {
   const [selectedRooms, setSelectedRooms] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [finalData, setFinalData] = useState([]);
-  const [numberOfNights, setNumberOfNights] = useState(0);
+  // const [numberOfNights, setNumberOfNights] = useState(0);
   const [selectedDate, setSelectedDate] = useState({
     visitDate: null,
     endDate: null,
   });
   const [selectedRoomIds, setSelectedRoomIds] = useState([]);
-  const { calPrice, setPrice, setPreviousCost, setDiscount, setVoucher } =
-    useContext(PriceContext);
+  const {
+    calPrice,
+    setPrice,
+    setPreviousCost,
+    setDiscount,
+    setVoucher,
+    numberOfNights,
+    setNumberOfNights,
+  } = useContext(PriceContext);
 
   const handleRestart = () => {
     dispatch(resetGuestInfo());
@@ -261,7 +268,7 @@ const RoomDetails = () => {
             <div className="">
               <div>
                 <h1 className="text-3xl font-bold md:text-xl  ">
-                  Stay & Room Details
+                  Select Date(s) & Room(s)
                 </h1>
                 <p className="text-[#606970] text-sm mt-1">
                   Select the check-in and check-out dates you would like to
@@ -440,8 +447,8 @@ const RoomDetails = () => {
                                       className="mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50"
                                     >
                                       {selectedRoomIds.includes(room.id)
-                                        ? "Remove"
-                                        : "Save"}
+                                        ? "Remove Room"
+                                        : "Select Room"}
                                     </button>
                                   </div>
                                 </div>

@@ -29,6 +29,7 @@ export const PriceProvider = ({ children }) => {
   const [multiNightDiscount, setMultiNightDiscount] = useState(0);
   const [previousCost, setPreviousCost] = useState(0);
   const [previousPaymentStatus, setPreviousPaymentStatus] = useState("");
+  const [numberOfNights, setNumberOfNights] = useState(0);
 
   console.log(previousCost);
   const calPrice = useCallback(() => {
@@ -331,6 +332,8 @@ export const PriceProvider = ({ children }) => {
         setPreviousCost,
         previousPaymentStatus,
         setPreviousPaymentStatus,
+        numberOfNights,
+        setNumberOfNights,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightReservation from "../../../components/OvernightReservation";
@@ -51,6 +51,13 @@ const Guest = () => {
 
     setChildrenAges(newAges);
   };
+  useEffect(() => {
+    const updatedGuestNumber = {
+      ...guestNumber,
+      ages: childrenAges,
+    };
+    dispatch(insert(updatedGuestNumber));
+  }, [guestNumber, childrenAges]);
   const onNext = () => {
     const updatedGuestNumber = {
       ...guestNumber,
