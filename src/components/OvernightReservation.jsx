@@ -58,7 +58,7 @@ const OvernightReservation = () => {
             {roomDetails?.visitDate} To {roomDetails?.endDate}
           </p>
         )}
-        <h1 className="text-lg font-bold">Number of Nights</h1>
+        <h1 className="text-lg font-bold mt-2">Number of Nights</h1>
         <p>
           {numberOfNights === 1
             ? `${numberOfNights} Night`
