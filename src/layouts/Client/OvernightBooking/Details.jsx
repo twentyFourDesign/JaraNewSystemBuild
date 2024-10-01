@@ -144,7 +144,9 @@ const Details = () => {
       return;
     }
 
-    dispatch(insert(userDetails));
+    const updatedDetails = { ...userDetails, para: userDetails.para.trim() };
+
+    dispatch(insert(updatedDetails));
     nav("/overnight/summary");
   };
   const handleFileChange = (e) => {
@@ -313,11 +315,6 @@ const Details = () => {
                     />
                   </div>
 
-                  {/* <input
-                    type="text"
-                    placeholder="How did you hear about us?"
-                    className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  /> */}
                   <select
                     name="aboutus"
                     className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"

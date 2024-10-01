@@ -30,8 +30,9 @@ export const PriceProvider = ({ children }) => {
   const [previousCost, setPreviousCost] = useState(0);
   const [previousPaymentStatus, setPreviousPaymentStatus] = useState("");
   const [numberOfNights, setNumberOfNights] = useState(0);
-
-  console.log(previousCost);
+  const [previousBookingId, setPreviousBookingId] = useState(null);
+  const [previousBookingMethod, setPreviousBookingMethod] = useState(null);
+  // console.log(previousCost);
   const calPrice = useCallback(() => {
     const pricingPercentages = {
       "Ocean Deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
@@ -334,6 +335,10 @@ export const PriceProvider = ({ children }) => {
         setPreviousPaymentStatus,
         numberOfNights,
         setNumberOfNights,
+        previousBookingId,
+        setPreviousBookingId,
+        previousBookingMethod,
+        setPreviousBookingMethod,
       }}
     >
       {children}

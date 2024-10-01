@@ -47,8 +47,9 @@ const OvernightSummary = () => {
     calPrice,
     overnightSubtotal,
     previousCost,
-
+    previousBookingId,
     previousPaymentStatus,
+    previousBookingMethod,
   } = useContext(PriceContext);
   const nav = useNavigate();
 
@@ -105,6 +106,10 @@ const OvernightSummary = () => {
         } else if (discount) {
           confirmBooking("Success", "Discount");
         }
+      } else if (previousCost > 0) {
+        if (price - previousCost == 0) {
+          confirmBooking("Success", previousBookingMethod);
+        }
       }
     }
   }, [isChecked]);
@@ -123,24 +128,34 @@ const OvernightSummary = () => {
     let success = 0;
     setDisabled(true);
     try {
-      let result = await axios.post(
-        `${baseUrl}/overnight/booking/create`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      let result;
+      if (previousCost > 0) {
+        result = await axios.put(
+          `${baseUrl}/overnight/booking/update/${previousBookingId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      } else {
+        result = await axios.post(
+          `${baseUrl}/overnight/booking/create`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      }
 
       if (result.status === 200) {
         await createPayment(result.data._id, paymentStatus, method);
         success = 1;
         if (previousCost > 0) {
-          toast.success("Your Previous Booking Will Be Canceled!");
-          toast.success(
-            "You will get an email with the Updated Booking Details"
-          );
+          toast.success("Your Booking has been Updated");
         } else {
           toast.success("Booking Created");
         }
@@ -162,29 +177,58 @@ const OvernightSummary = () => {
   };
   const createPayment = async (bookingId, status, method) => {
     try {
-      let result = await axios.post(`${baseUrl}/payment/create`, {
-        name: guestDetails.firstname + " " + guestDetails.lastname,
-        // amount: price,
-        amount:
-          previousCost > 0
-            ? previousPaymentStatus == "Pending"
-              ? price
-              : price - previousCost > 0
-              ? price - previousCost
-              : 0
-            : price,
-        status: status,
-        ref: bookingId,
-        method: method,
-        guestDetails: JSON.stringify(guestDetails),
-        roomDetails: JSON.stringify(roomDetails),
-        subTotal: overnightSubtotal,
-        vat: overnightTaxAmount,
-        totalCost: price,
-        discount: discount ? discount.percentage : 0,
-        voucher: voucher ? voucher.voucher.balance : 0,
-        multiNightDiscount: multiNightDiscount,
-      });
+      let result;
+      if (previousCost > 0) {
+        result = await axios.put(
+          `${baseUrl}/payment/update/${previousBookingId}`,
+          {
+            name: guestDetails.firstname + " " + guestDetails.lastname,
+            // amount: price,
+            amount:
+              previousPaymentStatus == "Pending"
+                ? price
+                : price - previousCost > 0
+                ? price - previousCost
+                : 0,
+
+            status: status,
+            ref: bookingId,
+            method: method,
+            guestDetails: JSON.stringify(guestDetails),
+            roomDetails: JSON.stringify(roomDetails),
+            subTotal: overnightSubtotal,
+            vat: overnightTaxAmount,
+            totalCost: price,
+            discount: discount ? discount.percentage : 0,
+            voucher: voucher ? voucher.voucher.balance : 0,
+            multiNightDiscount: multiNightDiscount,
+          }
+        );
+      } else {
+        result = await axios.post(`${baseUrl}/payment/create`, {
+          name: guestDetails.firstname + " " + guestDetails.lastname,
+          amount: price,
+          // amount:
+          //   previousCost > 0
+          //     ? previousPaymentStatus == "Pending"
+          //       ? price
+          //       : price - previousCost > 0
+          //       ? price - previousCost
+          //       : 0
+          //     : price,
+          status: status,
+          ref: bookingId,
+          method: method,
+          guestDetails: JSON.stringify(guestDetails),
+          roomDetails: JSON.stringify(roomDetails),
+          subTotal: overnightSubtotal,
+          vat: overnightTaxAmount,
+          totalCost: price,
+          discount: discount ? discount.percentage : 0,
+          voucher: voucher ? voucher.voucher.balance : 0,
+          multiNightDiscount: multiNightDiscount,
+        });
+      }
     } catch (err) {
       toast.error("An error occurred while creating payment");
     }
