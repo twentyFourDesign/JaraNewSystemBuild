@@ -155,9 +155,11 @@ const OvernightSummary = () => {
         await createPayment(result.data._id, paymentStatus, method);
         success = 1;
         if (previousCost > 0) {
-          toast.success("Your Booking has been Updated");
+          toast.success(
+            "Your Booking has been Updated. Please check your email."
+          );
         } else {
-          toast.success("Booking Created");
+          toast.success("Booking Created! Please check your email.");
         }
       } else {
         toast.error(result.data.message || "Failed to create booking");
