@@ -109,7 +109,7 @@ const Guest = () => {
                   (infants and toddlers included).
                 </p>
 
-                <div className="mt-4 flex flex-col gap-y-4 md:flex-row gap-x-[153px] items-center lg:w-[80%]">
+                <div className="mt-4 flex flex-col gap-y-4 md:flex-row gap-x-[153px] md:gap-x-[10px] lg:gap-x-[153px] items-center lg:w-[80%]">
                   <div className="w-[100%] ">
                     <h1 className="text-lg font-bold  ">Adult(s)</h1>
                     <div className="flex justify-between items-center w-[100%] lg:w-[80%]">
@@ -256,7 +256,7 @@ const Guest = () => {
           </div>
 
           {/* RESERVATION  */}
-          <div className="w-auto  mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
+          <div className="w-auto md:mt-4 mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
             <div className="w-full xl:max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
               <OvernightReservation />
             </div>
