@@ -19,7 +19,9 @@ import adire from "../assets/adire.jpeg";
 import bedroom from "../assets/bedRoom.png";
 import { insert } from "../store/slices/daypassAvailablity.slice";
 const Extras = ({ finalData, setFinalData, type }) => {
-  const [showExtra, setshowExtra] = useState(true);
+  const [showExtra, setshowExtra] = useState(
+    type != "overnight" ? false : true
+  );
   const [cakeExtra, setCakeExtra] = useState([]);
   const [lookoutExtra, setlookoutExtra] = useState([]);
   const [massageExtra, setmassageExtra] = useState([]);
@@ -267,7 +269,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
   const [showUnforgettable, setshowUnforgettable] = useState(false);
 
   return (
-    <div className="w-[100%]  overflow-y-auto  rounded-md mt-4 font-robotoFont ">
+    <div
+      className={`w-[100%]  overflow-y-auto ${
+        type != "overnight" && "border-2 border-[#75A9BF] p-4"
+      }  rounded-md mt-4 font-robotoFont `}
+    >
       <h1 className="text-xl font-bold">Want to add some Extras</h1>
 
       <div className="flex justify-between items-center gap-x-4">
@@ -275,17 +281,19 @@ const Extras = ({ finalData, setFinalData, type }) => {
           Here you can book in any extra special experiences.Please select the
           ones you wish to add to your booking.
         </h1>
-        {/* <img
-          onClick={() => setshowExtra(!showExtra)}
-          src={downIcon}
-          alt=""
-          className=" cursor-pointer"
-        /> */}
+        {type != "overnight" && (
+          <img
+            onClick={() => setshowExtra(!showExtra)}
+            src={downIcon}
+            alt=""
+            className=" cursor-pointer"
+          />
+        )}
       </div>
 
-      {/* {showExtra && (
-        <> */}
-      {/* {lookoutExtra?.map((extra, index) => (
+      {showExtra && (
+        <>
+          {/* {lookoutExtra?.map((extra, index) => (
             <div key={index} className="mt-4">
               <h1 className="text-lg mb-3 ml-0 font-semibold">
                 Lookout Experience
@@ -346,50 +354,52 @@ const Extras = ({ finalData, setFinalData, type }) => {
               })}
             </div>
           ))} */}
-      {cakeExtra?.length > 0 && (
-        <div className="my-4">
-          <div className="flex justify-between items-center gap-x-4">
-            <div className="flex items-center gap-x-4 ">
-              <img
-                src={cake}
-                alt=""
-                className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-              />
-              <h1 className="text-lg mb-3 ml-0 font-semibold">Cake</h1>
-            </div>
+          {cakeExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={cake}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">Cake</h1>
+                </div>
 
-            <img
-              onClick={() => setshowCake(!showCake)}
-              src={downIcon}
-              alt=""
-              className=" cursor-pointer"
-            />
-          </div>
-          {showCake && (
-            <>
-              {cakeExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <div className="flex flex-wrap justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div className=" flex items-center gap-x-3 lt:mt-0 mt-2">
-                        {/* <p className="text-[#606970] ">Item</p> */}
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleAddRemoveCake(item);
-                          }}
-                          className="w-6 h-6 rounded-sm cursor-pointer"
-                        />
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
+                <img
+                  onClick={() => setshowCake(!showCake)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
+              </div>
+              {showCake && (
+                <>
+                  {cakeExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className=" flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970] ">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveCake(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.title}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
 
-                      {/* <div className="lg:mt-0 mt-4">
+                          {/* <div className="lg:mt-0 mt-4">
                             <button
                               onClick={() => handleAddRemoveCake(item)}
                               className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
@@ -397,60 +407,62 @@ const Extras = ({ finalData, setFinalData, type }) => {
                               {isCakeAdded(item) ? "Remove Cake" : "Add Cake"}
                             </button>
                           </div> */}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      )}
-
-      {massageExtra?.length > 0 && (
-        <div className="my-4">
-          <div className="flex justify-between items-center gap-x-4">
-            <div className="flex items-center gap-x-4 ">
-              <img
-                src={massage}
-                alt=""
-                className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-              />
-              <h1 className="text-lg mb-3 ml-0 font-semibold">Massage</h1>
+                  ))}
+                </>
+              )}
             </div>
+          )}
 
-            <img
-              onClick={() => setshowMassage(!showMassage)}
-              src={downIcon}
-              alt=""
-              className=" cursor-pointer"
-            />
-          </div>
-          {showMassage && (
-            <>
-              {massageExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <div className="flex flex-wrap justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div className=" flex items-center gap-x-3 lt:mt-0 mt-2">
-                        {/* <p className="text-[#606970]">Item</p> */}
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleAddRemoveMassage(item);
-                          }}
-                          className="w-6 h-6 rounded-sm cursor-pointer"
-                        />
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.type}</p>
-                      </div>
-                    </div>
+          {massageExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={massage}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">Massage</h1>
+                </div>
 
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
+                <img
+                  onClick={() => setshowMassage(!showMassage)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
+              </div>
+              {showMassage && (
+                <>
+                  {massageExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className=" flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970]">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveMassage(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.type}
+                            </p>
+                          </div>
+                        </div>
 
-                      {/* <div className="lg:mt-0 mt-4">
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
+
+                          {/* <div className="lg:mt-0 mt-4">
                             <button
                               onClick={() => handleAddRemoveMassage(item)}
                               className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
@@ -460,60 +472,62 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 : "Add Massage"}
                             </button>
                           </div> */}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      )}
-
-      {drinkExtra?.length > 0 && (
-        <div className="my-4">
-          <div className="flex justify-between items-center gap-x-4">
-            <div className="flex items-center gap-x-4 ">
-              <img
-                src={drinking}
-                alt=""
-                className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-              />
-              <h1 className="text-lg mb-3 ml-0 font-semibold">Drinks</h1>
+                  ))}
+                </>
+              )}
             </div>
+          )}
 
-            <img
-              onClick={() => setshowDrink(!showDrink)}
-              src={downIcon}
-              alt=""
-              className=" cursor-pointer"
-            />
-          </div>
-          {showDrink && (
-            <>
-              {drinkExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <div className="flex flex-wrap justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
-                        {/* <p className="text-[#606970]">Item</p> */}
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleAddRemoveDrink(item);
-                          }}
-                          className="w-6 h-6 rounded-sm cursor-pointer"
-                        />
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                      </div>
-                    </div>
+          {drinkExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={drinking}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">Drinks</h1>
+                </div>
 
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
+                <img
+                  onClick={() => setshowDrink(!showDrink)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
+              </div>
+              {showDrink && (
+                <>
+                  {drinkExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970]">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveDrink(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.title}
+                            </p>
+                          </div>
+                        </div>
 
-                      {/* <div className="lg:mt-0 mt-4">
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
+
+                          {/* <div className="lg:mt-0 mt-4">
                             <button
                               onClick={() => handleAddRemoveDrink(item)}
                               className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
@@ -523,62 +537,64 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 : "Add Drink"}
                             </button>
                           </div> */}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      )}
-
-      {unforgettableExtra?.length > 0 && (
-        <div className="my-4">
-          <div className="flex justify-between items-center gap-x-4">
-            <div className="flex items-center gap-x-4 ">
-              <img
-                src={unforgettable}
-                alt=""
-                className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-              />
-              <h1 className="text-lg mb-3 ml-0 font-semibold">
-                Unforgettable Experiences
-              </h1>
+                  ))}
+                </>
+              )}
             </div>
+          )}
 
-            <img
-              onClick={() => setshowUnforgettable(!showUnforgettable)}
-              src={downIcon}
-              alt=""
-              className=" cursor-pointer"
-            />
-          </div>
-          {showUnforgettable && (
-            <>
-              {unforgettableExtra?.map((item, index) => (
-                <div key={index} className="mt-4">
-                  <div className="flex flex-wrap justify-between items-center mb-4">
-                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                      <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
-                        {/* <p className="text-[#606970]">Item</p> */}
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleAddRemoveUnforgettable(item);
-                          }}
-                          className="w-6 h-6 rounded-sm cursor-pointer"
-                        />
-                        <p className="lg:mt-1 mt-0 font-bold">{item?.title}</p>
-                      </div>
-                    </div>
+          {unforgettableExtra?.length > 0 && (
+            <div className="my-4">
+              <div className="flex justify-between items-center gap-x-4">
+                <div className="flex items-center gap-x-4 ">
+                  <img
+                    src={unforgettable}
+                    alt=""
+                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                  />
+                  <h1 className="text-lg mb-3 ml-0 font-semibold">
+                    Unforgettable Experiences
+                  </h1>
+                </div>
 
-                    <div className="flex flex-col lg:gap-y-2">
-                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                        {/* <p className="text-[#606970]">Price</p> */}
-                        <p className="font-bold">{item.price}₦</p>
-                      </div>
+                <img
+                  onClick={() => setshowUnforgettable(!showUnforgettable)}
+                  src={downIcon}
+                  alt=""
+                  className=" cursor-pointer"
+                />
+              </div>
+              {showUnforgettable && (
+                <>
+                  {unforgettableExtra?.map((item, index) => (
+                    <div key={index} className="mt-4">
+                      <div className="flex flex-wrap justify-between items-center mb-4">
+                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                            {/* <p className="text-[#606970]">Item</p> */}
+                            <input
+                              type="checkbox"
+                              onChange={() => {
+                                handleAddRemoveUnforgettable(item);
+                              }}
+                              className="w-6 h-6 rounded-sm cursor-pointer"
+                            />
+                            <p className="lg:mt-1 mt-0 font-bold">
+                              {item?.title}
+                            </p>
+                          </div>
+                        </div>
 
-                      {/* <div className="lg:mt-0 mt-4">
+                        <div className="flex flex-col lg:gap-y-2">
+                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                            {/* <p className="text-[#606970]">Price</p> */}
+                            <p className="font-bold">{item.price}₦</p>
+                          </div>
+
+                          {/* <div className="lg:mt-0 mt-4">
                             <button
                               onClick={() => handleAddRemoveUnforgettable(item)}
                               className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
@@ -588,63 +604,65 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 : "Add Experience"}
                             </button>
                           </div> */}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      )}
-      {type == "overnight" && (
-        <div>
-          {rindingExtra?.length > 0 && (
-            <div className="my-4">
-              <div className="flex justify-between items-center gap-x-4">
-                <div className="flex items-center gap-x-4 ">
-                  <img
-                    src={riding}
-                    alt=""
-                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-                  />
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">Rinding</h1>
-                </div>
-
-                <img
-                  onClick={() => setshowRiding(!showRiding)}
-                  src={downIcon}
-                  alt=""
-                  className=" cursor-pointer"
-                />
-              </div>
-              {showRiding && (
-                <>
-                  {rindingExtra?.map((item, index) => (
-                    <div key={index} className="mt-4">
-                      <div className="flex flex-wrap justify-between items-center mb-4">
-                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
-                            {/* <p className="text-[#606970]">Item</p> */}
-                            <input
-                              type="checkbox"
-                              onChange={() => {
-                                handleAddRemoveRiding(item);
-                              }}
-                              className="w-6 h-6 rounded-sm cursor-pointer"
-                            />
-                            <p className="lg:mt-1 mt-0 font-bold">
-                              {item?.title}
-                            </p>
-                          </div>
                         </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          )}
+          {type == "overnight" && (
+            <div>
+              {rindingExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      <img
+                        src={riding}
+                        alt=""
+                        className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                      />
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Rinding
+                      </h1>
+                    </div>
 
-                        <div className="flex flex-col lg:gap-y-2">
-                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                            {/* <p className="text-[#606970]">Price</p> */}
-                            <p className="font-bold">{item.price}₦</p>
-                          </div>
+                    <img
+                      onClick={() => setshowRiding(!showRiding)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
+                  </div>
+                  {showRiding && (
+                    <>
+                      {rindingExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemoveRiding(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
 
-                          {/* <div className="lg:mt-0 mt-4">
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
+
+                              {/* <div className="lg:mt-0 mt-4">
                                 <button
                                   onClick={() => handleAddRemoveRiding(item)}
                                   className="w-[8rem] h-[2.4rem] rounded-lg text-white bg-black"
@@ -654,63 +672,63 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     : "Add Ridng"}
                                 </button>
                               </div> */}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
-            </div>
-          )}
-          {roomDecorationExtra?.length > 0 && (
-            <div className="my-4">
-              <div className="flex justify-between items-center gap-x-4">
-                <div className="flex items-center gap-x-4 ">
-                  <img
-                    src={Room}
-                    alt=""
-                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-                  />
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">
-                    Room Decoration
-                  </h1>
+                      ))}
+                    </>
+                  )}
                 </div>
+              )}
+              {roomDecorationExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      <img
+                        src={Room}
+                        alt=""
+                        className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                      />
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Room Decoration
+                      </h1>
+                    </div>
 
-                <img
-                  onClick={() => setshowRoomDecoration(!showRoomDecoration)}
-                  src={downIcon}
-                  alt=""
-                  className=" cursor-pointer"
-                />
-              </div>
-              {showRoomDecoration && (
-                <>
-                  {roomDecorationExtra?.map((item, index) => (
-                    <div key={index} className="mt-4">
-                      <div className="flex flex-wrap justify-between items-center mb-4">
-                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
-                            {/* <p className="text-[#606970]">Item</p> */}
-                            <input
-                              type="checkbox"
-                              onChange={() => {
-                                handleAddRemoveRoomDecoration(item);
-                              }}
-                              className="w-6 h-6 rounded-sm cursor-pointer"
-                            />
-                            <p className="lg:mt-1 mt-0 font-bold">
-                              {item?.title}
-                            </p>
-                          </div>
-                        </div>
+                    <img
+                      onClick={() => setshowRoomDecoration(!showRoomDecoration)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
+                  </div>
+                  {showRoomDecoration && (
+                    <>
+                      {roomDecorationExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemoveRoomDecoration(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
 
-                        <div className="flex flex-col lg:gap-y-2">
-                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                            {/* <p className="text-[#606970]">Price</p> */}
-                            <p className="font-bold">{item.price}₦</p>
-                          </div>
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
 
-                          {/* <div className="lg:mt-0 mt-4">
+                              {/* <div className="lg:mt-0 mt-4">
                                 <button
                                   onClick={() =>
                                     handleAddRemoveRoomDecoration(item)
@@ -722,64 +740,64 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     : "Add Decoration"}
                                 </button>
                               </div> */}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
-            </div>
-          )}
-
-          {domesticStaffExtra?.length > 0 && (
-            <div className="my-4">
-              <div className="flex justify-between items-center gap-x-4">
-                <div className="flex items-center gap-x-4 ">
-                  <img
-                    src={bedroom}
-                    alt=""
-                    className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
-                  />
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">
-                    Domestic Staff
-                  </h1>
+                      ))}
+                    </>
+                  )}
                 </div>
+              )}
 
-                <img
-                  onClick={() => setshowDomesticStaff(!showDomesticStaff)}
-                  src={downIcon}
-                  alt=""
-                  className=" cursor-pointer"
-                />
-              </div>
-              {showDomesticStaff && (
-                <>
-                  {domesticStaffExtra?.map((item, index) => (
-                    <div key={index} className="mt-4">
-                      <div className="flex flex-wrap justify-between items-center mb-4">
-                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
-                            {/* <p className="text-[#606970]">Item</p> */}
-                            <input
-                              type="checkbox"
-                              onChange={() => {
-                                handleAddRemoveDomesticStaff(item);
-                              }}
-                              className="w-6 h-6 rounded-sm cursor-pointer"
-                            />
-                            <p className="lg:mt-1 mt-0 font-bold">
-                              {item?.title}
-                            </p>
-                          </div>
-                        </div>
+              {domesticStaffExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      <img
+                        src={bedroom}
+                        alt=""
+                        className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
+                      />
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Domestic Staff
+                      </h1>
+                    </div>
 
-                        <div className="flex flex-col lg:gap-y-2">
-                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                            {/* <p className="text-[#606970]">Price</p> */}
-                            <p className="font-bold">{item.price}₦</p>
-                          </div>
+                    <img
+                      onClick={() => setshowDomesticStaff(!showDomesticStaff)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
+                  </div>
+                  {showDomesticStaff && (
+                    <>
+                      {domesticStaffExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemoveDomesticStaff(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
 
-                          {/* <div className="lg:mt-0 mt-4">
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
+
+                              {/* <div className="lg:mt-0 mt-4">
                                 <button
                                   onClick={() =>
                                     handleAddRemoveDomesticStaff(item)
@@ -791,70 +809,70 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     : "Add Staff"}
                                 </button>
                               </div> */}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </>
+                      ))}
+                    </>
+                  )}
+                </div>
               )}
-            </div>
-          )}
-          {personalExtra?.length > 0 && (
-            <div className="my-4">
-              <div className="flex justify-between items-center gap-x-4">
-                <div className="flex items-center gap-x-4 ">
-                  {/* <img
+              {personalExtra?.length > 0 && (
+                <div className="my-4">
+                  <div className="flex justify-between items-center gap-x-4">
+                    <div className="flex items-center gap-x-4 ">
+                      {/* <img
                         src={bedroom}
                         alt=""
                         className="lg:w-fit w-[100%] bg-contain h-[10rem]  lg:h-[5rem]"
                       /> */}
-                  <h1 className="text-lg mb-3 ml-0 font-semibold">
-                    Personal Extras
-                  </h1>
-                </div>
+                      <h1 className="text-lg mb-3 ml-0 font-semibold">
+                        Personal Extras
+                      </h1>
+                    </div>
 
-                <img
-                  onClick={() => setshowPersonal(!showPersonal)}
-                  src={downIcon}
-                  alt=""
-                  className=" cursor-pointer"
-                />
-              </div>
-              {showPersonal && (
-                <>
-                  {personalExtra?.map((item, index) => (
-                    <div key={index} className="mt-4">
-                      <div className="flex flex-wrap justify-between items-center mb-4">
-                        <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
-                          <div>
-                            <img
-                              src={selectBg(item.title)}
-                              alt=""
-                              className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
-                            />
-                          </div>
-                          <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
-                            {/* <p className="text-[#606970]">Item</p> */}
-                            <input
-                              type="checkbox"
-                              onChange={() => {
-                                handleAddRemovePersonal(item);
-                              }}
-                              className="w-6 h-6 rounded-sm cursor-pointer"
-                            />
-                            <p className="lg:mt-1 mt-0 font-bold">
-                              {item?.title}
-                            </p>
-                          </div>
-                        </div>
+                    <img
+                      onClick={() => setshowPersonal(!showPersonal)}
+                      src={downIcon}
+                      alt=""
+                      className=" cursor-pointer"
+                    />
+                  </div>
+                  {showPersonal && (
+                    <>
+                      {personalExtra?.map((item, index) => (
+                        <div key={index} className="mt-4">
+                          <div className="flex flex-wrap justify-between items-center mb-4">
+                            <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                              <div>
+                                <img
+                                  src={selectBg(item.title)}
+                                  alt=""
+                                  className="lg:w-fit w-[100%] h-[10rem] bg-contain lg:h-[5rem]"
+                                />
+                              </div>
+                              <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                {/* <p className="text-[#606970]">Item</p> */}
+                                <input
+                                  type="checkbox"
+                                  onChange={() => {
+                                    handleAddRemovePersonal(item);
+                                  }}
+                                  className="w-6 h-6 rounded-sm cursor-pointer"
+                                />
+                                <p className="lg:mt-1 mt-0 font-bold">
+                                  {item?.title}
+                                </p>
+                              </div>
+                            </div>
 
-                        <div className="flex flex-col lg:gap-y-2">
-                          <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
-                            {/* <p className="text-[#606970]">Price</p> */}
-                            <p className="font-bold">{item.price}₦</p>
-                          </div>
+                            <div className="flex flex-col lg:gap-y-2">
+                              <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                {/* <p className="text-[#606970]">Price</p> */}
+                                <p className="font-bold">{item.price}₦</p>
+                              </div>
 
-                          {/* <div className="lg:mt-0 mt-4">
+                              {/* <div className="lg:mt-0 mt-4">
                                 <button
                                   onClick={() => handleAddRemovePersonal(item)}
                                   className="w-[fit] px-1 h-[2.4rem] rounded-lg text-white bg-black"
@@ -864,18 +882,18 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     : `Add ${item.title}`}
                                 </button>
                               </div> */}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </>
+                      ))}
+                    </>
+                  )}
+                </div>
               )}
             </div>
           )}
-        </div>
+        </>
       )}
-      {/* </>
-      )} */}
     </div>
   );
 };
