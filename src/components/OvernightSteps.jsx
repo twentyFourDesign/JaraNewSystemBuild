@@ -56,7 +56,7 @@ const OvernightSteps = ({ step }) => {
           </div>
           <div className="w-[9rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-        <span className="md: w-3/4">Extras Experiences</span>
+        <span className="md: w-3/4">Extra Experiences</span>
       </div>
       <div className="flex flex-col justify-center gap-2">
         <div className="flex items-center">
