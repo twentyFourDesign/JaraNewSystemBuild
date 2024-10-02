@@ -238,7 +238,9 @@ const RoomDetails = () => {
           finalData,
         })
       );
-      nav("/overnight/details");
+      nav("/overnight/extras", {
+        state: { selectedRooms: updatedRooms, ...serializableSelectedDate },
+      });
     } else {
       toast.error("Please Select More Rooms ");
       console.log("u cannot fit");
@@ -467,13 +469,13 @@ const RoomDetails = () => {
               </p>
 
               {/* EXTRAS  */}
-              <div>
+              {/* <div>
                 <Extras
                   setFinalData={setFinalData}
                   finalData={finalData}
                   type={"overnight"}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -64,7 +64,7 @@ const Guest = () => {
                   </div>
 
                   <div className="flex gap-x-4 items-center">
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -81,7 +81,7 @@ const Guest = () => {
                     <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
                       {guestInfo.adultsAlcoholic}
                     </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlinePlus
                         onClick={() => {
                           setGuestInfo({
@@ -110,7 +110,7 @@ const Guest = () => {
                     </p>
                   </div>
                   <div className="flex gap-x-4 items-center">
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -127,7 +127,7 @@ const Guest = () => {
                     <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
                       {guestInfo.adultsNonAlcoholic}
                     </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlinePlus
                         onClick={() => {
                           setGuestInfo({
@@ -156,7 +156,7 @@ const Guest = () => {
                     </p>
                   </div>
                   <div className="flex gap-x-4 items-center">
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -173,7 +173,7 @@ const Guest = () => {
                     <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
                       {guestInfo.Nanny}
                     </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlinePlus
                         onClick={() => {
                           setGuestInfo({
@@ -201,7 +201,7 @@ const Guest = () => {
                   </div>
 
                   <div className="flex gap-x-4 items-center">
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
                           setGuestInfo((prevState) => ({
@@ -218,7 +218,7 @@ const Guest = () => {
                     <div className="w-[5rem] h-[2rem] bg-white flex justify-center items-center rounded-md text-[#9BA6B0]">
                       {guestInfo.childTotal}
                     </div>
-                    <div className="w-[2rem] h-[2rem] bg-black flex justify-center items-center rounded-md cursor-pointer">
+                    <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlinePlus
                         onClick={() => {
                           setGuestInfo({
@@ -267,7 +267,7 @@ const Guest = () => {
               disabled={!isValid}
               className={
                 isValid
-                  ? "w-[10rem] h-[3rem] bg-black text-white rounded-md flex items-center justify-center font-robotoFont"
+                  ? "w-[10rem] h-[3rem] bg-black  text-white rounded-md flex items-center justify-center font-robotoFont"
                   : "text-white rounded-md flex items-center justify-center font-robotoFont bg-[#D2D2D2] w-[10rem] h-[3rem] cursor-not-allowed"
               }
             >

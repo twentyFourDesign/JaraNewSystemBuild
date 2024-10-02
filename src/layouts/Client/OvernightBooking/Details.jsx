@@ -159,7 +159,7 @@ const Details = () => {
           {/* SETPS  */}
           <div className="w-[100%] flex justify-center items-center">
             <div className="w-[100%] lg:w-[90%]">
-              <OvernightSteps step={3} />
+              <OvernightSteps step={4} />
             </div>
           </div>
 
@@ -413,7 +413,7 @@ const Details = () => {
                 </button>
               </div>
               <div
-                onClick={() => nav("/overnight/room-details")}
+                onClick={() => nav("/overnight/extras")}
                 className=" flex w-full p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
               >
                 <img src={arrow} alt="icon" className="w-[1rem]" />

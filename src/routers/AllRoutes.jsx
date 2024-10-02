@@ -16,6 +16,7 @@ import DayPassDetailsScreen from "../screens/Client/Daypass/DetailsScreem";
 import BookingTypeScreen from "../screens/Client/BookingTypeScreen";
 import OvernightGuestScreen from "../screens/Client/Overnight/GuestScreen";
 import OvernightDetailsScreen from "../screens/Client/Overnight/DetailsScreen";
+import ExtrasPageScreen from "../screens/Client/Overnight/ExtrasPageScreen";
 import OverNightSummaryScreen from "../screens/Client/Overnight/SummaryScreen";
 import OverNightConfirmationScreen from "../screens/Client/Overnight/ConfirmationScreen";
 import OvernightRoomDetailsScreen from "../screens/Client/Overnight/RoomDetailsScreen";
@@ -164,6 +165,7 @@ const AllRoutes = () => {
       <Route path="/" element={<BookingTypeScreen />} />
       <Route path="/overnight/guest" element={<OvernightGuestScreen />} />
       <Route path="/overnight/details" element={<OvernightDetailsScreen />} />
+      <Route path="/overnight/extras" element={<ExtrasPageScreen />} />
       <Route path="/overnight/summary" element={<OverNightSummaryScreen />} />
       <Route
         path="/overnight/confirmation"
