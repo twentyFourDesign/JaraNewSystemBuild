@@ -21,6 +21,7 @@ import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestIn
 import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 import { ImCross } from "react-icons/im";
+import { ClipLoader } from "react-spinners";
 import { PriceContext } from "../../../Context/PriceContext";
 
 const RoomDetails = () => {
@@ -32,6 +33,7 @@ const RoomDetails = () => {
   const [selectedRooms, setSelectedRooms] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [finalData, setFinalData] = useState([]);
+  const [disableDate, setDisableDate] = useState(true);
   // const [numberOfNights, setNumberOfNights] = useState(0);
   const [selectedDate, setSelectedDate] = useState({
     visitDate: null,
@@ -320,6 +322,7 @@ const RoomDetails = () => {
 
                     <DatePicker
                       label="Check-out Date"
+                      disabled={selectedDate.visitDate ? false : true}
                       value={selectedDate?.endDate || null}
                       onChange={(newValue) => {
                         if (
@@ -350,7 +353,11 @@ const RoomDetails = () => {
                           label: "Check-out Date",
                         },
                       }}
-                      minDate={dayjs()} // Add this line to set the minimum date to today
+                      minDate={
+                        selectedDate.visitDate
+                          ? dayjs(selectedDate.visitDate).add(1, "day")
+                          : dayjs() // Add this line to set the minimum date to 1 day after the checkin date
+                      }
                     />
                   </div>
                 </div>
@@ -376,7 +383,7 @@ const RoomDetails = () => {
 
               {/* MAIN ROOM TYPES  */}
               <div className="mt-4 flex flex-col ">
-                {modifiedRoom?.length > 0 &&
+                {modifiedRoom?.length > 0 ? (
                   modifiedRoom.map((item, index) => (
                     <div key={index} className="lg:flex  gap-x-10 items-center">
                       <div>
@@ -460,7 +467,12 @@ const RoomDetails = () => {
                         ))}
                       </div>
                     </div>
-                  ))}
+                  ))
+                ) : selectedDate.visitDate && selectedDate.endDate ? (
+                  <div className="w-full text-center mt-3">
+                    <ClipLoader color="#000000" size={35} />
+                  </div>
+                ) : null}
               </div>
 
               <p className="text-[#606970] text-sm mt-3">

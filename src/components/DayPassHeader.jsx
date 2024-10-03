@@ -1,5 +1,5 @@
 import React from "react";
-import HeaderImage from "../assets/daypassHeader.png";
+import HeaderImage from "../assets/daypassNewHead.jpeg";
 import logo from "../assets/jaralogo.png";
 import { Link } from "react-router-dom";
 
@@ -17,7 +17,7 @@ const DayPassHeader = () => {
         </Link>
         {/* <img src={logo} alt="" className='h-[2rem]' /> */}
       </div>
-      <img src={HeaderImage} alt="" className="h-full w-full" />
+      <img src={HeaderImage} alt="" className="h-[300px] w-full" />
     </div>
   );
 };
