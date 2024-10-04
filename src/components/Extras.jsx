@@ -33,7 +33,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
   const [rindingExtra, setrindingExtra] = useState([]);
   const [personalExtra, setpersonalExtra] = useState([]);
   const [addedItems, setAddedItems] = useState({});
-
+  const [disabledExtras, setDisabledExtras] = useState([]);
   const getExtras = async () => {
     let cakes = await axios.get(`${baseUrl}/cake/get`);
     let lookout = await axios.get(`${baseUrl}/lookout/get`);
@@ -79,9 +79,48 @@ const Extras = ({ finalData, setFinalData, type }) => {
   // console.log(domesticStaffExtra);
   // console.log(personalExtra);
 
+  const fetchDisabledExtras = async () => {
+    let response = await axios.get(`${baseUrl}/disable/get`);
+    if (response.data) {
+      setDisabledExtras(response.data);
+    }
+  };
   useEffect(() => {
     getExtras();
+    fetchDisabledExtras();
   }, []);
+  const filterExtras = (extras) => {
+    return extras.filter((item) => {
+      const isDisabled = disabledExtras.some(
+        (disabledItem) =>
+          disabledItem?.type?.trim() === item?.title?.trim() &&
+          new Date(disabledItem.date).toDateString() ===
+            new Date().toDateString() // Replace with the provided date
+      );
+      return !isDisabled;
+    });
+  };
+  const filterMassageExtras = (extras) => {
+    return extras.filter((item) => {
+      const isDisabled = disabledExtras.some(
+        (disabledItem) =>
+          disabledItem?.type?.trim() === item?.type?.trim() &&
+          new Date(disabledItem.date).toDateString() ===
+            new Date().toDateString() // Replace with the provided date
+      );
+      return !isDisabled;
+    });
+  };
+
+  const filteredCakeExtras = filterExtras(cakeExtra);
+  const filteredLookoutExtras = filterExtras(lookoutExtra);
+  const filteredMassageExtras = filterMassageExtras(massageExtra);
+  const filteredDrinkExtras = filterExtras(drinkExtra);
+  const filteredUnforgettableExtras = filterExtras(unforgettableExtra);
+  const filteredDomesticStaffExtras = filterExtras(domesticStaffExtra);
+  const filteredRoomDecorationExtras = filterExtras(roomDecorationExtra);
+  const filteredRidingExtras = filterExtras(rindingExtra);
+  const filteredPersonalExtras = filterExtras(personalExtra);
 
   const handleAddRemoveExtra = (key, value) => {
     if (addedItems[key]) {
@@ -389,7 +428,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                   </div>
                   {showCake && (
                     <>
-                      {cakeExtra?.map((item, index) => (
+                      {filteredCakeExtras?.map((item, index) => (
                         <div key={index} className="mt-4">
                           <div className="flex flex-wrap justify-between items-center mb-4">
                             <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
@@ -453,7 +492,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                   </div>
                   {showMassage && (
                     <>
-                      {massageExtra?.map((item, index) => (
+                      {filteredMassageExtras?.map((item, index) => (
                         <div key={index} className="mt-4">
                           <div className="flex flex-wrap justify-between items-center mb-4">
                             <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
@@ -520,7 +559,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                   </div>
                   {showDrink && (
                     <>
-                      {drinkExtra?.map((item, index) => (
+                      {filteredDrinkExtras?.map((item, index) => (
                         <div key={index} className="mt-4">
                           <div className="flex flex-wrap justify-between items-center mb-4">
                             <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
@@ -587,7 +626,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                   </div>
                   {showUnforgettable && (
                     <>
-                      {unforgettableExtra?.map((item, index) => (
+                      {filteredUnforgettableExtras?.map((item, index) => (
                         <div key={index} className="mt-4">
                           <div className="flex flex-wrap justify-between items-center mb-4">
                             <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
@@ -655,7 +694,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       </div>
                       {showRiding && (
                         <>
-                          {rindingExtra?.map((item, index) => (
+                          {filteredRidingExtras?.map((item, index) => (
                             <div key={index} className="mt-4">
                               <div className="flex flex-wrap justify-between items-center mb-4">
                                 <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
@@ -723,7 +762,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       </div>
                       {showRoomDecoration && (
                         <>
-                          {roomDecorationExtra?.map((item, index) => (
+                          {filteredRoomDecorationExtras?.map((item, index) => (
                             <div key={index} className="mt-4">
                               <div className="flex flex-wrap justify-between items-center mb-4">
                                 <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
@@ -794,7 +833,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       </div>
                       {showDomesticStaff && (
                         <>
-                          {domesticStaffExtra?.map((item, index) => (
+                          {filteredDomesticStaffExtras?.map((item, index) => (
                             <div key={index} className="mt-4">
                               <div className="flex flex-wrap justify-between items-center mb-4">
                                 <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
@@ -862,7 +901,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       </div>
                       {showPersonal && (
                         <>
-                          {personalExtra?.map((item, index) => (
+                          {filteredPersonalExtras?.map((item, index) => (
                             <div key={index} className="mt-4">
                               <div className="flex flex-wrap justify-between items-center mb-4">
                                 <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">

@@ -19,6 +19,8 @@ const RoomDetails = () => {
   const [finalData, setFinalData] = useState([]);
   const [dayType, setdayType] = useState("weekdays");
   const [seasonalDates, setSeasonalDates] = useState([]);
+  const [blockedDates, setBlockedDates] = useState([]);
+  console.log(blockedDates);
   // console.log(seasonalDates);
   const [availablityInfo, setavailablityInfo] = useState({
     dayType: "",
@@ -44,7 +46,12 @@ const RoomDetails = () => {
       const response = await axios.get(`${baseUrl}/seasonal/get`);
       setSeasonalDates(response.data.map((date) => new Date(date.date)));
     };
+    const fetchBlockedDates = async () => {
+      const response = await axios.get(`${baseUrl}/block/booking/get`);
+      setBlockedDates(response.data.map((date) => new Date(date.date)));
+    };
     fetchSeasonalDates();
+    fetchBlockedDates();
   }, []);
   const checkIfDateIsNotPast = (dateString) => {
     const today = new Date();
@@ -243,6 +250,7 @@ const RoomDetails = () => {
                       }
                       return true;
                     }}
+                    excludeDates={blockedDates}
                     dateFormat="yyyy-MM-dd"
                     placeholderText="Select a date"
                     className="mr-10 w-[100%] border-2 lg:mb-0 mb-2 lg:w-[20rem] h-[2.3rem] px-3 rounded-md"

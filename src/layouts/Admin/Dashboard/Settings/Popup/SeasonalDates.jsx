@@ -11,7 +11,7 @@ const SeasonalDates = ({ setShowPopups, showPopups }) => {
 
   const getData = async () => {
     let response = await axios.get(`${baseUrl}/seasonal/get`);
-    setApiData(response.data);
+    setApiData(response?.data ? response?.data : []);
   };
 
   const onChange = (e) => {
@@ -33,8 +33,10 @@ const SeasonalDates = ({ setShowPopups, showPopups }) => {
   const del = async (id) => {
     let response = await axios.delete(`${baseUrl}/seasonal/delete/${id}`);
     if (response.status === 200) {
-      getData();
       toast.success("Seasonal Date Deleted");
+      setTimeout(() => {
+        getData();
+      }, 2000);
     }
   };
   function formatDate(dateString) {
