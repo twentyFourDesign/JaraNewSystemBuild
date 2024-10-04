@@ -33,164 +33,167 @@ import AccountsScreen from "../screens/Admin/Dashboard/AccountsScreen";
 import DaypassConfirmationScreen from "../screens/Client/Daypass/ConfirmationScreen";
 import ProtectedRoute from "../components/ProtectedRoute";
 import ResetPassword from "../components/ResetPassword";
+import ScrollToTop from "../components/ScrollToTop";
 const AllRoutes = () => {
   return (
-    <Routes>
-      {/* ADMIN ROUTES  */}
-      <Route path="/admin/jara/">
-        <Route path="login" element={<LoginScreen />} />
-        <Route path="reset-password/:token" element={<ResetPassword />} />
-        <Route
-          path="booking"
-          element={
-            <ProtectedRoute>
-              <BookingScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="guests"
-          element={
-            <ProtectedRoute>
-              <GuestScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="day-pass"
-          element={
-            <ProtectedRoute>
-              <DaypassScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="black-list-guests"
-          element={
-            <ProtectedRoute>
-              <BlacklistScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="staff"
-          element={
-            <ProtectedRoute>
-              <StaffScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="vouchers"
-          element={
-            <ProtectedRoute>
-              <VoucherScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="discounts"
-          element={
-            <ProtectedRoute>
-              <DiscountScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="tasks"
-          element={
-            <ProtectedRoute>
-              <TaskScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="discounts/daypass"
-          element={
-            <ProtectedRoute>
-              <DaypassDiscountScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="vouchers/daypass"
-          element={
-            <ProtectedRoute>
-              <DaypassVoucherScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="payment"
-          element={
-            <ProtectedRoute>
-              <PaymentScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="setting"
-          element={
-            <ProtectedRoute>
-              <SettingScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="rooms"
-          element={
-            <ProtectedRoute>
-              <RoomsScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="booking-status/:ref"
-          element={
-            <ProtectedRoute>
-              <BookingStatusScreen />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="accounts"
-          element={
-            <ProtectedRoute>
-              <AccountsScreen />
-            </ProtectedRoute>
-          }
-        />
-      </Route>
+    <ScrollToTop>
+      <Routes>
+        {/* ADMIN ROUTES  */}
+        <Route path="/admin/jara/">
+          <Route path="login" element={<LoginScreen />} />
+          <Route path="reset-password/:token" element={<ResetPassword />} />
+          <Route
+            path="booking"
+            element={
+              <ProtectedRoute>
+                <BookingScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="guests"
+            element={
+              <ProtectedRoute>
+                <GuestScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="day-pass"
+            element={
+              <ProtectedRoute>
+                <DaypassScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="black-list-guests"
+            element={
+              <ProtectedRoute>
+                <BlacklistScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="staff"
+            element={
+              <ProtectedRoute>
+                <StaffScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="vouchers"
+            element={
+              <ProtectedRoute>
+                <VoucherScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="discounts"
+            element={
+              <ProtectedRoute>
+                <DiscountScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="tasks"
+            element={
+              <ProtectedRoute>
+                <TaskScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="discounts/daypass"
+            element={
+              <ProtectedRoute>
+                <DaypassDiscountScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="vouchers/daypass"
+            element={
+              <ProtectedRoute>
+                <DaypassVoucherScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="payment"
+            element={
+              <ProtectedRoute>
+                <PaymentScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="setting"
+            element={
+              <ProtectedRoute>
+                <SettingScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="rooms"
+            element={
+              <ProtectedRoute>
+                <RoomsScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="booking-status/:ref"
+            element={
+              <ProtectedRoute>
+                <BookingStatusScreen />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="accounts"
+            element={
+              <ProtectedRoute>
+                <AccountsScreen />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
 
-      <Route path="/" element={<BookingTypeScreen />} />
-      <Route path="/overnight/guest" element={<OvernightGuestScreen />} />
-      <Route path="/overnight/details" element={<OvernightDetailsScreen />} />
-      <Route path="/overnight/extras" element={<ExtrasPageScreen />} />
-      <Route path="/overnight/summary" element={<OverNightSummaryScreen />} />
-      <Route
-        path="/overnight/confirmation"
-        element={<OverNightConfirmationScreen />}
-      />
-      <Route
-        path="/overnight/room-details"
-        element={<OvernightRoomDetailsScreen />}
-      />
+        <Route path="/" element={<BookingTypeScreen />} />
+        <Route path="/overnight/guest" element={<OvernightGuestScreen />} />
+        <Route path="/overnight/details" element={<OvernightDetailsScreen />} />
+        <Route path="/overnight/extras" element={<ExtrasPageScreen />} />
+        <Route path="/overnight/summary" element={<OverNightSummaryScreen />} />
+        <Route
+          path="/overnight/confirmation"
+          element={<OverNightConfirmationScreen />}
+        />
+        <Route
+          path="/overnight/room-details"
+          element={<OvernightRoomDetailsScreen />}
+        />
 
-      <Route path="/daypass/guest" element={<DaypassGuestScreen />} />
-      <Route path="/daypass/summary" element={<DaypassSummaryScreen />} />
-      <Route
-        path="/daypass/room-details"
-        element={<DayPassRoomDetailsScreen />}
-      />
-      <Route path="/daypass/details" element={<DayPassDetailsScreen />} />
-      <Route
-        path="/daypass/confirmation"
-        element={<DaypassConfirmationScreen />}
-      />
-      <Route path="/booking/manage" element={<ManageBookingScreen />} />
+        <Route path="/daypass/guest" element={<DaypassGuestScreen />} />
+        <Route path="/daypass/summary" element={<DaypassSummaryScreen />} />
+        <Route
+          path="/daypass/room-details"
+          element={<DayPassRoomDetailsScreen />}
+        />
+        <Route path="/daypass/details" element={<DayPassDetailsScreen />} />
+        <Route
+          path="/daypass/confirmation"
+          element={<DaypassConfirmationScreen />}
+        />
+        <Route path="/booking/manage" element={<ManageBookingScreen />} />
 
-      <Route path="*" element={<BookingTypeScreen />} />
-    </Routes>
+        <Route path="*" element={<BookingTypeScreen />} />
+      </Routes>
+    </ScrollToTop>
   );
 };
 

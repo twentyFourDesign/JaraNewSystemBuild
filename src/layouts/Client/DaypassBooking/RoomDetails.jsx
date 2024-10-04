@@ -251,7 +251,7 @@ const RoomDetails = () => {
                       return true;
                     }}
                     excludeDates={blockedDates}
-                    dateFormat="yyyy-MM-dd"
+                    dateFormat="dd-MM-yyyy"
                     placeholderText="Select a date"
                     className="mr-10 w-[100%] border-2 lg:mb-0 mb-2 lg:w-[20rem] h-[2.3rem] px-3 rounded-md"
                   />

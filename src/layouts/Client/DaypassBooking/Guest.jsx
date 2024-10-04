@@ -43,18 +43,13 @@ const Guest = () => {
             <div className="w-[100%] lg:w-[90%]">
               <h1 className="text-xl font-bold ">How Many Guest(s)</h1>
               <p className="text-[#606970] text-sm mt-2 w-[100%] lg:w-[70%]">
-                Please select the number of guests you want to book for (infants
-                and child, adults (Alcohol / Non-alcohol)). By proceeding you
-                understand your payment is transferable but non-refundable in
-                line with Our terms and conditions.
+                {`Please select the number of guests you would like to book for, i.e. Adult Alcohol, Adult Non-Alcohol, Children, Infants or Nannies. By proceeding you understand your payment is transferable but non-refundable in line with our ${`<> Terms and Conditions <>.`}`}
               </p>
 
               <div className="mt-4">
-                <h1 className="text-lg font-bold ">
-                  Number of adult(s) (Alcoholic)
-                </h1>
+                <h1 className="text-lg font-bold ">Adult Alcohol Pass(es)</h1>
                 <div className="flex justify-between items-center w-[100%] lg:w-[80%]">
-                  <div>
+                  <div className="sm:mr-4">
                     <p className="text-[#606970] mt-2">
                       Adult Day Pass including Alcoholic Drinks
                     </p>
@@ -63,7 +58,7 @@ const Guest = () => {
                     </p>
                   </div>
 
-                  <div className="flex gap-x-4 items-center">
+                  <div className="flex gap-x-2 sm:gap-x-4  items-center">
                     <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
@@ -98,18 +93,18 @@ const Guest = () => {
 
               <div className="mt-4">
                 <h1 className="text-lg font-bold ">
-                  Number of adult(s) (Non-Alcoholic)
+                  Adult Non-Alcohol Pass(es)
                 </h1>
                 <div className="flex justify-between items-center w-[100%] lg:w-[80%]">
-                  <div>
+                  <div className="sm:mr-4">
                     <p className="text-[#606970] mt-2">
-                      Adult Day Pass w/ Soft Drinks
+                      Adult Day Pass with Soft Drinks
                     </p>
                     <p className="text-[#606970] mt-2">
                       {/* ₦{guestInfo.adultsNonAlcoholic * 35000} */}
                     </p>
                   </div>
-                  <div className="flex gap-x-4 items-center">
+                  <div className="flex gap-x-2 sm:gap-x-4 items-center">
                     <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
@@ -144,9 +139,9 @@ const Guest = () => {
               </div>
 
               <div className="mt-4">
-                <h1 className="text-lg font-bold ">Number of Nanny</h1>
+                <h1 className="text-lg font-bold ">Nanny Pass(es)</h1>
                 <div className="flex justify-between items-center w-[100%] lg:w-[80%]">
-                  <div>
+                  <div className="sm:mr-4">
                     <p className="text-[#606970] mt-2">
                       Nanny passes limited to 1 per child, maximum 3 nannies per
                       booking.
@@ -155,7 +150,7 @@ const Guest = () => {
                       {/* ₦{guestInfo.Nanny * 15000} */}
                     </p>
                   </div>
-                  <div className="flex gap-x-4 items-center">
+                  <div className="flex gap-x-2 sm:gap-x-4 items-center">
                     <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
@@ -189,9 +184,9 @@ const Guest = () => {
               </div>
 
               <div className="mt-4">
-                <h1 className="text-lg font-bold ">Number of Child</h1>
+                <h1 className="text-lg font-bold ">Child Pass(es)</h1>
                 <div className="flex justify-between items-center w-[100%] lg:w-[80%]">
-                  <div>
+                  <div className="sm:mr-4">
                     <p className="text-[#606970] mt-2">
                       Aged 2-17 years (or 3 years+ after first FREE Toddler)
                     </p>
@@ -200,7 +195,7 @@ const Guest = () => {
                     </p>
                   </div>
 
-                  <div className="flex gap-x-4 items-center">
+                  <div className="flex gap-x-2 sm:gap-x-4 items-center">
                     <div className="w-[2rem] h-[2rem] bg-[#75A9BF]  flex justify-center items-center rounded-md cursor-pointer">
                       <AiOutlineMinus
                         onClick={() => {
