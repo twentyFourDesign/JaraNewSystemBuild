@@ -1,19 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
-let initialState= {}
-
+let initialState = {};
 
 const daypassAvailablity = createSlice({
-    name:"daypassAvailablity",
-    initialState,
-    reducers:{
-        insert(state,action){
-            return {...state,...action.payload}
-        }
-    }
-})
+  name: "daypassAvailablity",
+  initialState,
+  reducers: {
+    insert(state, action) {
+      return { ...state, ...action.payload };
+    },
+    reset() {
+      return initialState;
+    },
+  },
+});
 
+export const { insert, reset } = daypassAvailablity.actions;
 
-export const {insert}  = daypassAvailablity.actions
-
-export default daypassAvailablity.reducer
+export default daypassAvailablity.reducer;

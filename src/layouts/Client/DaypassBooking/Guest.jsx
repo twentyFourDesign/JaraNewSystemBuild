@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightFooter from "../../../components/OvernightFooter";
 import DaypassSteps from "../../../components/DaypassSteps";
@@ -7,11 +7,16 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { insert } from "../../../store/slices/daypass.slice";
+import { reset as resetGuestInfo } from "../../../store/slices/daypass.slice";
+import { reset as resetGuestCount } from "../../../store/slices/daypassAvailablity.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/daypassUserInfo.slice";
+import { PriceContext } from "../../../Context/PriceContext";
 
 const Guest = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
-
+  const { setDaypassPrice, setDaypassDiscount, setDaypassVoucher } =
+    useContext(PriceContext);
   const [guestInfo, setGuestInfo] = useState({
     adultsAlcoholic: 0,
     adultsNonAlcoholic: 0,
@@ -27,6 +32,15 @@ const Guest = () => {
     nav("/daypass/room-details");
   };
 
+  const handleRestart = () => {
+    dispatch(resetGuestInfo());
+    dispatch(resetGuestCount());
+    dispatch(resetRoomDetails());
+    setDaypassPrice(0);
+    setDaypassDiscount(null);
+    setDaypassVoucher(null);
+    nav("/");
+  };
   return (
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap">
@@ -240,7 +254,7 @@ const Guest = () => {
       {/* FOOTER  */}
 
       <div className="w-screen bg-white">
-        <div className="flex flex-col md:flex-row gap-y-4 justify-between items-center px-7 pt-4">
+        <div className="flex flex-col-reverse md:flex-row gap-y-4 justify-between items-center px-7 pt-4">
           <div className="flex gap-x-4">
             <div
               className="flex gap-x-1 items-center text-[#75A9BF] cursor-pointer"
@@ -251,7 +265,7 @@ const Guest = () => {
             </div>
             <div
               className="flex gap-x-1 border-2 rounded-lg border-[#75A9BF] px-2 py-2 items-center text-[#75A9BF] cursor-pointer"
-              onClick={() => nav("/")}
+              onClick={handleRestart}
             >
               <p>Restart Booking</p>
             </div>

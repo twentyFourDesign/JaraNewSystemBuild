@@ -13,7 +13,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { Tooltip } from "react-tooltip";
-
+import { reset as resetGuestInfo } from "../../../store/slices/daypass.slice";
+import { reset as resetGuestCount } from "../../../store/slices/daypassAvailablity.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/daypassUserInfo.slice";
 const RoomDetails = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
   const dispatch = useDispatch();
@@ -41,8 +43,13 @@ const RoomDetails = () => {
   }
 
   // Add this line to get the setDaypassPrice function from the context
-  const { setDaypassPrice, setDaypassSubtotal, calculateDaypassPrice } =
-    useContext(PriceContext);
+  const {
+    setDaypassPrice,
+    setDaypassSubtotal,
+    calculateDaypassPrice,
+    setDaypassDiscount,
+    setDaypassVoucher,
+  } = useContext(PriceContext);
 
   useEffect(() => {
     const fetchSeasonalDates = async () => {
@@ -165,6 +172,15 @@ const RoomDetails = () => {
       // return () => clearTimeout(timer);
     }
   }, [isValid]);
+  const handleRestart = () => {
+    dispatch(resetGuestInfo());
+    dispatch(resetGuestCount());
+    dispatch(resetRoomDetails());
+    setDaypassPrice(0);
+    setDaypassDiscount(null);
+    setDaypassVoucher(null);
+    nav("/");
+  };
   return (
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap overflow-x-auto">
@@ -299,7 +315,7 @@ const RoomDetails = () => {
             </div>
             <div
               className="flex gap-x-1 border-2 rounded-lg border-[#75A9BF] px-2 py-2 items-center text-[#75A9BF] cursor-pointer"
-              onClick={() => nav("/")}
+              onClick={handleRestart}
             >
               <p>Restart Booking</p>
             </div>

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
@@ -9,8 +8,15 @@ import DaypassSteps from "../../../components/DaypassSteps";
 import DaypassReservation from "../../../components/DaypassReservation";
 import { insert } from "../../../store/slices/daypassUserInfo.slice";
 import toast from "react-hot-toast";
+
+import { reset as resetGuestInfo } from "../../../store/slices/daypass.slice";
+import { reset as resetGuestCount } from "../../../store/slices/daypassAvailablity.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/daypassUserInfo.slice";
+import { PriceContext } from "../../../Context/PriceContext";
 const Details = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
+  const { setDaypassPrice, setDaypassDiscount, setDaypassVoucher } =
+    useContext(PriceContext);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex =
     /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/;
@@ -43,6 +49,15 @@ const Details = () => {
     return age;
   };
 
+  const handleRestart = () => {
+    dispatch(resetGuestInfo());
+    dispatch(resetGuestCount());
+    dispatch(resetRoomDetails());
+    setDaypassPrice(0);
+    setDaypassDiscount(null);
+    setDaypassVoucher(null);
+    nav("/");
+  };
   const isValid =
     userDetails.firstname &&
     userDetails.lastname &&
@@ -269,7 +284,7 @@ const Details = () => {
 
       {/* FOOTER  */}
       <div className="w-screen bg-white">
-        <div className="flex flex-col md:flex-row gap-y-4 justify-between items-center px-7 pt-4">
+        <div className="flex flex-col-reverse md:flex-row gap-y-4 justify-between items-center px-7 pt-4">
           <div className="flex gap-x-4">
             <div
               className="flex gap-x-1 items-center text-[#75A9BF] cursor-pointer"
@@ -280,7 +295,7 @@ const Details = () => {
             </div>
             <div
               className="flex gap-x-1 border-2 rounded-lg border-[#75A9BF] px-2 py-2 items-center text-[#75A9BF] cursor-pointer"
-              onClick={() => nav("/")}
+              onClick={handleRestart}
             >
               <p>Restart Booking</p>
             </div>

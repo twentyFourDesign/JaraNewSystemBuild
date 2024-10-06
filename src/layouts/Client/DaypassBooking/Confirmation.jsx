@@ -4,13 +4,12 @@ import Thumbs from "../../../assets/confirm.png";
 import Insta from "../../../assets/Instagram.svg";
 import Fb from "../../../assets/fb.svg";
 import arrow from "../../../assets/arrowLeft.png";
-
 import arrowR from "../../../assets/arrowLeft.png";
 import { useDispatch, useSelector } from "react-redux";
+import { reset as resetGuestInfo } from "../../../store/slices/daypass.slice";
+import { reset as resetGuestCount } from "../../../store/slices/daypassAvailablity.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/daypassUserInfo.slice";
 import { PriceContext } from "../../../Context/PriceContext";
-import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
-import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
-import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 import { useNavigate } from "react-router-dom";
 const Confirmation = () => {
   const dispatch = useDispatch();
@@ -27,7 +26,7 @@ const Confirmation = () => {
     setDaypassVoucher(null);
     nav("/daypass/guest");
   };
-  const handleHome = () => {
+  const handleRestart = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
     dispatch(resetRoomDetails());
@@ -93,7 +92,7 @@ const Confirmation = () => {
             Make another booking
           </button>
           <button
-            onClick={handleHome}
+            onClick={handleRestart}
             className="w-[100%] sm:mt-0 mt-3 sm:w-[13rem] h-[2.4rem] bg-black flex gap-x-2 justify-center items-center font-bold text-white rounded-md cursor-pointer font-robotoFont"
           >
             Go to Website
