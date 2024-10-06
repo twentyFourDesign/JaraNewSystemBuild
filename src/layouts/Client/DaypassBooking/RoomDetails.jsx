@@ -23,7 +23,7 @@ const RoomDetails = () => {
   const [seasonalDates, setSeasonalDates] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [showTooltip, setShowTooltip] = useState(false);
-  console.log(blockedDates);
+
   // console.log(seasonalDates);
   const [availablityInfo, setavailablityInfo] = useState({
     dayType: "",
