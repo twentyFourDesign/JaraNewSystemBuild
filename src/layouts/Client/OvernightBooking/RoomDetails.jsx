@@ -265,10 +265,10 @@ const RoomDetails = () => {
   }, [selectedRooms]);
   useEffect(() => {
     if (isValid) {
-      console.log("being shown");
+      // console.log("being shown");
       setShowTooltip(true);
-      const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
-      return () => clearTimeout(timer);
+      // const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
+      // return () => clearTimeout(timer);
     }
   }, [isValid]);
 
@@ -534,11 +534,11 @@ const RoomDetails = () => {
                   content="Happy with your room choice? Please continue"
                   isOpen={showTooltip}
                   style={{
-                    backgroundColor: "#75A9BF",
-                    color: "white",
+                    backgroundColor: "#FFD562",
+                    color: "black",
                     padding: "8px",
                     borderRadius: "10px",
-                    fontSize: "14px",
+                    fontSize: "15px",
                     height: "50px",
                     textAlign: "center",
                     verticalAlign: "center",

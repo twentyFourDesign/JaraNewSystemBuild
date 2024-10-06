@@ -159,10 +159,10 @@ const RoomDetails = () => {
 
   useEffect(() => {
     if (isValid) {
-      console.log("being shown");
+      // console.log("being shown");
       setShowTooltip(true);
-      const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
-      return () => clearTimeout(timer);
+      // const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
+      // return () => clearTimeout(timer);
     }
   }, [isValid]);
   return (
@@ -288,7 +288,7 @@ const RoomDetails = () => {
       </div>
 
       <div className="w-screen bg-white">
-        <div className="flex  flex-col md:flex-row gap-y-4 justify-between  items-center px-7 pt-4">
+        <div className="flex flex-col-reverse md:flex-row gap-y-4 justify-between  items-center px-7 pt-4">
           <div className="flex gap-x-4">
             <div
               className="flex gap-x-1 items-center text-[#75A9BF] cursor-pointer"
@@ -323,11 +323,11 @@ const RoomDetails = () => {
               content="Happy with your dates? Please continue"
               isOpen={showTooltip}
               style={{
-                backgroundColor: "#75A9BF",
-                color: "white",
+                backgroundColor: "#FFD562",
+                color: "black",
                 padding: "8px",
                 borderRadius: "10px",
-                fontSize: "14px",
+                fontSize: "15px",
                 height: "50px",
                 textAlign: "center",
                 verticalAlign: "center",
