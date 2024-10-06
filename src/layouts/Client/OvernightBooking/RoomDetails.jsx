@@ -23,6 +23,7 @@ import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomD
 import { ImCross } from "react-icons/im";
 import { ClipLoader } from "react-spinners";
 import { PriceContext } from "../../../Context/PriceContext";
+import { Tooltip } from "react-tooltip";
 
 const RoomDetails = () => {
   const nav = useNavigate();
@@ -40,6 +41,8 @@ const RoomDetails = () => {
     endDate: null,
   });
   const [selectedRoomIds, setSelectedRoomIds] = useState([]);
+
+  const [showTooltip, setShowTooltip] = useState(false);
   const {
     calPrice,
     setPrice,
@@ -110,21 +113,27 @@ const RoomDetails = () => {
     // setPrice(calPrice()); // Recalculate price when a room is selected
   };
   useEffect(() => {
-    if (selectedRooms.length > 0) {
-      const visitDateObj2 = new Date(selectedDate.visitDate);
-      const endDateObj2 = new Date(selectedDate.endDate);
-      const serializableSelectedDate = {
-        ...selectedDate,
-        visitDate: visitDateObj2.toLocaleDateString("en-CA"),
-        endDate: endDateObj2.toLocaleDateString("en-CA"),
-      };
+    // if (selectedRooms.length > 0) {
+    const visitDateObj2 = new Date(
+      selectedDate.visitDate ? selectedDate.visitDate : null
+    );
+    const endDateObj2 = new Date(
+      selectedDate.endDate ? selectedDate.endDate : null
+    );
+    const serializableSelectedDate = {
+      ...selectedDate,
+      visitDate: selectedDate.visitDate
+        ? visitDateObj2.toLocaleDateString("en-CA")
+        : null,
+      endDate: selectedDate.endDate
+        ? endDateObj2.toLocaleDateString("en-CA")
+        : null,
+    };
 
-      dispatch(
-        insert({ selectedRooms, ...serializableSelectedDate, finalData })
-      );
-      setPrice(calPrice()); // Recalculate price when a room is selected
-    }
-  }, [selectedRooms, finalData]);
+    dispatch(insert({ selectedRooms, ...serializableSelectedDate, finalData }));
+    setPrice(calPrice()); // Recalculate price when a room is selected
+    // }
+  }, [selectedRooms, finalData, selectedDate]);
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
@@ -254,7 +263,14 @@ const RoomDetails = () => {
   useEffect(() => {
     getSelectedCount();
   }, [selectedRooms]);
-  // console.log(modifiedRoom);
+  useEffect(() => {
+    if (isValid) {
+      console.log("being shown");
+      setShowTooltip(true);
+      const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [isValid]);
 
   return (
     <div>
@@ -499,19 +515,35 @@ const RoomDetails = () => {
           </div>
           <div className="min-w-[18rem] ">
             <div className="flex flex-col  items-center gap-y-2 pt-4">
-              <div className="w-full">
+              <div className="w-full relative">
                 <button
                   onClick={handleNext}
-                  // disabled={!isValid}
+                  data-tooltip-id="continueTooltip"
                   className={`w-full p-2 gap-x-4 ${
                     isValid
                       ? "cursor-pointer bg-black"
                       : "bg-[#D2D2D2] cursor-not-allowed"
-                  } text-white rounded-xl flex items-center justify-center font-robotoFont`}
+                  } text-white rounded-xl flex items-center  justify-center font-robotoFont`}
                 >
                   <p className={"font-[500] text-xl"}>Continue</p>
                   <img src={arrowR} alt="icon" className="w-[1rem]" />
                 </button>
+                <Tooltip
+                  id="continueTooltip"
+                  place="top"
+                  content="Happy with your room choice? Please continue"
+                  isOpen={showTooltip}
+                  style={{
+                    backgroundColor: "#75A9BF",
+                    color: "white",
+                    padding: "8px",
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    height: "50px",
+                    textAlign: "center",
+                    verticalAlign: "center",
+                  }}
+                />
               </div>
               <div
                 onClick={() => nav("/overnight/guest")}
@@ -535,10 +567,14 @@ const RoomDetails = () => {
 
       {/* FOOTER  */}
 
-      <div className="w-screen bg-[#9DD4D3] text-black font-rubic">
-        <div className="flex justify-between items-center px-7 mt-3 pb-3">
+      <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
+        <div>
           <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
-          <p>Owned and Operated By Little Company Nigeria Limited</p>
+        </div>
+        <div>
+          <p className="text-right max-w-[300px] md:max-w-full">
+            Owned and Operated By Little Company Nigeria Limited
+          </p>
         </div>
       </div>
     </div>

@@ -12,6 +12,8 @@ import { PriceContext } from "../../../Context/PriceContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { Tooltip } from "react-tooltip";
+
 const RoomDetails = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
   const dispatch = useDispatch();
@@ -20,6 +22,7 @@ const RoomDetails = () => {
   const [dayType, setdayType] = useState("weekdays");
   const [seasonalDates, setSeasonalDates] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
+  const [showTooltip, setShowTooltip] = useState(false);
   console.log(blockedDates);
   // console.log(seasonalDates);
   const [availablityInfo, setavailablityInfo] = useState({
@@ -154,6 +157,14 @@ const RoomDetails = () => {
     dispatch(insert(availablityInfo));
   }, [availablityInfo, dispatch]);
 
+  useEffect(() => {
+    if (isValid) {
+      console.log("being shown");
+      setShowTooltip(true);
+      const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [isValid]);
   return (
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap overflow-x-auto">
@@ -296,6 +307,7 @@ const RoomDetails = () => {
           <div>
             <button
               onClick={onSubmit}
+              data-tooltip-id="continueTooltip"
               className={
                 isValid
                   ? "w-[10rem] h-[3rem] bg-black text-white rounded-md flex items-center justify-center font-robotoFont"
@@ -305,12 +317,34 @@ const RoomDetails = () => {
               Continue
               <MdKeyboardArrowRight className="ml-2 text-lg" />
             </button>
+            <Tooltip
+              id="continueTooltip"
+              place="top"
+              content="Happy with your dates? Please continue"
+              isOpen={showTooltip}
+              style={{
+                backgroundColor: "#75A9BF",
+                color: "white",
+                padding: "8px",
+                borderRadius: "10px",
+                fontSize: "14px",
+                height: "50px",
+                textAlign: "center",
+                verticalAlign: "center",
+              }}
+            />
           </div>
         </div>
       </div>
-      <div className=" w-full flex justify-between items-center bg-[#9DD4D3] text-black font-rubic px-7 mt-3 py-2">
-        <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
-        <p>Owned and Operated By Little Company Nigeria Limited</p>
+      <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
+        <div>
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+        </div>
+        <div>
+          <p className="text-right max-w-[300px] md:max-w-full">
+            Owned and Operated By Little Company Nigeria Limited
+          </p>
+        </div>
       </div>
     </div>
   );

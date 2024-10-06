@@ -143,7 +143,7 @@ const DaypassSummary = () => {
       if (daypassPrice == 0) {
         if (daypassVoucher) {
           confirmBooking("Success", "Voucher");
-        } else if (discount) {
+        } else if (daypassDiscount) {
           confirmBooking("Success", "Discount");
         }
       }
@@ -242,6 +242,15 @@ const DaypassSummary = () => {
     onClose: onClose,
   };
   const handleHold = () => {
+    if (
+      !bookingInfo.adultsAlcoholic &&
+      !bookingInfo.adultsNonAlcoholic &&
+      !bookingInfo.Nanny &&
+      !bookingInfo.childTotal
+    ) {
+      toast.error("Please go to guest details page and enter guest details");
+      return;
+    }
     if (!isChecked) {
       toast.error("You must accept the terms and conditions first");
       return;
@@ -266,26 +275,6 @@ const DaypassSummary = () => {
     <div className="font-robotoFont py-4 px-2 h-[100%]  relative">
       <h1 className="text-xl font-bold">Booking Summary</h1>
       <div className="w-[100%] h-[1px] border-2 border-[#E2E8ED] mt-2"></div>
-
-      <div className="flex items-start gap-x-5 mt-10">
-        <input
-          type="checkbox"
-          name=""
-          id=""
-          checked={isChecked}
-          onChange={handleCheckbox}
-        />
-        <p className="text-xs">
-          Agree with the Booking {" "}
-          <span
-            onClick={() => setIsModalOpen(true)}
-            className="underline text-blue-500 cursor-pointer"
-          >
-            Terms and Conditions
-          </span>{" "}
-           and Proceed to payment.
-        </p>
-      </div>
 
       <div className="flex justify-between items-center gap-x-3 mt-4">
         <input
@@ -324,7 +313,25 @@ const DaypassSummary = () => {
           Apply
         </button>
       </div>
-
+      <div className="flex items-start gap-x-5 mt-10">
+        <input
+          type="checkbox"
+          name=""
+          id=""
+          checked={isChecked}
+          onChange={handleCheckbox}
+        />
+        <p className="text-xs">
+          Agree with the Booking {" "}
+          <span
+            onClick={() => setIsModalOpen(true)}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Terms and Conditions
+          </span>{" "}
+           and Proceed to payment.
+        </p>
+      </div>
       <div className="absolute bottom-2 w-[96%] ">
         <button
           disabled={disabled}

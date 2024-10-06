@@ -3,7 +3,7 @@ import OvernightSteps from "../../../components/OvernightSteps";
 import OvernightReservation from "../../../components/OvernightReservation";
 import { useState } from "react";
 import Extras from "../../../components/Extras";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { insert } from "../../../store/slices/overnight/roomDetails.slice";
 import { FiRefreshCcw } from "react-icons/fi";
@@ -15,6 +15,7 @@ import { reset as resetGuestCount } from "../../../store/slices/overnight/overni
 import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
 
 import { PriceContext } from "../../../Context/PriceContext";
+import toast from "react-hot-toast";
 function ExtrasPage() {
   const [finalData, setFinalData] = useState([]);
   const location = useLocation();
@@ -23,6 +24,7 @@ function ExtrasPage() {
   const { setPrice, setPreviousCost, setDiscount, setVoucher } =
     useContext(PriceContext);
   // console.log(location.state);
+  const guestCount = useSelector((state) => state.overnightGuestCount);
   const handleRestart = () => {
     dispatch(resetGuestInfo());
     dispatch(resetGuestCount());
@@ -37,6 +39,12 @@ function ExtrasPage() {
     dispatch(insert({ ...location.state, finalData }));
   }, [finalData]);
   const handleNext = () => {
+    if (!guestCount.adults) {
+      toast.error(
+        "Please Return to Guest Details Page and Select Number of Adults"
+      );
+      return;
+    }
     dispatch(insert({ ...location.state, finalData }));
     nav("/overnight/details");
   };
@@ -106,10 +114,14 @@ function ExtrasPage() {
 
       {/* FOOTER  */}
 
-      <div className="w-screen bg-[#9DD4D3] text-black font-rubic">
-        <div className="flex justify-between items-center px-7 mt-3 pb-3">
+      <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
+        <div>
           <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
-          <p>Owned and Operated By Little Company Nigeria Limited</p>
+        </div>
+        <div>
+          <p className="text-right max-w-[300px] md:max-w-full">
+            Owned and Operated By Little Company Nigeria Limited
+          </p>
         </div>
       </div>
     </div>

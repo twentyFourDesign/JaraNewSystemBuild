@@ -18,7 +18,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 .wrapper-background {
-  background-image: url("./assets/Homepagebg.jpeg"); /* Adjust the path as needed */
+  background-image: url("./assets/homeBg.jpg"); /* Adjust the path as needed */
 
   background-size: cover;
   background-position: center;

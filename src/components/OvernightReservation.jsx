@@ -19,7 +19,12 @@ const OvernightReservation = () => {
   useEffect(() => {
     calPrice(); // Recalculate price when component mounts or dependencies change
   }, [calPrice, roomDetails, guestCount]);
-
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  }
   return (
     <div className="font-robotoFont p-4 mb-10">
       <h1 className="text-xl font-bold">Your Reservation</h1>
@@ -55,7 +60,8 @@ const OvernightReservation = () => {
           <p className="mt-1">No days selected yet.</p>
         ) : (
           <p className="mt-1">
-            {roomDetails?.visitDate} To {roomDetails?.endDate}
+            {formatDate(roomDetails?.visitDate)} To{" "}
+            {formatDate(roomDetails?.endDate)}
           </p>
         )}
         <h1 className="text-lg font-bold mt-2">Number of Nights</h1>

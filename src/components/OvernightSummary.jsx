@@ -318,6 +318,12 @@ const OvernightSummary = () => {
   };
 
   const handleHold = () => {
+    if (!guestCount.adults) {
+      toast.error(
+        "Please Return to Guest Details Page and Select Number of Adults"
+      );
+      return;
+    }
     if (!isChecked) {
       toast.error("You must accept the terms and conditions first");
       return;
@@ -334,6 +340,12 @@ const OvernightSummary = () => {
     }
   };
   const handlePaystackClick = () => {
+    if (!guestCount.adults) {
+      toast.error(
+        "Please Return to Guest Details Page and Select Number of Adults"
+      );
+      return;
+    }
     if (!isChecked) {
       toast.error("You must accept the terms and conditions first");
       return;

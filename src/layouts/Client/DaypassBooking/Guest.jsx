@@ -272,9 +272,15 @@ const Guest = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center px-7 bg-[#9DD4D3] text-black font-rubic mt-3 py-2">
-          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
-          <p>Owned and Operated By Little Company Nigeria Limited</p>
+        <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
+          <div>
+            <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+          </div>
+          <div>
+            <p className="text-right max-w-[300px] md:max-w-full">
+              Owned and Operated By Little Company Nigeria Limited
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -90,14 +90,14 @@ export const PriceProvider = ({ children }) => {
           continue;
         }
 
-        const numAdults = guestCount.adults;
-        const numChildren = guestCount.ages.filter((age) =>
+        const numAdults = guestCount?.adults;
+        const numChildren = guestCount?.ages?.filter((age) =>
           age.includes("child")
         ).length;
-        const numToddlers = guestCount.ages.filter((age) =>
+        const numToddlers = guestCount?.ages?.filter((age) =>
           age.includes("toddler")
         ).length;
-        const numInfants = guestCount.ages.filter((age) =>
+        const numInfants = guestCount?.ages?.filter((age) =>
           age.includes("infant")
         ).length;
 
@@ -149,14 +149,14 @@ export const PriceProvider = ({ children }) => {
             continue;
           }
 
-          const numAdults = guestCount.adults;
-          const numChildren = guestCount.ages.filter((age) =>
+          const numAdults = guestCount?.adults;
+          const numChildren = guestCount?.ages?.filter((age) =>
             age.includes("child")
           ).length;
-          const numToddlers = guestCount.ages.filter((age) =>
+          const numToddlers = guestCount?.ages?.filter((age) =>
             age.includes("toddler")
           ).length;
-          const numInfants = guestCount.ages.filter((age) =>
+          const numInfants = guestCount?.ages?.filter((age) =>
             age.includes("infant")
           ).length;
 
