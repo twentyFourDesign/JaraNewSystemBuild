@@ -192,9 +192,73 @@ const RoomDetails = () => {
           return acc;
         }, []);
         setModifiedRoom(groupedRooms);
+        // console.log("groupedRooms", groupedRooms);
       });
   }, [selectedDate]);
+  // console.log(selectedRooms);
+  const occupancyRules = {
+    "Ocean Deluxe": [
+      { adults: 2, children: 0, toddlers: 0, infants: 1 },
+      { adults: 1, children: 1, toddlers: 0, infants: 1 },
+      { adults: 1, children: 1, toddlers: 1, infants: 0 },
+    ],
+    "Family Room": [
+      { adults: 5, children: 0, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 1, infants: 0 },
+    ],
+    "FAMILY CABINS": [
+      { adults: 5, children: 0, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 1, infants: 0 },
+    ],
 
+    "Villa (Sunrise)": [
+      { adults: 5, children: 0, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 1, infants: 0 },
+    ],
+    "Villa (Sunset)": [
+      { adults: 5, children: 0, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 1, infants: 0 },
+    ],
+    Studios: [
+      { adults: 4, children: 0, toddlers: 0, infants: 1 },
+      { adults: 3, children: 1, toddlers: 0, infants: 1 },
+      { adults: 3, children: 1, toddlers: 1, infants: 0 },
+    ],
+    "Family Deluxe (The Loft)": [
+      { adults: 5, children: 0, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 0, infants: 1 },
+      { adults: 4, children: 1, toddlers: 1, infants: 0 },
+    ],
+  };
+  const validateGuestCount = (roomType, guestCount) => {
+    const rules = occupancyRules[roomType];
+    if (!rules) return false;
+    const numChildren = guestCount?.ages?.filter((age) =>
+      age.includes("child")
+    ).length;
+    const numToddlers = guestCount?.ages?.filter((age) =>
+      age.includes("toddler")
+    ).length;
+    const numInfants = guestCount?.ages?.filter((age) =>
+      age.includes("infant")
+    ).length;
+    // console.log(guestCount.adults, numChildren, numToddlers, numInfants);
+    // console.log(rules);
+    const isValid = rules.some(
+      (rule) =>
+        guestCount.adults <= rule.adults &&
+        numChildren <= rule.children &&
+        numToddlers <= rule.toddlers &&
+        numInfants <= rule.infants
+    );
+
+    // console.log(`Is valid: ${isValid}`);
+    return isValid;
+  };
   const handleNext = () => {
     let totalAdults = 0;
     let totalChildren = 0;
@@ -216,8 +280,53 @@ const RoomDetails = () => {
       toast.error("Please Select Dates");
       return;
     }
+    const isValidOccupancy = selectedRooms?.every((room) => {
+      const groupedRoom = modifiedRoom.find((group) =>
+        group.details.some((detail) => detail.title === room.title)
+      );
 
-    if (
+      if (groupedRoom) {
+        const reference = groupedRoom.ref;
+        const isValid = validateGuestCount(reference.trim(), guestCount);
+        // console.log(`Room: ${room.title}, Is valid: ${isValid}`);
+        return isValid;
+      }
+      // validateGuestCount(room.title, guestCount)
+    });
+    // console.log("isValidOccupancy", isValidOccupancy);
+
+    if (isValidOccupancy) {
+      console.log("u can fit ");
+      const visitDateObj2 = new Date(selectedDate.visitDate);
+      const endDateObj2 = new Date(selectedDate.endDate);
+      const serializableSelectedDate = {
+        ...selectedDate,
+        visitDate: visitDateObj2.toLocaleDateString("en-CA"),
+        endDate: endDateObj2.toLocaleDateString("en-CA"),
+      };
+      const updatedRooms = selectedRooms.map((room) => ({
+        ...room,
+        guestCount: {
+          adults: guestCount.adults,
+          children: guestCount.children,
+          infants: guestCount.infants,
+          toodler: guestCount.toddler,
+          ages: guestCount.ages,
+        },
+      }));
+
+      dispatch(
+        insert({
+          selectedRooms: updatedRooms,
+          ...serializableSelectedDate,
+          finalData,
+        })
+      );
+      nav("/overnight/extras", {
+        state: { selectedRooms: updatedRooms, ...serializableSelectedDate },
+      });
+    } else if (
+      selectedRooms?.length > 1 &&
       totalAdults >= guestCount.adults &&
       totalChildren >= guestCount.children &&
       totalInfants >= guestCount.infants &&
