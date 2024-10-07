@@ -100,7 +100,7 @@ const Setting = ({ setShowNav, showNav }) => {
             onClick={() => setShowPopups({ ...showPopups, standard: true })}
             className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
           >
-            <p>Standard Room</p>
+            <p> Ocean Deluxe</p>
           </div>
 
           <div

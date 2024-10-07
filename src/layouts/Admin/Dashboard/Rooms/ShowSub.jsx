@@ -56,7 +56,7 @@ const ShowSub = ({ showRoom, data }) => {
               <th className={trStyle}>Room Id</th>
               <th className={trStyle}>Room Name</th>
               <th className={trStyle}>Total Rooms</th>
-              <th className={trStyle}>Available Rooms</th>
+              {/* <th className={trStyle}>Available Rooms</th> */}
               <th className={trStyle}>Adults</th>
               <th className={trStyle}>Children</th>
               <th className={trStyle}>Toodler</th>
@@ -71,7 +71,7 @@ const ShowSub = ({ showRoom, data }) => {
                 <td className={tdStyle}>{item?.roomId}</td>
                 <td className={tdStyle}>{item?.title}</td>
                 <td className={tdStyle}>{item?.totalRoom}</td>
-                <td className={tdStyle}>{item?.availableRoom}</td>
+                {/* <td className={tdStyle}>{item?.availableRoom}</td> */}
 
                 <td className={tdStyle}>{item?.adults}</td>
                 <td className={tdStyle}>{item?.children}</td>

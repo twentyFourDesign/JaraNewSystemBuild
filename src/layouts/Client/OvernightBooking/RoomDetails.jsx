@@ -162,6 +162,12 @@ const RoomDetails = () => {
             infants: 1,
           },
           {
+            adults: firstDetail.adult - 2,
+            children: 1,
+            toddlers: 1,
+            infants: 1,
+          },
+          {
             adults: firstDetail.adult - 1,
             children: 1,
             toddlers: 1,
@@ -272,7 +278,7 @@ const RoomDetails = () => {
   //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
   //   ],
   // };
-  // console.log(occupancyRules);
+  console.log(occupancyRules);
   const validateGuestCount = (roomType, guestCount) => {
     const rules = occupancyRules[roomType];
     if (!rules) return false;
