@@ -128,7 +128,7 @@ const Setting = ({ setShowNav, showNav }) => {
             onClick={() => setShowPopups({ ...showPopups, loadging: true })}
             className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
           >
-            <p>Staff Loading</p>
+            <p>Staff Lodging</p>
           </div>
 
           {/* <div className='bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer'>
