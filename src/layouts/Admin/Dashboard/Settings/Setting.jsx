@@ -110,12 +110,12 @@ const Setting = ({ setShowNav, showNav }) => {
             <p>Studio Room</p>
           </div>
 
-          <div
+          {/* <div
             onClick={() => setShowPopups({ ...showPopups, lookout: true })}
             className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
           >
             <p>Lookout Exp.</p>
-          </div>
+          </div> */}
 
           <div
             onClick={() => setShowPopups({ ...showPopups, massage: true })}
