@@ -34,7 +34,7 @@ const RoomDetails = () => {
   const [selectedRooms, setSelectedRooms] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [finalData, setFinalData] = useState([]);
-  const [disableDate, setDisableDate] = useState(true);
+  const [occupancyRules, setOccupancyRules] = useState({});
   // const [numberOfNights, setNumberOfNights] = useState(0);
   const [selectedDate, setSelectedDate] = useState({
     visitDate: null,
@@ -138,6 +138,42 @@ const RoomDetails = () => {
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
 
+  const updateOccupancyRules = (modifiedRoom) => {
+    const updatedOccupancyRules = {};
+
+    modifiedRoom.forEach((room) => {
+      const roomType = room.ref.trim();
+      const details = room.details;
+
+      if (details.length > 0) {
+        const firstDetail = details[0];
+        updatedOccupancyRules[roomType] = [
+          { adults: firstDetail.adult, children: 0, toddlers: 0, infants: 1 },
+          {
+            adults: firstDetail.adult - 1,
+            children: 1,
+            toddlers: 0,
+            infants: 1,
+          },
+          {
+            adults: firstDetail.adult - 1,
+            children: 0,
+            toddlers: 1,
+            infants: 1,
+          },
+          {
+            adults: firstDetail.adult - 1,
+            children: 1,
+            toddlers: 1,
+            infants: 0,
+          },
+        ];
+      }
+    });
+
+    return updatedOccupancyRules;
+  };
+
   useEffect(() => {
     let requestData = null;
 
@@ -192,48 +228,51 @@ const RoomDetails = () => {
           return acc;
         }, []);
         setModifiedRoom(groupedRooms);
+        const updatedRules = updateOccupancyRules(groupedRooms);
+        setOccupancyRules(updatedRules);
         // console.log("groupedRooms", groupedRooms);
       });
   }, [selectedDate]);
   // console.log(selectedRooms);
-  const occupancyRules = {
-    "Ocean Deluxe": [
-      { adults: 2, children: 0, toddlers: 0, infants: 1 },
-      { adults: 1, children: 1, toddlers: 0, infants: 1 },
-      { adults: 1, children: 1, toddlers: 1, infants: 0 },
-    ],
-    "Family Room": [
-      { adults: 5, children: 0, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 1, infants: 0 },
-    ],
-    "FAMILY CABINS": [
-      { adults: 5, children: 0, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 1, infants: 0 },
-    ],
+  // const occupancyRulesw = {
+  //   "Ocean Deluxe": [
+  //     { adults: 2, children: 0, toddlers: 0, infants: 1 },
+  //     { adults: 1, children: 1, toddlers: 0, infants: 1 },
+  //     { adults: 1, children: 1, toddlers: 1, infants: 0 },
+  //   ],
+  //   "Family Room": [
+  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
+  //   ],
+  //   "FAMILY CABINS": [
+  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
+  //   ],
 
-    "Villa (Sunrise)": [
-      { adults: 5, children: 0, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 1, infants: 0 },
-    ],
-    "Villa (Sunset)": [
-      { adults: 5, children: 0, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 1, infants: 0 },
-    ],
-    Studios: [
-      { adults: 4, children: 0, toddlers: 0, infants: 1 },
-      { adults: 3, children: 1, toddlers: 0, infants: 1 },
-      { adults: 3, children: 1, toddlers: 1, infants: 0 },
-    ],
-    "Family Deluxe (The Loft)": [
-      { adults: 5, children: 0, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 0, infants: 1 },
-      { adults: 4, children: 1, toddlers: 1, infants: 0 },
-    ],
-  };
+  //   "Villa (Sunrise)": [
+  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
+  //   ],
+  //   "Villa (Sunset)": [
+  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
+  //   ],
+  //   Studios: [
+  //     { adults: 4, children: 0, toddlers: 0, infants: 1 },
+  //     { adults: 3, children: 1, toddlers: 0, infants: 1 },
+  //     { adults: 3, children: 1, toddlers: 1, infants: 0 },
+  //   ],
+  //   "Family Deluxe (The Loft)": [
+  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
+  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
+  //   ],
+  // };
+  // console.log(occupancyRules);
   const validateGuestCount = (roomType, guestCount) => {
     const rules = occupancyRules[roomType];
     if (!rules) return false;
