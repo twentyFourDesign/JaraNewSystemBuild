@@ -17,7 +17,7 @@ const DayPassHeader = () => {
         </Link>
         {/* <img src={logo} alt="" className='h-[2rem]' /> */}
       </div>
-      <img src={HeaderImage} alt="" className="h-full w-full" />
+      <img src={HeaderImage} alt="" className="h-full w-full object-cover" />
     </div>
   );
 };

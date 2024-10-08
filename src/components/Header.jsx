@@ -1,5 +1,5 @@
 import React from "react";
-import HeaderImage from "../assets/overnightNew.jpg";
+import HeaderImage from "../assets/overnightLast.jpeg";
 import JaraLogo from "../assets/jaralogo.png";
 import { Link } from "react-router-dom";
 const Header = () => {
@@ -15,7 +15,11 @@ const Header = () => {
           />
         </Link>
       </div>
-      <img src={HeaderImage} alt="overnight" className="h-full w-full" />
+      <img
+        src={HeaderImage}
+        alt="overnight"
+        className="h-full  w-full object-cover"
+      />
     </div>
   );
 };
