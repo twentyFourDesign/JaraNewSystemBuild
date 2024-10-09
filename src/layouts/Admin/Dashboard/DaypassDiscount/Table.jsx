@@ -60,7 +60,7 @@ const Table = ({ tr, data, setData }) => {
         </table>
       ) : (
         <h1 className="flex justify-center items-center h-[100%] text-lg">
-          NO STAFF FOUND
+          NO DISCOUNT FOUND
         </h1>
       )}
     </div>

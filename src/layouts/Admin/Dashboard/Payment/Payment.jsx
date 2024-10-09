@@ -8,6 +8,14 @@ import { paymentRow } from "../../../../constants/tableData";
 const Payment = ({ setShowNav, showNav, data }) => {
   const [searchValue, setSearchValue] = useState("");
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
+
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  const filteredData = data?.filter((g) =>
+    g.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       {/* HEADER  */}
@@ -32,10 +40,11 @@ const Payment = ({ setShowNav, showNav, data }) => {
             className={
               "sm:mb-0 mb-2 w-[15rem] h-[3rem] pl-4 pr-4 rounded-md outline-none text-[#828893]"
             }
+            onChangeFun={handleSearchChange}
           />
         </div>
         <div>
-          <Table tr={paymentRow} data={data} />
+          <Table tr={paymentRow} data={filteredData} />
         </div>
       </div>
     </div>

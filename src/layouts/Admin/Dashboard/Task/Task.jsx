@@ -26,7 +26,13 @@ const Task = ({ setShowNav, showNav }) => {
       console.error("Error fetching tasks:", error);
     }
   };
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
+  };
 
+  const filteredTasks = data.filter((g) =>
+    g.heading.toLowerCase().includes(searchValue.toLowerCase())
+  );
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       {/* HEADER  */}
@@ -51,6 +57,7 @@ const Task = ({ setShowNav, showNav }) => {
             className={
               "sm:mb-0 mb-2 w-[15rem] h-[3rem] pl-4 pr-4 rounded-md outline-none text-[#828893]"
             }
+            onChangeFun={handleSearchChange}
           />
           <Button
             buttonTitle={"Create New Task"}
@@ -62,7 +69,7 @@ const Task = ({ setShowNav, showNav }) => {
         </div>
 
         <div className="flex flex-wrap gap-x-3 items-start gap-y-3 p-2">
-          {data.map((taskGroup) => (
+          {filteredTasks.map((taskGroup) => (
             <div key={taskGroup._id}>
               <Card taskGroup={taskGroup} setData={setData} />
             </div>

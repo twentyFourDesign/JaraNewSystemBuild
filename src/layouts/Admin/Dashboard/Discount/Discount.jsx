@@ -12,7 +12,13 @@ const Discount = ({ setShowNav, showNav, data, setData }) => {
   const [searchValue, setSearchValue] = useState("");
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
   const [showPopup, setshowPopup] = useState(false);
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
+  };
 
+  const filteredData = data?.filter((g) =>
+    g.code.toLowerCase().includes(searchValue.toLowerCase())
+  );
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       {/* HEADER  */}
@@ -37,6 +43,7 @@ const Discount = ({ setShowNav, showNav, data, setData }) => {
             className={
               "sm:mb-0 mb-2 w-[15rem] h-[3rem] pl-4 pr-4 rounded-md outline-none text-[#828893]"
             }
+            onChangeFun={handleSearchChange}
           />
           {adminUser?.role === "superAdmin" && (
             <Button
@@ -49,7 +56,7 @@ const Discount = ({ setShowNav, showNav, data, setData }) => {
           )}
         </div>
         <div>
-          <Table tr={discountsRow} data={data} setData={setData} />
+          <Table tr={discountsRow} data={filteredData} setData={setData} />
         </div>
       </div>
 

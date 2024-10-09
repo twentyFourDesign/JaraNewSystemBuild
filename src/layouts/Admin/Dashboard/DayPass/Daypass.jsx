@@ -22,12 +22,12 @@ const Daypass = ({ setShowNav, showNav }) => {
 
   useEffect(() => {
     axios.get(`${baseUrl}/overnight/booking/get/all`).then((res) => {
-      console.log(res.data, "setdata");
+      // console.log(res.data, "setdata");
       setData(res?.data);
     });
 
     axios.get(`${baseUrl}/daypass/booking/get/all`).then((res) => {
-      console.log(res.data, "setdaypassData");
+      // console.log(res.data, "setdaypassData");
       setdaypassData(res?.data);
     });
   }, [Type]);
@@ -73,12 +73,12 @@ const Daypass = ({ setShowNav, showNav }) => {
             />
           </div>
 
-          <Button
+          {/* <Button
             buttonTitle={"Export"}
             className={
               "w-[10rem] h-[2.5rem] font-bold rounded-md text-white font-cursive bg-blue-800"
             }
-          />
+          /> */}
         </div>
         <div>
           {Type === "overnight" ? (
