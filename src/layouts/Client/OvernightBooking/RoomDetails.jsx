@@ -31,16 +31,17 @@ const RoomDetails = () => {
   const [showPopup, setshowPopup] = useState(false);
   const [roomId, setroomId] = useState(null);
   const [modifiedRoom, setModifiedRoom] = useState([]);
-  const [selectedRooms, setSelectedRooms] = useState([]);
+  // const [selectedRooms, setSelectedRooms] = useState([]);
   const [quantity, setQuantity] = useState(1);
-  const [finalData, setFinalData] = useState([]);
+  // const [finalData, setFinalData] = useState([]);
   const [occupancyRules, setOccupancyRules] = useState({});
   // const [numberOfNights, setNumberOfNights] = useState(0);
-  const [selectedDate, setSelectedDate] = useState({
-    visitDate: null,
-    endDate: null,
-  });
-  const [selectedRoomIds, setSelectedRoomIds] = useState([]);
+  // const [selectedDate, setSelectedDate] = useState({
+  //   visitDate: null,
+  //   endDate: null,
+  // });
+
+  // const [selectedRoomIds, setSelectedRoomIds] = useState([]);
 
   const [showTooltip, setShowTooltip] = useState(false);
   const {
@@ -51,17 +52,26 @@ const RoomDetails = () => {
     setVoucher,
     numberOfNights,
     setNumberOfNights,
+    selectedDate,
+    setSelectedDate,
+    selectedRoomIds,
+    setSelectedRoomIds,
+    selectedRooms,
+    setSelectedRooms,
+    finalData,
+    setFinalData,
   } = useContext(PriceContext);
 
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
-    setPreviousCost(0);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setPrice(0);
+    // setDiscount(null);
+    // setVoucher(null);
+    // setPreviousCost(0);
     nav("/");
+    window.location.reload();
   };
   const guestCount = useSelector((state) => state.overnightGuestCount);
 
@@ -239,46 +249,7 @@ const RoomDetails = () => {
         // console.log("groupedRooms", groupedRooms);
       });
   }, [selectedDate]);
-  // console.log(selectedRooms);
-  // const occupancyRulesw = {
-  //   "Ocean Deluxe": [
-  //     { adults: 2, children: 0, toddlers: 0, infants: 1 },
-  //     { adults: 1, children: 1, toddlers: 0, infants: 1 },
-  //     { adults: 1, children: 1, toddlers: 1, infants: 0 },
-  //   ],
-  //   "Family Room": [
-  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
-  //   ],
-  //   "FAMILY CABINS": [
-  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
-  //   ],
 
-  //   "Villa (Sunrise)": [
-  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
-  //   ],
-  //   "Villa (Sunset)": [
-  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
-  //   ],
-  //   Studios: [
-  //     { adults: 4, children: 0, toddlers: 0, infants: 1 },
-  //     { adults: 3, children: 1, toddlers: 0, infants: 1 },
-  //     { adults: 3, children: 1, toddlers: 1, infants: 0 },
-  //   ],
-  //   "Family Deluxe (The Loft)": [
-  //     { adults: 5, children: 0, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 0, infants: 1 },
-  //     { adults: 4, children: 1, toddlers: 1, infants: 0 },
-  //   ],
-  // };
-  console.log(occupancyRules);
   const validateGuestCount = (roomType, guestCount) => {
     const rules = occupancyRules[roomType];
     if (!rules) return false;
@@ -407,7 +378,9 @@ const RoomDetails = () => {
         state: { selectedRooms: updatedRooms, ...serializableSelectedDate },
       });
     } else {
-      toast.error("Please Select More Rooms ");
+      toast.error(
+        "Sorry, you have not selected enough rooms based on Jara’s room capacities and size of your visiting group. Please select additional rooms to complete your booking."
+      );
       console.log("u cannot fit");
     }
   };

@@ -8,33 +8,38 @@ import DaypassSteps from "../../../components/DaypassSteps";
 import DaypassReservation from "../../../components/DaypassReservation";
 import { insert } from "../../../store/slices/daypassUserInfo.slice";
 import toast from "react-hot-toast";
-
+import upload from "../../../assets/Vector.png";
 import { reset as resetGuestInfo } from "../../../store/slices/daypass.slice";
 import { reset as resetGuestCount } from "../../../store/slices/daypassAvailablity.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/daypassUserInfo.slice";
 import { PriceContext } from "../../../Context/PriceContext";
 const Details = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
-  const { setDaypassPrice, setDaypassDiscount, setDaypassVoucher } =
-    useContext(PriceContext);
+  const {
+    setDaypassPrice,
+    setDaypassDiscount,
+    setDaypassVoucher,
+    userDetails2: userDetails,
+    setuserDetails2: setuserDetails,
+  } = useContext(PriceContext);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex =
     /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/;
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const [userDetails, setuserDetails] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    gender: "",
-    para: "",
-    aboutUs: "",
-    dateOfBirth: "",
-    file: "",
-    mailLitst: false,
-    keepInfo: false,
-  });
+  // const [userDetails, setuserDetails] = useState({
+  //   firstname: "",
+  //   lastname: "",
+  //   email: "",
+  //   phone: "",
+  //   gender: "",
+  //   para: "",
+  //   aboutUs: "",
+  //   dateOfBirth: "",
+  //   file: "",
+  //   mailLitst: false,
+  //   keepInfo: false,
+  // });
   const calculateAge = (dateOfBirth) => {
     const today = new Date();
     const birthDate = new Date(dateOfBirth);
@@ -50,13 +55,14 @@ const Details = () => {
   };
 
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setDaypassPrice(0);
-    setDaypassDiscount(null);
-    setDaypassVoucher(null);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setDaypassPrice(0);
+    // setDaypassDiscount(null);
+    // setDaypassVoucher(null);
     nav("/");
+    window.location.reload();
   };
   const isValid =
     userDetails.firstname &&
@@ -148,6 +154,7 @@ const Details = () => {
                         firstname: e.target.value,
                       });
                     }}
+                    value={userDetails.firstname}
                     type="text"
                     placeholder="First name"
                     className="flex-1 h-[2.4rem] w-[100%] rounded-md bg-white pl-3 pr-3 outline-none border-2 border-[#C8D5E0]"
@@ -159,6 +166,7 @@ const Details = () => {
                         lastname: e.target.value,
                       });
                     }}
+                    value={userDetails.lastname}
                     type="text"
                     placeholder="Last name"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
@@ -169,6 +177,7 @@ const Details = () => {
                     onChange={(e) => {
                       setuserDetails({ ...userDetails, email: e.target.value });
                     }}
+                    value={userDetails.email}
                     type="text"
                     placeholder="Email"
                     className="flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 outline-none border-2 border-[#C8D5E0]"
@@ -177,6 +186,7 @@ const Details = () => {
                     onChange={(e) => {
                       setuserDetails({ ...userDetails, phone: e.target.value });
                     }}
+                    value={userDetails.phone}
                     type="text"
                     placeholder="Phone Number"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
@@ -197,6 +207,7 @@ const Details = () => {
                   <select
                     name="gender"
                     id="gender"
+                    value={userDetails.gender}
                     onChange={(e) => {
                       setuserDetails({
                         ...userDetails,
@@ -233,19 +244,40 @@ const Details = () => {
 
                 <p className="mt-2">
                   Upload Image [face] identification (i.e. passport, national
-                  ID, driver's license) - Max: 5 MB
+                  ID, driver's license)
                 </p>
 
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
-                  <input
+                  {/* <input
                     type="file"
                     name="file"
                     onChange={handleFileChange}
                     className=""
-                  />
+                  /> */}
+                  <div>
+                    <label
+                      htmlFor="file"
+                      className="w-[300px]  h-[50px] flex  justify-between items-center px-4 border-2 border-[#C8D5E0] rounded-md cursor-pointer"
+                    >
+                      <p className="text-[#a0b1c0]">
+                        {userDetails.file
+                          ? userDetails.file.name
+                          : "Upload File"}
+                      </p>
+                      <img src={upload} alt="upload" className="w-6 h-6" />
+                    </label>
+                    <input
+                      type="file"
+                      id="file"
+                      name="file"
+                      onChange={handleFileChange}
+                      style={{ display: "none" }}
+                    />
+                  </div>
 
                   <select
                     name="aboutus"
+                    value={userDetails.aboutUs}
                     className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                     id="aboutus"
                     onChange={(e) => {
@@ -270,6 +302,42 @@ const Details = () => {
                     </option>
                     <option value="Other">Other</option>
                   </select>
+                </div>
+                <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
+                  <div className="flex items-center mt-4">
+                    <input
+                      checked={userDetails.mailLitst}
+                      onChange={(e) => {
+                        setuserDetails({
+                          ...userDetails,
+                          mailLitst: e.target.checked,
+                        });
+                      }}
+                      value={userDetails.mailLitst}
+                      type="radio"
+                      className="w-4 h-4 border-2 border-[#C8D5E0] rounded-md"
+                    />
+                    <p className="text-[#606970] text-sm ml-2">
+                      Signup for our mailing list
+                    </p>
+                  </div>
+                  <div className="flex items-center mt-4">
+                    <input
+                      checked={userDetails.keepInfo}
+                      type="radio"
+                      onChange={(e) => {
+                        setuserDetails({
+                          ...userDetails,
+                          keepInfo: e.target.checked,
+                        });
+                      }}
+                      value={userDetails.keepInfo}
+                      className="w-4 h-4 border-2 border-[#C8D5E0] rounded-md"
+                    />
+                    <p className="text-[#606970] text-sm ml-2">
+                      Keep information for next visit
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

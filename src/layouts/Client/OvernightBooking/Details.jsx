@@ -25,41 +25,50 @@ const Details = () => {
   const guestCount = useSelector(
     (state) => state.overnightGuestCount.adults || 0
   );
-  const { setPrice, setPreviousCost, setDiscount, setVoucher } =
-    useContext(PriceContext);
+
+  const {
+    setPrice,
+    setPreviousCost,
+    setDiscount,
+    setVoucher,
+    userDetails,
+    setuserDetails,
+  } = useContext(PriceContext);
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
-    setPreviousCost(0);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setPrice(0);
+    // setDiscount(null);
+    // setVoucher(null);
+    // setPreviousCost(0);
     nav("/");
+    window.location.reload();
   };
   const guests = useSelector((state) => state.overnightGuestDetails);
   // console.log(guests);
   const [isNamesValid, setIsNamesValid] = useState(false);
 
-  const [userDetails, setuserDetails] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    gender: "",
-    para: "",
-    dateOfBirth: "",
-    mailLitst: false,
-    keepInfo: false,
-    file: "",
-    aboutUs: "",
-    guests: Array.from({ length: guestCount }, (_, i) => ({
-      id: i + 1,
-      firstName: "",
-      lastName: "",
-      room: "",
-    })),
-  });
+  // const [userDetails, setuserDetails] = useState({
+  //   firstname: "",
+  //   lastname: "",
+  //   email: "",
+  //   phone: "",
+  //   gender: "",
+  //   para: "",
+  //   dateOfBirth: "",
+  //   mailLitst: false,
+  //   keepInfo: false,
+  //   file: "",
+  //   aboutUs: "",
+  //   guests: Array.from({ length: guestCount }, (_, i) => ({
+  //     id: i + 1,
+  //     firstName: "",
+  //     lastName: "",
+  //     room: "",
+  //   })),
+  // });
+
   const updateGuest = (id, field, value) => {
     setuserDetails((prevState) => ({
       ...prevState,
@@ -184,6 +193,7 @@ const Details = () => {
                         firstname: e.target.value,
                       });
                     }}
+                    value={userDetails.firstname}
                     type="text"
                     placeholder="First name"
                     className="flex-1 h-[2.4rem] w-[100%] rounded-md bg-white pl-3 pr-3 outline-none border-2 border-[#C8D5E0]"
@@ -196,6 +206,7 @@ const Details = () => {
                       });
                     }}
                     type="text"
+                    value={userDetails.lastname}
                     placeholder="Last name"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                   />
@@ -209,6 +220,7 @@ const Details = () => {
                       });
                     }}
                     type="email"
+                    value={userDetails.email}
                     placeholder="Email"
                     className="flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 outline-none border-2 border-[#C8D5E0]"
                   />
@@ -220,6 +232,7 @@ const Details = () => {
                       });
                     }}
                     type="tel"
+                    value={userDetails.phone}
                     placeholder="Phone Number"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                   />
@@ -261,6 +274,7 @@ const Details = () => {
                   <div className="w-[100%] lg:mt-0 mt-3 flex-1 flex rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0]">
                     <DatePicker
                       selected={userDetails.dateOfBirth}
+                      value={userDetails.dateOfBirth}
                       onChange={(date) => {
                         setuserDetails({
                           ...userDetails,
@@ -284,6 +298,7 @@ const Details = () => {
                     setuserDetails({ ...userDetails, para: e.target.value });
                   }}
                   type="text"
+                  value={userDetails.para}
                   placeholder="State any dietary or setup requirements (i.e baby bathtub or children’s cot)"
                   name=""
                   className=" lg:w-[83%] w-[100%] h-[5rem] rounded-md bg-white outline-none border-2 border-[#C8D5E0] mt-4 resize-none p-4"
@@ -319,6 +334,7 @@ const Details = () => {
                     name="aboutus"
                     className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                     id="aboutus"
+                    value={userDetails.aboutUs}
                     onChange={(e) => {
                       setuserDetails({
                         ...userDetails,
@@ -345,6 +361,7 @@ const Details = () => {
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
                   <div className="flex items-center mt-4">
                     <input
+                      checked={userDetails.mailLitst}
                       onChange={(e) => {
                         setuserDetails({
                           ...userDetails,
@@ -361,6 +378,7 @@ const Details = () => {
                   </div>
                   <div className="flex items-center mt-4">
                     <input
+                      checked={userDetails.keepInfo}
                       type="radio"
                       onChange={(e) => {
                         setuserDetails({

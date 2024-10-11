@@ -15,7 +15,6 @@ const GuestForm = ({ guests, guestCount, updateGuest }) => {
     // dispatch(insertGuestCount({ guestCount: guestCount }));
     setShowModal(true);
   };
-
   return (
     <div
       className="px-4 py-2 w-[90%] border-2 mt-4 flex flex-col items-start md:items-center border-[#75A9BF] rounded-xl "

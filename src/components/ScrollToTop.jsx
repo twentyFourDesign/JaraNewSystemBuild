@@ -6,7 +6,7 @@ const ScrollToTop = ({ children }) => {
 
   useEffect(() => {
     window.scrollTo({
-      top: 0,
+      top: 300, // Scroll to 100 pixels from the top
       behavior: "smooth",
     });
   }, [pathname]);

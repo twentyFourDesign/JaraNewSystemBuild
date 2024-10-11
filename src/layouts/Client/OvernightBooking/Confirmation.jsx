@@ -20,24 +20,26 @@ const Confirmation = () => {
     useContext(PriceContext);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   const handleAnotherBooking = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
-    setPreviousCost(0);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setPrice(0);
+    // setDiscount(null);
+    // setVoucher(null);
+    // setPreviousCost(0);
     nav("/overnight/guest");
+    window.location.reload();
   };
   const handleHome = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
-    setPreviousCost(0);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setPrice(0);
+    // setDiscount(null);
+    // setVoucher(null);
+    // setPreviousCost(0);
     nav("/");
+    window.location.reload();
   };
   return (
     <>

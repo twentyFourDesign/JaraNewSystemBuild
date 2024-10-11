@@ -436,6 +436,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 {/* <p className="text-[#606970] ">Item</p> */}
                                 <input
                                   type="checkbox"
+                                  checked={isCakeAdded(item)}
                                   onChange={() => {
                                     handleAddRemoveCake(item);
                                   }}
@@ -449,7 +450,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">{item.price}₦</p>
+                                <p className="font-bold">₦{item.price}</p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -500,6 +501,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 {/* <p className="text-[#606970]">Item</p> */}
                                 <input
                                   type="checkbox"
+                                  checked={isMassageAdded(item)}
                                   onChange={() => {
                                     handleAddRemoveMassage(item);
                                   }}
@@ -514,7 +516,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">{item.price}₦</p>
+                                <p className="font-bold">₦{item.price}</p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -567,6 +569,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 {/* <p className="text-[#606970]">Item</p> */}
                                 <input
                                   type="checkbox"
+                                  checked={isDrinkAdded(item)}
                                   onChange={() => {
                                     handleAddRemoveDrink(item);
                                   }}
@@ -581,7 +584,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">{item.price}₦</p>
+                                <p className="font-bold">₦{item.price}</p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -634,6 +637,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 {/* <p className="text-[#606970]">Item</p> */}
                                 <input
                                   type="checkbox"
+                                  checked={isUnforgettableAdded(item)}
                                   onChange={() => {
                                     handleAddRemoveUnforgettable(item);
                                   }}
@@ -648,7 +652,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">{item.price}₦</p>
+                                <p className="font-bold">₦{item.price}</p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -702,6 +706,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     {/* <p className="text-[#606970]">Item</p> */}
                                     <input
                                       type="checkbox"
+                                      checked={isRidingAdded(item)}
                                       onChange={() => {
                                         handleAddRemoveRiding(item);
                                       }}
@@ -716,7 +721,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">{item.price}₦</p>
+                                    <p className="font-bold">₦{item.price}</p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">
@@ -770,6 +775,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     {/* <p className="text-[#606970]">Item</p> */}
                                     <input
                                       type="checkbox"
+                                      checked={isRoomDecorationAdded(item)}
                                       onChange={() => {
                                         handleAddRemoveRoomDecoration(item);
                                       }}
@@ -784,7 +790,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">{item.price}₦</p>
+                                    <p className="font-bold">₦{item.price}</p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">
@@ -841,6 +847,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     {/* <p className="text-[#606970]">Item</p> */}
                                     <input
                                       type="checkbox"
+                                      checked={isDomesticStaffAdded(item)}
                                       onChange={() => {
                                         handleAddRemoveDomesticStaff(item);
                                       }}
@@ -855,7 +862,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">{item.price}₦</p>
+                                    <p className="font-bold">₦{item.price}</p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">
@@ -916,6 +923,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     {/* <p className="text-[#606970]">Item</p> */}
                                     <input
                                       type="checkbox"
+                                      checked={isPersonalAdded(item)}
                                       onChange={() => {
                                         handleAddRemovePersonal(item);
                                       }}
@@ -930,7 +938,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">{item.price}₦</p>
+                                    <p className="font-bold">₦{item.price}</p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">

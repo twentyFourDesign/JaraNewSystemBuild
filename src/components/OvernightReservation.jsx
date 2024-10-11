@@ -60,7 +60,7 @@ const OvernightReservation = () => {
           <p className="mt-1">No days selected yet.</p>
         ) : (
           <p className="mt-1">
-            {formatDate(roomDetails?.visitDate)} To{" "}
+            {formatDate(roomDetails?.visitDate)} to{" "}
             {formatDate(roomDetails?.endDate)}
           </p>
         )}

@@ -21,14 +21,15 @@ const Summary = () => {
   const summaryRef = useRef(null);
   const [reservationHeight, setReservationHeight] = useState(0);
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
-    setPreviousCost(0);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setPrice(0);
+    // setDiscount(null);
+    // setVoucher(null);
+    // setPreviousCost(0);
     nav("/");
+    window.location.reload();
   };
   useEffect(() => {
     if (reservationRef.current) {

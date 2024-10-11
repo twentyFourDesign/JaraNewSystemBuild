@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightFooter from "../../../components/OvernightFooter";
 import DaypassSteps from "../../../components/DaypassSteps";
@@ -11,36 +11,49 @@ import { reset as resetGuestInfo } from "../../../store/slices/daypass.slice";
 import { reset as resetGuestCount } from "../../../store/slices/daypassAvailablity.slice";
 import { reset as resetRoomDetails } from "../../../store/slices/daypassUserInfo.slice";
 import { PriceContext } from "../../../Context/PriceContext";
-
+import { Tooltip } from "react-tooltip";
 const Guest = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const { setDaypassPrice, setDaypassDiscount, setDaypassVoucher } =
-    useContext(PriceContext);
-  const [guestInfo, setGuestInfo] = useState({
-    adultsAlcoholic: 0,
-    adultsNonAlcoholic: 0,
-    Nanny: 0,
-    childTotal: 0,
-  });
+  const [showTooltip, setShowTooltip] = useState(false);
+  const {
+    setDaypassPrice,
+    setDaypassDiscount,
+    setDaypassVoucher,
+    guestInfo2: guestInfo,
+    setGuestInfo2: setGuestInfo,
+  } = useContext(PriceContext);
+  // const [guestInfo, setGuestInfo] = useState({
+  //   adultsAlcoholic: 0,
+  //   adultsNonAlcoholic: 0,
+  //   Nanny: 0,
+  //   childTotal: 0,
+  // });
   const isValid =
-    guestInfo.adultsAlcoholic > 0 ||
-    guestInfo.adultsNonAlcoholic > 0 ||
-    guestInfo.Nanny > 0;
+    guestInfo.adultsAlcoholic > 0 || guestInfo.adultsNonAlcoholic > 0;
+
   const onSubmit = () => {
     dispatch(insert(guestInfo));
     nav("/daypass/room-details");
   };
 
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setDaypassPrice(0);
-    setDaypassDiscount(null);
-    setDaypassVoucher(null);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setDaypassPrice(0);
+    // setDaypassDiscount(null);
+    // setDaypassVoucher(null);
     nav("/");
+    window.location.reload();
   };
+  useEffect(() => {
+    if (isValid) {
+      setShowTooltip(true);
+    } else {
+      setShowTooltip(false);
+    }
+  }, [isValid]);
   return (
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap">
@@ -274,6 +287,7 @@ const Guest = () => {
             <button
               onClick={onSubmit}
               disabled={!isValid}
+              data-tooltip-id="continueTooltip"
               className={
                 isValid
                   ? "w-[10rem] h-[3rem] bg-black  text-white rounded-md flex items-center justify-center font-robotoFont"
@@ -283,6 +297,22 @@ const Guest = () => {
               Continue
               <MdKeyboardArrowRight className="ml-2 text-lg" />
             </button>
+            <Tooltip
+              id="continueTooltip"
+              place="top"
+              content="Happy with your number of Guests? Please continue"
+              isOpen={showTooltip}
+              style={{
+                backgroundColor: "#FFD562",
+                color: "black",
+                padding: "8px",
+                borderRadius: "10px",
+                fontSize: "15px",
+                height: "50px",
+                textAlign: "center",
+                verticalAlign: "center",
+              }}
+            />
           </div>
         </div>
 

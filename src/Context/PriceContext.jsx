@@ -8,6 +8,11 @@ export const PriceContext = createContext();
 export const PriceProvider = ({ children }) => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   // console.log(guestCount);
+  const guestCount2 = useSelector(
+    (state) => state.overnightGuestCount.adults || 0
+  );
+  // console.log(guestCount2);
+  // console.log(guestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   // console.log(guestCount);
@@ -15,7 +20,81 @@ export const PriceProvider = ({ children }) => {
   // console.log(bookingInfo);
   const availablity = useSelector((state) => state.daypassAvailablity);
   // console.log(availablity);
+  const [selectedDate, setSelectedDate] = useState({
+    visitDate: null,
+    endDate: null,
+  });
+  const [selectedRooms, setSelectedRooms] = useState([]);
+  const [selectedRoomIds, setSelectedRoomIds] = useState([]);
+
+  const [numChildren, setNumChildren] = useState(0);
+  const [childrenAges, setChildrenAges] = useState([]);
+  const [guestNumber, setguestNumber] = useState({
+    adults: 0,
+    children: 0,
+    toddler: 0,
+    infants: 0,
+    ages: [],
+  });
+  const [finalData, setFinalData] = useState([]);
+  const [userDetails, setuserDetails] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    gender: "",
+    para: "",
+    dateOfBirth: "",
+    mailLitst: false,
+    keepInfo: false,
+    file: "",
+    aboutUs: "",
+    guests: [],
+  });
+
+  // Add this useEffect to update the guests array when guestCount2 changes
+  useEffect(() => {
+    setuserDetails((prevDetails) => ({
+      ...prevDetails,
+      guests: Array.from({ length: guestCount2 }, (_, i) => ({
+        id: i + 1,
+        firstName: "",
+        lastName: "",
+        room: "",
+      })),
+    }));
+  }, [guestCount2]);
+
   const guestInfo = useSelector((state) => state.daypassUserInfo);
+  const [guestInfo2, setGuestInfo2] = useState({
+    adultsAlcoholic: 0,
+    adultsNonAlcoholic: 0,
+    Nanny: 0,
+    childTotal: 0,
+  });
+  const [finalData2, setFinalData2] = useState([]);
+  const [dayType, setdayType] = useState("weekdays");
+  const [availablityInfo, setavailablityInfo] = useState({
+    dayType: "",
+    startDate: "",
+    extras: finalData,
+    groups: bookingInfo,
+    adultsCount: bookingInfo.adultsAlcoholic + bookingInfo.adultsNonAlcoholic,
+    childrenCount: bookingInfo.Nanny + bookingInfo.childTotal,
+  });
+  const [userDetails2, setuserDetails2] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    gender: "",
+    para: "",
+    aboutUs: "",
+    dateOfBirth: "",
+    file: "",
+    mailLitst: false,
+    keepInfo: false,
+  });
   const [discount, setDiscount] = useState(null);
   const [voucher, setVoucher] = useState(null);
   const [daypassDiscount, setDaypassDiscount] = useState(null);
@@ -339,6 +418,32 @@ export const PriceProvider = ({ children }) => {
         setPreviousBookingId,
         previousBookingMethod,
         setPreviousBookingMethod,
+        selectedDate,
+        setSelectedDate,
+        selectedRoomIds,
+        setSelectedRoomIds,
+        selectedRooms,
+        setSelectedRooms,
+        numChildren,
+        setNumChildren,
+        childrenAges,
+        setChildrenAges,
+        guestNumber,
+        setguestNumber,
+        finalData,
+        setFinalData,
+        userDetails,
+        setuserDetails,
+        guestInfo2,
+        setGuestInfo2,
+        finalData2,
+        setFinalData2,
+        dayType,
+        setdayType,
+        availablityInfo,
+        setavailablityInfo,
+        userDetails2,
+        setuserDetails2,
       }}
     >
       {children}

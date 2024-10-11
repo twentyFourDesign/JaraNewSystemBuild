@@ -18,22 +18,24 @@ const Confirmation = () => {
     useContext(PriceContext);
   const guestInfo = useSelector((state) => state.daypassUserInfo);
   const handleAnotherBooking = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setDaypassPrice(0);
-    setDaypassDiscount(null);
-    setDaypassVoucher(null);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setDaypassPrice(0);
+    // setDaypassDiscount(null);
+    // setDaypassVoucher(null);
     nav("/daypass/guest");
+    window.location.reload();
   };
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setDaypassPrice(0);
-    setDaypassDiscount(null);
-    setDaypassVoucher(null);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setDaypassPrice(0);
+    // setDaypassDiscount(null);
+    // setDaypassVoucher(null);
     nav("/");
+    window.location.reload();
   };
   return (
     <>

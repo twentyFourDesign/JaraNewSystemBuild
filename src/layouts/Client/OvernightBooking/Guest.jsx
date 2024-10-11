@@ -14,21 +14,32 @@ import CustomSelect from "../../../components/CustomSelect";
 import Edit from "../../../assets/editBlack.png";
 import arrowR from "../../../assets/arrowRIght.png";
 import { PriceContext } from "../../../Context/PriceContext";
+import { Tooltip } from "react-tooltip";
 const Guest = () => {
-  const { previousCost, setPreviousCost } = useContext(PriceContext);
-  const [guestNumber, setguestNumber] = useState({
-    adults: 0,
-    children: 0,
-    toddler: 0,
-    infants: 0,
-    ages: [],
-  });
+  const {
+    previousCost,
+    setPreviousCost,
+    numChildren,
+    setNumChildren,
+    childrenAges,
+    setChildrenAges,
+    guestNumber,
+    setguestNumber,
+  } = useContext(PriceContext);
+  const [showTooltip, setShowTooltip] = useState(false);
+  // const [guestNumber, setguestNumber] = useState({
+  //   adults: 0,
+  //   children: 0,
+  //   toddler: 0,
+  //   infants: 0,
+  //   ages: [],
+  // });
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [numChildren, setNumChildren] = useState(0);
-  const [childrenAges, setChildrenAges] = useState([]);
+  // const [numChildren, setNumChildren] = useState(0);
+  // const [childrenAges, setChildrenAges] = useState([]);
   const hasAtLeastOneAdult = guestNumber.adults > 0;
-  const allChildrenHaveAges = childrenAges.every((age) => age.trim() !== "");
+  const allChildrenHaveAges = childrenAges?.every((age) => age.trim() !== "");
   const isValid =
     hasAtLeastOneAdult &&
     (guestNumber.children === 0 ||
@@ -85,6 +96,13 @@ const Guest = () => {
       nav("/booking/manage");
     }
   };
+  useEffect(() => {
+    if (isValid) {
+      setShowTooltip(true);
+    } else {
+      setShowTooltip(false);
+    }
+  }, [isValid]);
   return (
     <>
       <div>
@@ -241,7 +259,7 @@ const Guest = () => {
                     alignContent: "center",
                   }}
                 >
-                  {childrenAges.map((age, index) => (
+                  {childrenAges?.map((age, index) => (
                     <CustomSelect
                       key={index}
                       label={`Age of the child ${index + 1}`}
@@ -266,6 +284,7 @@ const Guest = () => {
                   <button
                     onClick={onNext}
                     disabled={!isValid}
+                    data-tooltip-id="continueTooltip"
                     className={`w-full p-2 gap-x-4 ${
                       isValid
                         ? "cursor-pointer bg-black"
@@ -275,6 +294,22 @@ const Guest = () => {
                     <p className={"font-[500] text-xl"}>Continue</p>
                     <img src={arrowR} alt="icon" className="w-[1rem]" />
                   </button>
+                  <Tooltip
+                    id="continueTooltip"
+                    place="top"
+                    content="Happy with your number of Guests? Please continue"
+                    isOpen={showTooltip}
+                    style={{
+                      backgroundColor: "#FFD562",
+                      color: "black",
+                      padding: "8px",
+                      borderRadius: "10px",
+                      fontSize: "15px",
+                      height: "50px",
+                      textAlign: "center",
+                      verticalAlign: "center",
+                    }}
+                  />
                 </div>
                 <div
                   className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-md gap-x-2 justify-center items-center text-black cursor-pointer"

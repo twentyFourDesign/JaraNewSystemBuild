@@ -14,7 +14,7 @@ const Modal = ({ onClose, onSave, guests, updateGuest }) => {
       <div className="bg-white p-6 rounded-lg max-w-xl w-full max-h-[50vh] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Guests Info</h2>
         <div className="space-y-4">
-          {guests.map((guest) => (
+          {guests?.map((guest) => (
             <div key={guest.id} className="flex space-x-4">
               <div className="w-1/4">
                 <label className="block mb-1">Guest Adult {guest.id}</label>

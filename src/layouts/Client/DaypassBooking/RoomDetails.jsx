@@ -20,21 +20,21 @@ const RoomDetails = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const [finalData, setFinalData] = useState([]);
-  const [dayType, setdayType] = useState("weekdays");
+  // const [finalData, setFinalData] = useState([]);
+  // const [dayType, setdayType] = useState("weekdays");
   const [seasonalDates, setSeasonalDates] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [showTooltip, setShowTooltip] = useState(false);
 
   // console.log(seasonalDates);
-  const [availablityInfo, setavailablityInfo] = useState({
-    dayType: "",
-    startDate: "",
-    extras: finalData,
-    groups: bookingInfo,
-    adultsCount: bookingInfo.adultsAlcoholic + bookingInfo.adultsNonAlcoholic,
-    childrenCount: bookingInfo.Nanny + bookingInfo.childTotal,
-  });
+  // const [availablityInfo, setavailablityInfo] = useState({
+  //   dayType: "",
+  //   startDate: "",
+  //   extras: finalData,
+  //   groups: bookingInfo,
+  //   adultsCount: bookingInfo.adultsAlcoholic + bookingInfo.adultsNonAlcoholic,
+  //   childrenCount: bookingInfo.Nanny + bookingInfo.childTotal,
+  // });
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -49,6 +49,12 @@ const RoomDetails = () => {
     calculateDaypassPrice,
     setDaypassDiscount,
     setDaypassVoucher,
+    availablityInfo,
+    setavailablityInfo,
+    dayType,
+    setdayType,
+    finalData2: finalData,
+    setFinalData2: setFinalData,
   } = useContext(PriceContext);
 
   useEffect(() => {
@@ -173,13 +179,14 @@ const RoomDetails = () => {
     }
   }, [isValid]);
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setDaypassPrice(0);
-    setDaypassDiscount(null);
-    setDaypassVoucher(null);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setDaypassPrice(0);
+    // setDaypassDiscount(null);
+    // setDaypassVoucher(null);
     nav("/");
+    window.location.reload();
   };
   return (
     <div>

@@ -24,13 +24,14 @@ const Summary = () => {
     }
   }, [reservationRef.current]);
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setDaypassPrice(0);
-    setDaypassDiscount(null);
-    setDaypassVoucher(null);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setDaypassPrice(0);
+    // setDaypassDiscount(null);
+    // setDaypassVoucher(null);
     nav("/");
+    window.location.reload();
   };
   return (
     <div className="flex flex-col">

@@ -17,23 +17,30 @@ import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomD
 import { PriceContext } from "../../../Context/PriceContext";
 import toast from "react-hot-toast";
 function ExtrasPage() {
-  const [finalData, setFinalData] = useState([]);
+  // const [finalData, setFinalData] = useState([]);
   const location = useLocation();
   const dispatch = useDispatch();
   const nav = useNavigate();
-  const { setPrice, setPreviousCost, setDiscount, setVoucher } =
-    useContext(PriceContext);
-  // console.log(location.state);
+  const {
+    setPrice,
+    setPreviousCost,
+    setDiscount,
+    setVoucher,
+    finalData,
+    setFinalData,
+  } = useContext(PriceContext);
+  console.log(finalData);
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const handleRestart = () => {
-    dispatch(resetGuestInfo());
-    dispatch(resetGuestCount());
-    dispatch(resetRoomDetails());
-    setPrice(0);
-    setDiscount(null);
-    setVoucher(null);
-    setPreviousCost(0);
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setPrice(0);
+    // setDiscount(null);
+    // setVoucher(null);
+    // setPreviousCost(0);
     nav("/");
+    window.location.reload();
   };
   useEffect(() => {
     dispatch(insert({ ...location.state, finalData }));
