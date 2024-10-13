@@ -64,6 +64,41 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
     return formattedDate;
   }
 
+  const renderExtras = () => {
+    const extras =
+      booking?.bookingDetails?.finalData ||
+      booking?.bookingDetails?.extras ||
+      [];
+    const groupedExtras = extras.reduce((acc, extra) => {
+      const category = extra.type || "Other";
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(extra);
+      return acc;
+    }, {});
+
+    return Object.entries(groupedExtras).map(([category, categoryExtras]) => (
+      <div key={category} className="mb-4">
+        <h3 className="text-lg font-semibold capitalize mb-2">{category}</h3>
+        {categoryExtras.map((extra, index) => (
+          <div key={index} className="ml-4 mb-2">
+            <p className="font-medium">{extra.title || extra.key}</p>
+            {extra.details && (
+              <ul className="list-disc list-inside ml-4">
+                {Object.entries(extra.details).map(([key, value]) => (
+                  <li key={key} className="text-sm">
+                    <span className="font-medium">{key}:</span> {value}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    ));
+  };
+
   if (!booking) return <div>Loading...</div>;
   // console.log(booking?.bookingDetails?.groups?.Nanny);
   return (
@@ -393,34 +428,10 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
               </div>
             </div>
           </div>
-
+          {/* Extras Section */}
           <div className="bg-white shadow-md rounded-lg p-5">
             <h2 className="text-lg font-semibold mb-4">Extras</h2>
-            {/* Add your extras fields here */}
-            <div className="space-y-2">
-              {booking?.bookingDetails?.finalData?.map((extra, index) => (
-                <div
-                  className="flex justify-between min-w-[100px] gap-x-4"
-                  key={index}
-                >
-                  <p className="text-gray-600">Extra {index + 1}</p>
-                  <span className="font-semibold text-start">
-                    {extra.title ? extra.title : extra.type}
-                  </span>
-                </div>
-              )) ||
-                booking?.bookingDetails?.extras?.map((extra, index) => (
-                  <div
-                    className="flex justify-between min-w-[100px] gap-x-4"
-                    key={index}
-                  >
-                    <p className="text-gray-600">Extra {index + 1}</p>
-                    <span className="font-semibold text-start">
-                      {extra.key}
-                    </span>
-                  </div>
-                ))}
-            </div>
+            <div className="space-y-2">{renderExtras()}</div>
           </div>
 
           <div className="bg-white shadow-md rounded-lg p-5">

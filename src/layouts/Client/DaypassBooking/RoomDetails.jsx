@@ -13,36 +13,24 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { Tooltip } from "react-tooltip";
-import { reset as resetGuestInfo } from "../../../store/slices/daypass.slice";
-import { reset as resetGuestCount } from "../../../store/slices/daypassAvailablity.slice";
-import { reset as resetRoomDetails } from "../../../store/slices/daypassUserInfo.slice";
+import ExtraModal from "../../../components/ExtraModal";
+
 const RoomDetails = () => {
   const bookingInfo = useSelector((state) => state.daypassBookingInfo);
   const dispatch = useDispatch();
   const nav = useNavigate();
-  // const [finalData, setFinalData] = useState([]);
-  // const [dayType, setdayType] = useState("weekdays");
   const [seasonalDates, setSeasonalDates] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [showTooltip, setShowTooltip] = useState(false);
-
-  // console.log(seasonalDates);
-  // const [availablityInfo, setavailablityInfo] = useState({
-  //   dayType: "",
-  //   startDate: "",
-  //   extras: finalData,
-  //   groups: bookingInfo,
-  //   adultsCount: bookingInfo.adultsAlcoholic + bookingInfo.adultsNonAlcoholic,
-  //   childrenCount: bookingInfo.Nanny + bookingInfo.childTotal,
-  // });
+  const [showModal, setShowModal] = useState(false);
+  const [modalsToShow, setModalsToShow] = useState([]);
+  const [completedCategories, setCompletedCategories] = useState({});
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { year: "numeric", month: "long", day: "numeric" };
     const formattedDate = date.toLocaleDateString("en-US", options);
     return formattedDate;
   }
-
-  // Add this line to get the setDaypassPrice function from the context
   const {
     setDaypassPrice,
     setDaypassSubtotal,
@@ -55,6 +43,8 @@ const RoomDetails = () => {
     setdayType,
     finalData2: finalData,
     setFinalData2: setFinalData,
+    extraFormData,
+    setExtraFormData,
   } = useContext(PriceContext);
 
   useEffect(() => {
@@ -188,6 +178,80 @@ const RoomDetails = () => {
     nav("/");
     window.location.reload();
   };
+
+  const handleNext = () => {
+    if (
+      !bookingInfo.adultsAlcoholic &&
+      !bookingInfo.adultsNonAlcoholic &&
+      !bookingInfo.Nanny &&
+      !bookingInfo.childTotal
+    ) {
+      toast.error("Please go back and enter guest details");
+      return;
+    }
+    if (!availablityInfo.startDate) {
+      toast.error("please select date");
+      return;
+    }
+    if (!isValid) {
+      toast.error("Select a date not in the past");
+      return;
+    }
+
+    const uniqueTypes = [...new Set(finalData.map((item) => item.type))];
+    if (uniqueTypes.length > 0) {
+      setModalsToShow(uniqueTypes);
+      setShowModal(true);
+    } else {
+      proceedToNextPage();
+    }
+  };
+
+  const handleModalClose = (completedData, formData) => {
+    if (completedData === null && formData === null) {
+      // Modal was cancelled
+      setShowModal(false);
+      return;
+    }
+
+    setCompletedCategories((prev) => ({ ...prev, ...completedData }));
+    setExtraFormData(formData);
+    setShowModal(false);
+
+    const updatedFinalData = finalData.map((item) => ({
+      ...item,
+      details: formData[item.type]?.[item._id] || {},
+    }));
+
+    setFinalData(updatedFinalData);
+
+    const allCategoriesCompleted = Object.values(completedData).every(
+      (value) => value === true
+    );
+
+    if (allCategoriesCompleted) {
+      proceedToNextPage(updatedFinalData);
+    } else {
+      toast.error("Please complete all extra details before proceeding.");
+    }
+  };
+
+  const proceedToNextPage = (updatedFinalData = finalData) => {
+    setavailablityInfo({
+      ...availablityInfo,
+      dayType: dayType,
+      extras: updatedFinalData,
+    });
+    dispatch(
+      insert({
+        ...availablityInfo,
+        dayType: dayType,
+        extras: [...updatedFinalData],
+      })
+    );
+    nav("/daypass/details");
+  };
+
   return (
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap overflow-x-auto">
@@ -329,7 +393,7 @@ const RoomDetails = () => {
           </div>
           <div>
             <button
-              onClick={onSubmit}
+              onClick={handleNext}
               data-tooltip-id="continueTooltip"
               className={
                 isValid
@@ -369,6 +433,14 @@ const RoomDetails = () => {
           </p>
         </div>
       </div>
+      {showModal && (
+        <ExtraModal
+          categories={modalsToShow}
+          extras={finalData}
+          onClose={handleModalClose}
+          initialFormData={extraFormData}
+        />
+      )}
     </div>
   );
 };

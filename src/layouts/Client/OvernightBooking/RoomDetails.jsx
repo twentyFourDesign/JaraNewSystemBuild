@@ -26,6 +26,8 @@ import { PriceContext } from "../../../Context/PriceContext";
 import { Tooltip } from "react-tooltip";
 
 const RoomDetails = () => {
+  const roomDetails = useSelector((state) => state.overnightRoomInfo);
+
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [showPopup, setshowPopup] = useState(false);

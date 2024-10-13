@@ -95,6 +95,7 @@ export const PriceProvider = ({ children }) => {
     mailLitst: false,
     keepInfo: false,
   });
+  const [extraFormData, setExtraFormData] = useState({});
   const [discount, setDiscount] = useState(null);
   const [voucher, setVoucher] = useState(null);
   const [daypassDiscount, setDaypassDiscount] = useState(null);
@@ -444,6 +445,8 @@ export const PriceProvider = ({ children }) => {
         setavailablityInfo,
         userDetails2,
         setuserDetails2,
+        extraFormData,
+        setExtraFormData,
       }}
     >
       {children}

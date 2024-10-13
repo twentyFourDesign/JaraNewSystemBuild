@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import OvernightSteps from "../../../components/OvernightSteps";
 import OvernightReservation from "../../../components/OvernightReservation";
-import { useState } from "react";
 import Extras from "../../../components/Extras";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,15 +8,11 @@ import { insert } from "../../../store/slices/overnight/roomDetails.slice";
 import { FiRefreshCcw } from "react-icons/fi";
 import arrow from "../../../assets/arrowLeft.png";
 import arrowR from "../../../assets/arrowRIght.png";
-
-import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
-import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
-import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
-
 import { PriceContext } from "../../../Context/PriceContext";
 import toast from "react-hot-toast";
+import ExtraModal from "../../../components/ExtraModal";
+
 function ExtrasPage() {
-  // const [finalData, setFinalData] = useState([]);
   const location = useLocation();
   const dispatch = useDispatch();
   const nav = useNavigate();
@@ -28,23 +23,24 @@ function ExtrasPage() {
     setVoucher,
     finalData,
     setFinalData,
+    extraFormData,
+    setExtraFormData,
   } = useContext(PriceContext);
-  console.log(finalData);
   const guestCount = useSelector((state) => state.overnightGuestCount);
+  const [modalsToShow, setModalsToShow] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [completedCategories, setCompletedCategories] = useState({});
+  // const [extraFormData, setExtraFormData] = useState({});
+
   const handleRestart = () => {
-    // dispatch(resetGuestInfo());
-    // dispatch(resetGuestCount());
-    // dispatch(resetRoomDetails());
-    // setPrice(0);
-    // setDiscount(null);
-    // setVoucher(null);
-    // setPreviousCost(0);
     nav("/");
     window.location.reload();
   };
+
   useEffect(() => {
     dispatch(insert({ ...location.state, finalData }));
   }, [finalData]);
+
   const handleNext = () => {
     if (!guestCount.adults) {
       toast.error(
@@ -52,14 +48,47 @@ function ExtrasPage() {
       );
       return;
     }
-    dispatch(insert({ ...location.state, finalData }));
-    nav("/overnight/details");
+
+    const uniqueTypes = [...new Set(finalData.map((item) => item.type))];
+    setModalsToShow(uniqueTypes);
+    setShowModal(true);
   };
+
+  const handleModalClose = (completedData, formData) => {
+    if (completedData === null && formData === null) {
+      // Modal was cancelled
+      setShowModal(false);
+      return;
+    }
+
+    setCompletedCategories((prev) => ({ ...prev, ...completedData }));
+    setExtraFormData(formData);
+    setShowModal(false);
+
+    const updatedFinalData = finalData.map((item) => ({
+      ...item,
+      details: formData[item.type]?.[item._id] || {},
+    }));
+
+    setFinalData(updatedFinalData);
+
+    const allCategoriesCompleted = Object.values(completedData).every(
+      (value) => value === true
+    );
+
+    if (allCategoriesCompleted) {
+      dispatch(insert({ ...location.state, finalData: updatedFinalData }));
+      nav("/overnight/details");
+    } else {
+      toast.error("Please complete all extra details before proceeding.");
+    }
+  };
+
   return (
     <div>
       <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap overflow-x-auto">
         <div className="w-[100%] lg:w-[70%]  gap-x-3">
-          {/* SETPS  */}
+          {/* STEPS  */}
           <div className="w-[100%] overflow-x-auto flex justify-center items-center">
             <div className="w-[100%] lg:w-[90%]">
               <OvernightSteps step={3} />
@@ -110,7 +139,6 @@ function ExtrasPage() {
                 className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
                 onClick={handleRestart}
               >
-                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
                 <FiRefreshCcw />
                 <p className="font-[500] text-xl">Restart Booking</p>
               </div>
@@ -120,7 +148,6 @@ function ExtrasPage() {
       </div>
 
       {/* FOOTER  */}
-
       <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
         <div>
           <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
@@ -131,6 +158,15 @@ function ExtrasPage() {
           </p>
         </div>
       </div>
+
+      {showModal && (
+        <ExtraModal
+          categories={modalsToShow}
+          extras={finalData}
+          onClose={handleModalClose}
+          initialFormData={extraFormData} // Pass the stored form data
+        />
+      )}
     </div>
   );
 }

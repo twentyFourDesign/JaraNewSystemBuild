@@ -71,13 +71,6 @@ const Extras = ({ finalData, setFinalData, type }) => {
     setdomesticStaffExtra(domesticStaff.data);
     setroomDecorationExtra(roomDecoration.data);
   };
-  // console.log(cakeExtra);
-  // console.log(lookoutExtra);
-  // console.log(massageExtra);
-  // console.log(drinkExtra);
-  // console.log(rindingExtra);
-  // console.log(domesticStaffExtra);
-  // console.log(personalExtra);
 
   const fetchDisabledExtras = async () => {
     let response = await axios.get(`${baseUrl}/disable/get`);
@@ -114,7 +107,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
 
   const filteredCakeExtras = filterExtras(cakeExtra);
   const filteredLookoutExtras = filterExtras(lookoutExtra);
-  const filteredMassageExtras = filterMassageExtras(massageExtra);
+  const filteredMassageExtras = filterExtras(massageExtra);
   const filteredDrinkExtras = filterExtras(drinkExtra);
   const filteredUnforgettableExtras = filterExtras(unforgettableExtra);
   const filteredDomesticStaffExtras = filterExtras(domesticStaffExtra);
@@ -143,13 +136,13 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, cakeItem]);
+      setFinalData((prevData) => [...prevData, { ...cakeItem, type: "cake" }]);
     }
   };
 
   const handleAddRemoveMassage = (massageItem) => {
     const itemIndex = finalData.findIndex(
-      (item) => item.type === massageItem.type
+      (item) => item.title === massageItem.title
     );
     if (itemIndex !== -1) {
       setFinalData((prevData) => {
@@ -158,7 +151,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, massageItem]);
+      // setFinalData((prevData) => [...prevData, massageItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...massageItem, type: "massage" },
+      ]);
     }
   };
   const handleAddRemoveDrink = (drinkItem) => {
@@ -172,7 +169,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, drinkItem]);
+      // setFinalData((prevData) => [...prevData, drinkItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...drinkItem, type: "drink" },
+      ]);
     }
   };
 
@@ -187,7 +188,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, drinkItem]);
+      // setFinalData((prevData) => [...prevData, drinkItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...drinkItem, type: "riding" },
+      ]);
     }
   };
   const handleAddRemovePersonal = (drinkItem) => {
@@ -201,7 +206,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, drinkItem]);
+      // setFinalData((prevData) => [...prevData, drinkItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...drinkItem, type: "personal" },
+      ]);
     }
   };
 
@@ -216,7 +225,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, domesticStaffItem]);
+      // setFinalData((prevData) => [...prevData, domesticStaffItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...domesticStaffItem, type: "domestic" },
+      ]);
     }
   };
 
@@ -231,7 +244,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, roomDecorationItem]);
+      // setFinalData((prevData) => [...prevData, roomDecorationItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...roomDecorationItem, type: "roomDecoration" },
+      ]);
     }
   };
 
@@ -246,7 +263,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
         return newData;
       });
     } else {
-      setFinalData((prevData) => [...prevData, unforgettableItem]);
+      // setFinalData((prevData) => [...prevData, unforgettableItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...unforgettableItem, type: "unforgettable" },
+      ]);
     }
   };
 
@@ -254,7 +275,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
     return finalData.some((item) => item.title === cakeItem.title);
   };
   const isMassageAdded = (massageItem) => {
-    return finalData.some((item) => item.type === massageItem.type);
+    return finalData.some((item) => item.title === massageItem.title);
   };
 
   const isDrinkAdded = (drinkItem) => {
@@ -508,7 +529,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                   className="w-6 h-6 rounded-sm cursor-pointer"
                                 />
                                 <p className="lg:mt-1 mt-0 font-bold">
-                                  {item?.type}
+                                  {item?.title}
                                 </p>
                               </div>
                             </div>
