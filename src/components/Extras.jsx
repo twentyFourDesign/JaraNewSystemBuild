@@ -111,7 +111,6 @@ const Extras = ({ finalData, setFinalData, type }) => {
   //     return !isDisabled;
   //   });
   // };
-
   const filteredCakeExtras = filterExtras(cakeExtra);
   // const filteredLookoutExtras = filterExtras(lookoutExtra);
   const filteredDiningExtras = filterExtras(diningExtra);
@@ -218,7 +217,11 @@ const Extras = ({ finalData, setFinalData, type }) => {
       // setFinalData((prevData) => [...prevData, drinkItem]);
       setFinalData((prevData) => [
         ...prevData,
-        { ...drinkItem, type: drinkItem.title.trim().toLowerCase() },
+        {
+          ...drinkItem,
+          type: drinkItem.title.trim().toLowerCase(),
+          _id: Date.now(),
+        },
       ]);
     }
   };

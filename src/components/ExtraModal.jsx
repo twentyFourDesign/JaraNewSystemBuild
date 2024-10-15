@@ -43,6 +43,22 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
           ...newFormData["domestic"],
           [extra._id]: { selectedDates: dateRange },
         };
+      } else if (
+        extra.type === "organized team bonding" &&
+        !newFormData["organized team bonding"]?.[extra._id]
+      ) {
+        newFormData["organized team bonding"] = {
+          ...newFormData["organized team bonding"],
+          [extra._id]: { selectedDates: dateRange },
+        };
+      } else if (
+        extra.type === "conference facility" &&
+        !newFormData["conference facility"]?.[extra._id]
+      ) {
+        newFormData["conference facility"] = {
+          ...newFormData["conference facility"],
+          [extra._id]: { selectedDates: dateRange },
+        };
       }
     });
 
@@ -65,7 +81,6 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
   const validateForm = () => {
     const completedCategories = {};
     let isValid = true;
-    console.log(formData);
     categories.forEach((category) => {
       const categoryExtras = extras.filter((extra) => extra.type === category);
       const allFieldsFilled = categoryExtras.every((extra) => {
@@ -75,20 +90,20 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
           extraData &&
           Object.values(extraData).every(
             (value) => value !== "" && value !== undefined && value !== null
-          )
+          ) &&
+          (extraData.date?.length > 0 || extraData.selectedDates?.length > 0)
         );
       });
       completedCategories[category] = allFieldsFilled;
       if (!allFieldsFilled) isValid = false;
     });
-
+    // console.log(completedCategories);
     return { isValid, completedCategories };
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { isValid, completedCategories } = validateForm();
-
     if (isValid) {
       onClose(completedCategories, formData);
     } else {
@@ -391,8 +406,8 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
             <input
               className="w-full p-2 border border-gray-300 rounded-md"
               type="date"
-              name="photoDate"
-              value={extraData.photoDate || ""}
+              name="date"
+              value={extraData.date || ""}
               min={getDateString(startDate)}
               max={getDateString(endDate)}
               onChange={(e) => handleInputChange(e, category, extra._id)}
@@ -415,6 +430,8 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
           </>
         );
       case "domestic":
+      case "organized team bonding":
+      case "conference facility":
         const dateRange = getDatesInRange(startDate, endDate);
         return (
           <div className="flex flex-col space-y-2">
@@ -469,8 +486,8 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
             <input
               className="w-full p-2 border border-gray-300 rounded-md"
               type="date"
-              name="tieDyeDate"
-              value={extraData.tieDyeDate || ""}
+              name="date"
+              value={extraData.date || ""}
               min={getDateString(startDate)}
               max={getDateString(endDate)}
               onChange={(e) => handleInputChange(e, category, extra._id)}
@@ -494,18 +511,45 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
             </select>
           </>
         );
+      case "adire":
+        return (
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="date"
+              value={extraData.date || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="time"
+              value={extraData.time || ""}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              <option value="">Select Time</option>
+              <option value="morning">Morning</option>
+              <option value="afternoon">Afternoon</option>
+            </select>
+          </>
+        );
       default:
         return (
-          <input
-            className="w-full p-2 border border-gray-300 rounded-md"
-            type="date"
-            name="date"
-            value={extraData.date || ""}
-            min={getDateString(startDate)}
-            max={getDateString(endDate)}
-            onChange={(e) => handleInputChange(e, category, extra._id)}
-            required
-          />
+          // <input
+          //   className="w-full p-2 border border-gray-300 rounded-md"
+          //   type="date"
+          //   name="date"
+          //   value={extraData.date || ""}
+          //   min={getDateString(startDate)}
+          //   max={getDateString(endDate)}
+          //   onChange={(e) => handleInputChange(e, category, extra._id)}
+          //   required
+          // />
+          null
         );
     }
   };
@@ -533,22 +577,22 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
                   ))}
               </div>
             ))}
+            <div className="p-6 border-t flex justify-end space-x-2">
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="px-4 py-2 bg-gray-200 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmit}
+                className="px-4 py-2 bg-black text-white rounded"
+              >
+                Continue
+              </button>
+            </div>
           </form>
-        </div>
-        <div className="p-6 border-t flex justify-end space-x-2">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2 bg-gray-200 rounded"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-black text-white rounded"
-          >
-            Continue
-          </button>
         </div>
       </div>
     </div>
