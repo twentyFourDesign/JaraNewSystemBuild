@@ -503,7 +503,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       <img
                         src={cake}
                         alt=""
-                        className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                        className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                       />
                       <h1 className="text-lg mb-3 ml-0 font-semibold">Cake</h1>
                     </div>
@@ -566,7 +566,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       <img
                         src={massage}
                         alt=""
-                        className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                        className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                       />
                       <h1 className="text-lg mb-3 ml-0 font-semibold">
                         Massage
@@ -634,7 +634,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       <img
                         src={drinking}
                         alt=""
-                        className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                        className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                       />
                       <h1 className="text-lg mb-3 ml-0 font-semibold">
                         Drinks
@@ -702,7 +702,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       <img
                         src={unforgettable}
                         alt=""
-                        className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                        className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                       />
                       <h1 className="text-lg mb-3 ml-0 font-semibold">
                         Unforgettable Experiences
@@ -771,7 +771,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           <img
                             src={riding}
                             alt=""
-                            className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                            className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                           />
                           <h1 className="text-lg mb-3 ml-0 font-semibold">
                             Riding
@@ -838,7 +838,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           <img
                             src={Room}
                             alt=""
-                            className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                            className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                           />
                           <h1 className="text-lg mb-3 ml-0 font-semibold">
                             Room Decoration
@@ -909,7 +909,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           <img
                             src={dining}
                             alt=""
-                            className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                            className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                           />
                           <h1 className="text-lg mb-3 ml-0 font-semibold">
                             Dining Experience
@@ -1093,7 +1093,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           <img
                             src={daypass}
                             alt=""
-                            className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                            className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                           />
                           <h1 className="text-lg mb-3 ml-0 font-semibold">
                             Daypass Extension
@@ -1166,7 +1166,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           <img
                             src={bedroom}
                             alt=""
-                            className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                            className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                           />
                           <h1 className="text-lg mb-3 ml-0 font-semibold">
                             Domestic Staff
@@ -1237,7 +1237,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                           {/* <img
                         src={bedroom}
                         alt=""
-                        className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                        className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                       /> */}
                           <h1 className="text-lg mb-3 ml-0 font-semibold">
                             Personal Extras
@@ -1261,7 +1261,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                     <img
                                       src={selectBg(item.title)}
                                       alt=""
-                                      className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                                      className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                                     />
                                   </div>
                                   <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
