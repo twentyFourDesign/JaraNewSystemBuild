@@ -391,7 +391,7 @@ const RoomDetails = () => {
     );
   };
   const calculateMaxCapacity = (room) => {
-    return room.adult + room.children + room.infant;
+    return room.adult + room.infant;
   };
   const handleNext = () => {
     let totalAdults = 0;
@@ -567,56 +567,56 @@ const RoomDetails = () => {
   }, [isValid]);
 
   const renderGuestDistributionInputs = () => {
-    return selectedRooms.map((room) => {
-      const groupedRoom = modifiedRoom.find((group) =>
-        group.details.some((detail) => detail.title === room.title)
-      );
-      const maxCapacity = groupedRoom
-        ? calculateMaxCapacity(groupedRoom.details[0])
-        : 0;
-      return selectedRooms.map((room) => (
-        <div key={room.id} className="mt-6 p-4 border rounded-md shadow-md">
-          <h3 className="text-lg font-semibold mb-4">{room.title}</h3>
-          <p className="text-sm mb-2">Maximum Capacity: {maxCapacity}</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "Adults", key: "adults" },
-              { label: "Children/Nannies", key: "children" },
-              { label: "Toddlers", key: "toddlers" },
-              { label: "Infants", key: "infants" },
-            ].map(({ label, key }) => (
-              <div key={key} className="flex flex-col">
-                <label className="mb-2 text-sm font-medium">{label}</label>
-                <div className="flex items-center">
-                  <button
-                    onClick={() =>
-                      handleGuestDistributionChange(room.id, key, false)
-                    }
-                    className="bg-gray-200 px-2 py-1 rounded-l"
-                  >
-                    <AiOutlineMinus />
-                  </button>
-                  <input
-                    type="text"
-                    value={roomGuestDistribution[room.id]?.[key] || 0}
-                    readOnly
-                    className="w-12 text-center border-t border-b"
-                  />
-                  <button
-                    onClick={() =>
-                      handleGuestDistributionChange(room.id, key, true)
-                    }
-                    className="bg-gray-200 px-2 py-1 rounded-r"
-                  >
-                    <AiOutlinePlus />
-                  </button>
-                </div>
+    // return selectedRooms.map((room) => {
+    //   const groupedRoom = modifiedRoom.find((group) =>
+    //     group.details.some((detail) => detail.title === room.title)
+    //   );
+    //   const maxCapacity = groupedRoom
+    //     ? calculateMaxCapacity(groupedRoom.details[0])
+    //     : 0;
+    return selectedRooms.map((room) => (
+      <div key={room.id} className="mt-6 p-4 border rounded-md shadow-md">
+        <h3 className="text-lg font-semibold mb-4">{room.title}</h3>
+        {/* <p className="text-sm mb-2">Maximum Capacity: {maxCapacity}</p> */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { label: "Adults", key: "adults" },
+            { label: "Children/Nannies", key: "children" },
+            { label: "Toddlers", key: "toddlers" },
+            { label: "Infants", key: "infants" },
+          ].map(({ label, key }) => (
+            <div key={key} className="flex flex-col">
+              <label className="mb-2 text-sm font-medium">{label}</label>
+              <div className="flex items-center">
+                <button
+                  onClick={() =>
+                    handleGuestDistributionChange(room.id, key, false)
+                  }
+                  className="bg-gray-200 px-2 py-1 rounded-l"
+                >
+                  <AiOutlineMinus />
+                </button>
+                <input
+                  type="text"
+                  value={roomGuestDistribution[room.id]?.[key] || 0}
+                  readOnly
+                  className="w-12 text-center border-t border-b"
+                />
+                <button
+                  onClick={() =>
+                    handleGuestDistributionChange(room.id, key, true)
+                  }
+                  className="bg-gray-200 px-2 py-1 rounded-r"
+                >
+                  <AiOutlinePlus />
+                </button>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      ));
-    });
+      </div>
+    ));
+    // });
   };
 
   return (
