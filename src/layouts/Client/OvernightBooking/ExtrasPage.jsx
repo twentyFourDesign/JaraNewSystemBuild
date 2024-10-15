@@ -50,6 +50,11 @@ function ExtrasPage() {
     }
 
     const uniqueTypes = [...new Set(finalData.map((item) => item.type))];
+    if (uniqueTypes.length === 0) {
+      dispatch(insert({ ...location.state, finalData }));
+      nav("/overnight/details");
+      return;
+    }
     setModalsToShow(uniqueTypes);
     setShowModal(true);
   };

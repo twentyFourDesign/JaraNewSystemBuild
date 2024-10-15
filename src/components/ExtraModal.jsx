@@ -6,10 +6,48 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const daypassDetails = useSelector((state) => state.daypassAvailablity);
   const [formData, setFormData] = useState(initialFormData || {});
-
+  const guestCount = useSelector((state) => state.overnightGuestCount);
+  const numChildren = guestCount?.ages?.filter((age) =>
+    age.includes("child")
+  ).length;
+  const numToddlers = guestCount?.ages?.filter((age) =>
+    age.includes("toddler")
+  ).length;
+  const numInfants = guestCount?.ages?.filter((age) =>
+    age.includes("infant")
+  ).length;
+  const totalGuests =
+    guestCount?.adults + numChildren + numToddlers + numInfants;
   useEffect(() => {
-    setFormData(initialFormData || {});
-  }, [initialFormData]);
+    const startDate = new Date(
+      roomDetails?.visitDate || daypassDetails?.startDate
+    );
+    const endDate = new Date(roomDetails?.endDate || daypassDetails?.startDate);
+
+    const getDatesInRange = (start, end) => {
+      const dates = [];
+      let currentDate = new Date(start);
+      while (currentDate <= end) {
+        dates.push(new Date(currentDate).toISOString().split("T")[0]);
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      return dates;
+    };
+
+    const dateRange = getDatesInRange(startDate, endDate);
+
+    const newFormData = { ...initialFormData };
+    extras.forEach((extra) => {
+      if (extra.type === "domestic" && !newFormData["domestic"]?.[extra._id]) {
+        newFormData["domestic"] = {
+          ...newFormData["domestic"],
+          [extra._id]: { selectedDates: dateRange },
+        };
+      }
+    });
+
+    setFormData(newFormData);
+  }, [initialFormData, roomDetails, daypassDetails, extras]);
 
   const handleInputChange = (e, category, extraId) => {
     setFormData((prev) => ({
@@ -27,13 +65,17 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
   const validateForm = () => {
     const completedCategories = {};
     let isValid = true;
-
+    console.log(formData);
     categories.forEach((category) => {
       const categoryExtras = extras.filter((extra) => extra.type === category);
       const allFieldsFilled = categoryExtras.every((extra) => {
         const extraData = formData[category]?.[extra._id];
+
         return (
-          extraData && Object.values(extraData).every((value) => value !== "")
+          extraData &&
+          Object.values(extraData).every(
+            (value) => value !== "" && value !== undefined && value !== null
+          )
         );
       });
       completedCategories[category] = allFieldsFilled;
@@ -70,12 +112,21 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
 
   const renderFields = (category, extra) => {
     const extraData = formData[category]?.[extra._id] || {};
-    const startDate = getDateString(
+    const startDate = new Date(
       roomDetails?.visitDate || daypassDetails?.startDate
     );
-    const endDate = getDateString(
-      roomDetails?.endDate || daypassDetails?.startDate
-    );
+    const endDate = new Date(roomDetails?.endDate || daypassDetails?.startDate);
+
+    // Function to generate an array of dates between start and end
+    const getDatesInRange = (start, end) => {
+      const dates = [];
+      let currentDate = new Date(start);
+      while (currentDate <= end) {
+        dates.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      return dates;
+    };
 
     switch (category) {
       case "cake":
@@ -86,8 +137,8 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
               type="date"
               name="date"
               value={extraData.date || ""}
-              min={startDate}
-              max={endDate}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
               onChange={(e) => handleInputChange(e, category, extra._id)}
               required
             />
@@ -122,8 +173,8 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
               type="date"
               name="date"
               value={extraData.date || ""}
-              min={startDate}
-              max={endDate}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
               onChange={(e) => handleInputChange(e, category, extra._id)}
               required
             />
@@ -140,6 +191,21 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
             </select>
           </>
         );
+      case "dining":
+        return (
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="date"
+              value={extraData.date || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+          </>
+        );
       case "roomDecoration":
         return (
           <>
@@ -148,8 +214,8 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
               type="date"
               name="date"
               value={extraData.date || ""}
-              min={startDate}
-              max={endDate}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
               onChange={(e) => handleInputChange(e, category, extra._id)}
               required
             />
@@ -167,6 +233,265 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
                 </option>
               ))}
             </select>
+            {extra.title.trim().toLowerCase() === "balloons" ? (
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md"
+                name="color"
+                value={extraData.color || ""}
+                onChange={(e) => handleInputChange(e, category, extra._id)}
+                required
+              >
+                <option value="">Select Color</option>
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="yellow">Pink</option>
+              </select>
+            ) : extra.title.trim().toLowerCase() === "flower petals" ? (
+              <input
+                className="w-full p-2 border border-gray-300 rounded-md"
+                type="text"
+                name="petals"
+                value={extraData.petals || ""}
+                placeholder="what to write? 6 characters max"
+                maxLength="6"
+                onChange={(e) => handleInputChange(e, category, extra._id)}
+                required
+              />
+            ) : extra.title.trim().toLowerCase() === "welcome note" ? (
+              <input
+                className="w-full p-2 border border-gray-300 rounded-md"
+                type="text"
+                name="welcomeNote"
+                value={extraData.welcomeNote || ""}
+                placeholder="what to write? 20 characters max"
+                maxLength="20"
+                onChange={(e) => handleInputChange(e, category, extra._id)}
+                required
+              />
+            ) : null}
+          </>
+        );
+      case "daypassExtension":
+        return (
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="date"
+              value={extraData.date || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+            <span className="w-full p-2 border border-gray-300 rounded-md">
+              Arrival Time: <strong>11:30 Am</strong>
+            </span>
+            <span className="w-full p-2 border border-gray-300 rounded-md">
+              Departure Time: <strong>5:30 PM</strong>
+            </span>
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="quantity"
+              value={extraData.quantity || ""}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              <option value="" disabled>
+                Select quantity
+              </option>
+              {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+          </>
+        );
+      case "unforgettable":
+        const extraTitle = extra.title.trim().toLowerCase();
+        return (
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="date"
+              value={extraData.date || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+            {extraTitle === "floating breakfast (pool)" && (
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md"
+                name="time"
+                value={extraData.time || ""}
+                onChange={(e) => handleInputChange(e, category, extra._id)}
+                required
+              >
+                <option value="">Select Time</option>
+                <option value="9:00am">9:00 AM</option>
+                <option value="9:30am">9:30 AM</option>
+                <option value="10:00am">10:00 AM</option>
+              </select>
+            )}
+            {extraTitle === "diy painting" && (
+              <select
+                className="w-full p-2 border border-gray-300 rounded-md"
+                name="numberOfPeople"
+                value={extraData.numberOfPeople || ""}
+                onChange={(e) => handleInputChange(e, category, extra._id)}
+                required
+              >
+                <option value="">Select Number of People</option>
+                {Array.from({ length: totalGuests }, (_, i) => i + 1).map(
+                  (num) => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  )
+                )}
+              </select>
+            )}
+          </>
+        );
+      case "drink":
+        return (
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="date"
+              value={extraData.date || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="quantity"
+              value={extraData.quantity || ""}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              <option value="">Select Quantity</option>
+              {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+          </>
+        );
+      case "photo shoot (photographer access)":
+        return (
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="photoDate"
+              value={extraData.photoDate || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="assistants"
+              value={extraData.assistants || "0"}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              <option value="0">0 (No assistants/makeup artists)</option>
+              {[1, 2, 3, 4].map((num) => (
+                <option key={num} value={num.toString()}>
+                  {num}
+                </option>
+              ))}
+            </select>
+          </>
+        );
+      case "domestic":
+        const dateRange = getDatesInRange(startDate, endDate);
+        return (
+          <div className="flex flex-col space-y-2">
+            {dateRange.map((date) => (
+              <label
+                key={date.toISOString()}
+                className="flex items-center space-x-2"
+              >
+                <input
+                  type="checkbox"
+                  name="selectedDates"
+                  value={date.toISOString().split("T")[0]}
+                  checked={(extraData.selectedDates || []).includes(
+                    date.toISOString().split("T")[0]
+                  )}
+                  onChange={(e) => {
+                    const dateStr = e.target.value;
+                    const newSelectedDates = e.target.checked
+                      ? [...(extraData.selectedDates || []), dateStr]
+                      : (extraData.selectedDates || []).filter(
+                          (d) => d !== dateStr
+                        );
+                    handleInputChange(
+                      {
+                        target: {
+                          name: "selectedDates",
+                          value: newSelectedDates,
+                        },
+                      },
+                      category,
+                      extra._id
+                    );
+                  }}
+                  className="form-checkbox h-5 w-5 text-blue-600"
+                />
+                <span>{date.toLocaleDateString()}</span>
+              </label>
+            ))}
+          </div>
+        );
+      case "tie-dye":
+        // Set default value to 10 if not already set
+        if (!extraData.participants) {
+          handleInputChange(
+            { target: { name: "participants", value: "10" } },
+            category,
+            extra._id
+          );
+        }
+        return (
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="tieDyeDate"
+              value={extraData.tieDyeDate || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+            <label htmlFor="participants">
+              How many guests would participate?
+            </label>
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="participants"
+              value={extraData.participants || "10"}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              {Array.from({ length: 29 }, (_, i) => i + 2).map((num) => (
+                <option key={num} value={num.toString()}>
+                  {num}
+                </option>
+              ))}
+            </select>
           </>
         );
       default:
@@ -176,8 +501,8 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
             type="date"
             name="date"
             value={extraData.date || ""}
-            min={startDate}
-            max={endDate}
+            min={getDateString(startDate)}
+            max={getDateString(endDate)}
             onChange={(e) => handleInputChange(e, category, extra._id)}
             required
           />

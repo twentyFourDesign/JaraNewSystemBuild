@@ -62,7 +62,27 @@ const RoomDetails = () => {
     setSelectedRooms,
     finalData,
     setFinalData,
+    roomGuestDistribution,
+    setRoomGuestDistribution,
   } = useContext(PriceContext);
+
+  // const [roomGuestDistribution, setRoomGuestDistribution] = useState({});
+
+  const handleGuestDistributionChange = (roomId, guestType, increment) => {
+    setRoomGuestDistribution((prev) => {
+      const currentValue = prev[roomId]?.[guestType] || 0;
+      const newValue = increment
+        ? currentValue + 1
+        : Math.max(0, currentValue - 1);
+      return {
+        ...prev,
+        [roomId]: {
+          ...prev[roomId],
+          [guestType]: newValue,
+        },
+      };
+    });
+  };
 
   const handleRestart = () => {
     // dispatch(resetGuestInfo());
@@ -142,14 +162,62 @@ const RoomDetails = () => {
         : null,
     };
 
-    dispatch(insert({ selectedRooms, ...serializableSelectedDate, finalData }));
+    dispatch(
+      insert({
+        selectedRooms,
+        ...serializableSelectedDate,
+        finalData,
+        roomGuestDistribution,
+      })
+    );
     setPrice(calPrice()); // Recalculate price when a room is selected
     // }
-  }, [selectedRooms, finalData, selectedDate]);
+  }, [selectedRooms, finalData, selectedDate, roomGuestDistribution]);
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
 
+  // const updateOccupancyRules = (modifiedRoom) => {
+  //   const updatedOccupancyRules = {};
+
+  //   modifiedRoom.forEach((room) => {
+  //     const roomType = room.ref.trim();
+  //     const details = room.details;
+
+  //     if (details.length > 0) {
+  //       const firstDetail = details[0];
+  //       updatedOccupancyRules[roomType] = [
+  //         { adults: firstDetail.adult, children: 0, toddlers: 0, infants: 1 },
+  //         {
+  //           adults: firstDetail.adult - 1,
+  //           children: 1,
+  //           toddlers: 0,
+  //           infants: 1,
+  //         },
+  //         {
+  //           adults: firstDetail.adult - 1,
+  //           children: 0,
+  //           toddlers: 1,
+  //           infants: 1,
+  //         },
+  //         {
+  //           adults: firstDetail.adult - 2,
+  //           children: 1,
+  //           toddlers: 1,
+  //           infants: 1,
+  //         },
+  //         {
+  //           adults: firstDetail.adult - 1,
+  //           children: 1,
+  //           toddlers: 1,
+  //           infants: 0,
+  //         },
+  //       ];
+  //     }
+  //   });
+
+  //   return updatedOccupancyRules;
+  // };
   const updateOccupancyRules = (modifiedRoom) => {
     const updatedOccupancyRules = {};
 
@@ -160,30 +228,53 @@ const RoomDetails = () => {
       if (details.length > 0) {
         const firstDetail = details[0];
         updatedOccupancyRules[roomType] = [
-          { adults: firstDetail.adult, children: 0, toddlers: 0, infants: 1 },
+          {
+            adults: firstDetail.adult,
+            children: 0,
+            toddlers: 0,
+            infants: firstDetail.infant,
+          },
           {
             adults: firstDetail.adult - 1,
             children: 1,
             toddlers: 0,
-            infants: 1,
+            infants: firstDetail.infant,
           },
           {
             adults: firstDetail.adult - 1,
             children: 0,
             toddlers: 1,
-            infants: 1,
+            infants: firstDetail.infant,
+          },
+          {
+            adults: firstDetail.adult - 2,
+            children: 2,
+            toddlers: 0,
+            infants: firstDetail.infant,
           },
           {
             adults: firstDetail.adult - 2,
             children: 1,
             toddlers: 1,
-            infants: 1,
+            infants: firstDetail.infant,
           },
           {
-            adults: firstDetail.adult - 1,
-            children: 1,
+            adults: firstDetail.adult - 3,
+            children: 3,
+            toddlers: 0,
+            infants: firstDetail.infant,
+          },
+          {
+            adults: firstDetail.adult - 3,
+            children: 2,
             toddlers: 1,
-            infants: 0,
+            infants: firstDetail.infant,
+          },
+          {
+            adults: firstDetail.adult - 4,
+            children: 4,
+            toddlers: 0,
+            infants: firstDetail.infant,
           },
         ];
       }
@@ -252,30 +343,55 @@ const RoomDetails = () => {
       });
   }, [selectedDate]);
 
+  const numChildren = guestCount?.ages?.filter((age) =>
+    age.includes("child")
+  ).length;
+  const numToddlers = guestCount?.ages?.filter((age) =>
+    age.includes("toddler")
+  ).length;
+  const numInfants = guestCount?.ages?.filter((age) =>
+    age.includes("infant")
+  ).length;
+
+  // const validateGuestCount = (roomType, guestCount) => {
+  //   const rules = occupancyRules[roomType];
+  //   if (!rules) return false;
+
+  //   // console.log(guestCount.adults, numChildren, numToddlers, numInfants);
+  //   // console.log(rules);
+  //   const isValid = rules.some(
+  //     (rule) =>
+  //       guestCount.adults <= rule.adults &&
+  //       numChildren <= rule.children &&
+  //       numToddlers <= rule.toddlers &&
+  //       numInfants <= rule.infants
+  //   );
+
+  //   // console.log(`Is valid: ${isValid}`);
+  //   return isValid;
+  // };
   const validateGuestCount = (roomType, guestCount) => {
     const rules = occupancyRules[roomType];
     if (!rules) return false;
-    const numChildren = guestCount?.ages?.filter((age) =>
-      age.includes("child")
-    ).length;
-    const numToddlers = guestCount?.ages?.filter((age) =>
-      age.includes("toddler")
-    ).length;
-    const numInfants = guestCount?.ages?.filter((age) =>
-      age.includes("infant")
-    ).length;
-    // console.log(guestCount.adults, numChildren, numToddlers, numInfants);
-    // console.log(rules);
-    const isValid = rules.some(
+
+    const totalGuests =
+      guestCount.adults + numChildren + numToddlers + numInfants;
+    const maxCapacity = rules[0].adults + rules[0].infants;
+
+    if (totalGuests > maxCapacity) return false;
+
+    return rules.some(
       (rule) =>
         guestCount.adults <= rule.adults &&
         numChildren <= rule.children &&
         numToddlers <= rule.toddlers &&
-        numInfants <= rule.infants
+        numInfants <= rule.infants &&
+        guestCount.adults + numChildren + numToddlers <=
+          rule.adults + rule.children + rule.toddlers
     );
-
-    // console.log(`Is valid: ${isValid}`);
-    return isValid;
+  };
+  const calculateMaxCapacity = (room) => {
+    return room.adult + room.children + room.infant;
   };
   const handleNext = () => {
     let totalAdults = 0;
@@ -298,6 +414,20 @@ const RoomDetails = () => {
       toast.error("Please Select Dates");
       return;
     }
+    // const isValidOccupancy = selectedRooms?.every((room) => {
+    //   const groupedRoom = modifiedRoom.find((group) =>
+    //     group.details.some((detail) => detail.title === room.title)
+    //   );
+
+    //   if (groupedRoom) {
+    //     const reference = groupedRoom.ref;
+    //     const isValid = validateGuestCount(reference.trim(), guestCount);
+    //     // console.log(`Room: ${room.title}, Is valid: ${isValid}`);
+    //     return isValid;
+    //   }
+    //   // validateGuestCount(room.title, guestCount)
+    // });
+    // console.log("isValidOccupancy", isValidOccupancy);
     const isValidOccupancy = selectedRooms?.every((room) => {
       const groupedRoom = modifiedRoom.find((group) =>
         group.details.some((detail) => detail.title === room.title)
@@ -305,13 +435,46 @@ const RoomDetails = () => {
 
       if (groupedRoom) {
         const reference = groupedRoom.ref;
-        const isValid = validateGuestCount(reference.trim(), guestCount);
-        // console.log(`Room: ${room.title}, Is valid: ${isValid}`);
+        const maxCapacity = calculateMaxCapacity(groupedRoom.details[0]);
+        const roomDistribution = roomGuestDistribution[room.id] || {};
+        const totalDistributedGuests =
+          (roomDistribution.adults || 0) +
+          (roomDistribution.children || 0) +
+          (roomDistribution.toddlers || 0) +
+          (roomDistribution.infants || 0);
+
+        if (totalDistributedGuests > maxCapacity) {
+          toast.error(`Room ${room.title} exceeds maximum capacity.`);
+          return false;
+        }
+
+        const isValid = validateGuestCount(reference.trim(), roomDistribution);
+        if (!isValid) {
+          toast.error(`Invalid guest distribution for room ${room.title}.`);
+        }
         return isValid;
       }
-      // validateGuestCount(room.title, guestCount)
+      return false;
     });
-    // console.log("isValidOccupancy", isValidOccupancy);
+    const totalDistributedGuests = Object.values(roomGuestDistribution).reduce(
+      (acc, room) => ({
+        adults: acc.adults + (room.adults || 0),
+        children: acc.children + (room.children || 0),
+        toddlers: acc.toddlers + (room.toddlers || 0),
+        infants: acc.infants + (room.infants || 0),
+      }),
+      { adults: 0, children: 0, toddlers: 0, infants: 0 }
+    );
+
+    if (
+      totalDistributedGuests.adults !== guestCount.adults ||
+      totalDistributedGuests.children !== numChildren ||
+      totalDistributedGuests.toddlers !== numToddlers ||
+      totalDistributedGuests.infants !== numInfants
+    ) {
+      toast.error("The distributed guests don't match the total guest count.");
+      return;
+    }
 
     if (isValidOccupancy) {
       console.log("u can fit ");
@@ -338,6 +501,7 @@ const RoomDetails = () => {
           selectedRooms: updatedRooms,
           ...serializableSelectedDate,
           finalData,
+          roomGuestDistribution,
         })
       );
       nav("/overnight/extras", {
@@ -374,6 +538,7 @@ const RoomDetails = () => {
           selectedRooms: updatedRooms,
           ...serializableSelectedDate,
           finalData,
+          roomGuestDistribution,
         })
       );
       nav("/overnight/extras", {
@@ -400,6 +565,59 @@ const RoomDetails = () => {
       // return () => clearTimeout(timer);
     }
   }, [isValid]);
+
+  const renderGuestDistributionInputs = () => {
+    return selectedRooms.map((room) => {
+      const groupedRoom = modifiedRoom.find((group) =>
+        group.details.some((detail) => detail.title === room.title)
+      );
+      const maxCapacity = groupedRoom
+        ? calculateMaxCapacity(groupedRoom.details[0])
+        : 0;
+      return selectedRooms.map((room) => (
+        <div key={room.id} className="mt-6 p-4 border rounded-md shadow-md">
+          <h3 className="text-lg font-semibold mb-4">{room.title}</h3>
+          <p className="text-sm mb-2">Maximum Capacity: {maxCapacity}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: "Adults", key: "adults" },
+              { label: "Children/Nannies", key: "children" },
+              { label: "Toddlers", key: "toddlers" },
+              { label: "Infants", key: "infants" },
+            ].map(({ label, key }) => (
+              <div key={key} className="flex flex-col">
+                <label className="mb-2 text-sm font-medium">{label}</label>
+                <div className="flex items-center">
+                  <button
+                    onClick={() =>
+                      handleGuestDistributionChange(room.id, key, false)
+                    }
+                    className="bg-gray-200 px-2 py-1 rounded-l"
+                  >
+                    <AiOutlineMinus />
+                  </button>
+                  <input
+                    type="text"
+                    value={roomGuestDistribution[room.id]?.[key] || 0}
+                    readOnly
+                    className="w-12 text-center border-t border-b"
+                  />
+                  <button
+                    onClick={() =>
+                      handleGuestDistributionChange(room.id, key, true)
+                    }
+                    className="bg-gray-200 px-2 py-1 rounded-r"
+                  >
+                    <AiOutlinePlus />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ));
+    });
+  };
 
   return (
     <div>
@@ -624,6 +842,16 @@ const RoomDetails = () => {
                 *Available rooms are showing based on your selected check-in and
                 check-out dates above.
               </p>
+
+              {/* Add this section to render guest distribution inputs */}
+              {selectedRooms.length > 0 && (
+                <div className="mt-6">
+                  <h2 className="text-xl font-bold mb-4">
+                    Guest Distribution for Selected Rooms
+                  </h2>
+                  {renderGuestDistributionInputs()}
+                </div>
+              )}
 
               {/* EXTRAS  */}
               {/* <div>

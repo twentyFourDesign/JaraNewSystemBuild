@@ -31,12 +31,14 @@ const Extras = ({ finalData, setFinalData, type }) => {
   const [domesticStaffExtra, setdomesticStaffExtra] = useState([]);
   const [roomDecorationExtra, setroomDecorationExtra] = useState([]);
   const [rindingExtra, setrindingExtra] = useState([]);
+  const [diningExtra, setdiningExtra] = useState([]);
+  const [daypassExtensionExtra, setdaypassExtensionExtra] = useState([]);
   const [personalExtra, setpersonalExtra] = useState([]);
   const [addedItems, setAddedItems] = useState({});
   const [disabledExtras, setDisabledExtras] = useState([]);
   const getExtras = async () => {
     let cakes = await axios.get(`${baseUrl}/cake/get`);
-    let lookout = await axios.get(`${baseUrl}/lookout/get`);
+    // let lookout = await axios.get(`${baseUrl}/lookout/get`);
     let massage = await axios.get(`${baseUrl}/massage/get`);
     let drinks = await axios.get(`${baseUrl}/drink/get`);
     let riding = await axios.get(`${baseUrl}/riding/get`);
@@ -44,29 +46,34 @@ const Extras = ({ finalData, setFinalData, type }) => {
     let unforgettableExp = await axios.get(`${baseUrl}/unforgettableExp/get`);
     let domesticStaff = await axios.get(`${baseUrl}/domesticStaff/get`);
     let roomDecoration = await axios.get(`${baseUrl}/roomDecoration/get`);
+    let diningExperience = await axios.get(`${baseUrl}/diningExperience/get`);
+    let daypassExtension = await axios.get(`${baseUrl}/daypassExtension/get`);
     // console.log(personal.data);
     setpersonalExtra([
       {
         price: personal.data[0].DIYPainting,
         title: "Photo Shoot (Photographer Access)",
       },
-      { price: personal.data[0].baloons, title: "Dining Experience" },
-      {
-        price: personal.data[0].floatingBreakFast,
-        title: "Daypass Extension - On Last Day",
-      },
+      // { price: personal.data[0].baloons, title: "Dining Experience" },
+      // {
+      //   price: personal.data[0].floatingBreakFast,
+      //   title: "Daypass Extension - On Last Day",
+      // },
       { price: personal.data[0].flowerPetals, title: "Conference Facility" },
       { price: personal.data[0].sunsetPicnic, title: "Organized Team Bonding" },
       { price: personal.data[0].welcomeNote, title: "Adire" },
       { price: personal.data[1].TieDye, title: "Tie-Dye" },
     ]);
     setCakeExtra(cakes.data);
-    setlookoutExtra(lookout.data);
+    // setlookoutExtra(lookout.data);
+
     // console.log(lookout.data);
     setmassageExtra(massage.data);
     setdrinkExtra(drinks.data);
     // console.log(drinks.data);
     setrindingExtra(riding.data);
+    setdiningExtra(diningExperience.data);
+    setdaypassExtensionExtra(daypassExtension.data);
     setunforgettableExtra(unforgettableExp.data);
     setdomesticStaffExtra(domesticStaff.data);
     setroomDecorationExtra(roomDecoration.data);
@@ -93,20 +100,22 @@ const Extras = ({ finalData, setFinalData, type }) => {
       return !isDisabled;
     });
   };
-  const filterMassageExtras = (extras) => {
-    return extras.filter((item) => {
-      const isDisabled = disabledExtras.some(
-        (disabledItem) =>
-          disabledItem?.type?.trim() === item?.type?.trim() &&
-          new Date(disabledItem.date).toDateString() ===
-            new Date().toDateString() // Replace with the provided date
-      );
-      return !isDisabled;
-    });
-  };
+  // const filterMassageExtras = (extras) => {
+  //   return extras.filter((item) => {
+  //     const isDisabled = disabledExtras.some(
+  //       (disabledItem) =>
+  //         disabledItem?.type?.trim() === item?.type?.trim() &&
+  //         new Date(disabledItem.date).toDateString() ===
+  //           new Date().toDateString() // Replace with the provided date
+  //     );
+  //     return !isDisabled;
+  //   });
+  // };
 
   const filteredCakeExtras = filterExtras(cakeExtra);
-  const filteredLookoutExtras = filterExtras(lookoutExtra);
+  // const filteredLookoutExtras = filterExtras(lookoutExtra);
+  const filteredDiningExtras = filterExtras(diningExtra);
+  const filteredDaypassExtensionExtras = filterExtras(daypassExtensionExtra);
   const filteredMassageExtras = filterExtras(massageExtra);
   const filteredDrinkExtras = filterExtras(drinkExtra);
   const filteredUnforgettableExtras = filterExtras(unforgettableExtra);
@@ -209,7 +218,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
       // setFinalData((prevData) => [...prevData, drinkItem]);
       setFinalData((prevData) => [
         ...prevData,
-        { ...drinkItem, type: "personal" },
+        { ...drinkItem, type: drinkItem.title.trim().toLowerCase() },
       ]);
     }
   };
@@ -271,6 +280,43 @@ const Extras = ({ finalData, setFinalData, type }) => {
     }
   };
 
+  const handleAddRemoveDining = (diningItem) => {
+    const itemIndex = finalData.findIndex(
+      (item) => item.title === diningItem.title
+    );
+    if (itemIndex !== -1) {
+      setFinalData((prevData) => {
+        const newData = [...prevData];
+        newData.splice(itemIndex, 1);
+        return newData;
+      });
+    } else {
+      // setFinalData((prevData) => [...prevData, diningItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...diningItem, type: "dining" },
+      ]);
+    }
+  };
+  const handleAddRemoveDaypassExtension = (daypassExtensionItem) => {
+    const itemIndex = finalData.findIndex(
+      (item) => item.title === daypassExtensionItem.title
+    );
+    if (itemIndex !== -1) {
+      setFinalData((prevData) => {
+        const newData = [...prevData];
+        newData.splice(itemIndex, 1);
+        return newData;
+      });
+    } else {
+      // setFinalData((prevData) => [...prevData, daypassExtensionItem]);
+      setFinalData((prevData) => [
+        ...prevData,
+        { ...daypassExtensionItem, type: "daypassExtension" },
+      ]);
+    }
+  };
+
   const isCakeAdded = (cakeItem) => {
     return finalData.some((item) => item.title === cakeItem.title);
   };
@@ -302,14 +348,22 @@ const Extras = ({ finalData, setFinalData, type }) => {
     return finalData.some((item) => item.title === unforgettableItem.title);
   };
 
+  const isDiningAdded = (diningItem) => {
+    return finalData.some((item) => item.title === diningItem.title);
+  };
+
+  const isDaypassExtensionAdded = (daypassExtensionItem) => {
+    return finalData.some((item) => item.title === daypassExtensionItem.title);
+  };
+
   const selectBg = (item) => {
     switch (item) {
       case "Photo Shoot (Photographer Access)":
         return photo;
-      case "Dining Experience":
-        return dining;
-      case "Daypass Extension - On Last Day":
-        return daypass;
+      // case "Dining Experience":
+      //   return dining;
+      // case "Daypass Extension - On Last Day":
+      //   return daypass;
       case "Conference Facility":
         return conference;
       case "Organized Team Bonding":
@@ -328,6 +382,18 @@ const Extras = ({ finalData, setFinalData, type }) => {
   const [showDomesticStaff, setshowDomesticStaff] = useState(false);
   const [showRoomDecoration, setshowRoomDecoration] = useState(false);
   const [showUnforgettable, setshowUnforgettable] = useState(false);
+  const [showDining, setshowDining] = useState(false);
+  const [showDaypassExtension, setshowDaypassExtension] = useState(false);
+
+  const filteredDiningbreakfastExtras = filteredDiningExtras?.filter(
+    (item) => item.typeOf.toLowerCase().trim() === "lookout breakfast"
+  );
+  const filteredDininglunchExtras = filteredDiningExtras?.filter(
+    (item) => item.typeOf.toLowerCase().trim() === "lookout lunch"
+  );
+  const filteredDiningdinnerExtras = filteredDiningExtras?.filter(
+    (item) => item.typeOf.toLowerCase().trim() === "beachside dinner"
+  );
 
   return (
     <div
@@ -422,7 +488,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
           !rindingExtra?.length > 0 &&
           !roomDecorationExtra?.length > 0 &&
           !domesticStaffExtra?.length > 0 &&
-          !personalExtra?.length > 0 ? (
+          !personalExtra?.length > 0 &&
+          !diningExtra?.length > 0 &&
+          !daypassExtensionExtra?.length > 0 ? (
             <div className="w-full text-center mt-10">
               <ClipLoader color="#000000" size={35} />
             </div>
@@ -834,7 +902,263 @@ const Extras = ({ finalData, setFinalData, type }) => {
                       )}
                     </div>
                   )}
+                  {diningExtra?.length > 0 && (
+                    <div className="my-4">
+                      <div className="flex justify-between items-center gap-x-4">
+                        <div className="flex items-center gap-x-4 ">
+                          <img
+                            src={dining}
+                            alt=""
+                            className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                          />
+                          <h1 className="text-lg mb-3 ml-0 font-semibold">
+                            Dining Experience
+                          </h1>
+                        </div>
 
+                        <img
+                          onClick={() => setshowDining(!showDining)}
+                          src={downIcon}
+                          alt=""
+                          className=" cursor-pointer"
+                        />
+                      </div>
+                      {showDining && (
+                        <>
+                          {filteredDiningbreakfastExtras?.length > 0 && (
+                            <>
+                              <div>
+                                <h1 className="text-lg mb-3 ml-0 font-semibold">
+                                  Lookout Breakfast
+                                </h1>
+                              </div>
+                              {filteredDiningbreakfastExtras?.map(
+                                (item, index) => (
+                                  <div key={index} className="mt-4">
+                                    <div className="flex flex-wrap justify-between items-center mb-4">
+                                      <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                                        <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                          {/* <p className="text-[#606970]">Item</p> */}
+                                          <input
+                                            type="checkbox"
+                                            checked={isDiningAdded(item)}
+                                            onChange={() => {
+                                              handleAddRemoveDining(item);
+                                            }}
+                                            className="w-6 h-6 rounded-sm cursor-pointer"
+                                          />
+                                          <p className="lg:mt-1 mt-0 font-bold">
+                                            {item?.title}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      <div className="flex flex-col lg:gap-y-2">
+                                        <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                          {/* <p className="text-[#606970]">Price</p> */}
+                                          <p className="font-bold">
+                                            ₦{item.price}
+                                          </p>
+                                        </div>
+
+                                        {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() =>
+                                    handleAddRemoveRoomDecoration(item)
+                                  }
+                                  className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isRoomDecorationAdded(item)
+                                    ? "Remove Decoration"
+                                    : "Add Decoration"}
+                                </button>
+                              </div> */}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </>
+                          )}
+                          {filteredDininglunchExtras?.length > 0 && (
+                            <div>
+                              <h1 className="text-lg mb-3 ml-0 font-semibold">
+                                Lookout Lunch
+                              </h1>
+                              {filteredDininglunchExtras.map((item, index) => (
+                                <div key={index} className="mt-4">
+                                  <div className="flex flex-wrap justify-between items-center mb-4">
+                                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                                      <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                        {/* <p className="text-[#606970]">Item</p> */}
+                                        <input
+                                          type="checkbox"
+                                          checked={isDiningAdded(item)}
+                                          onChange={() => {
+                                            handleAddRemoveDining(item);
+                                          }}
+                                          className="w-6 h-6 rounded-sm cursor-pointer"
+                                        />
+                                        <p className="lg:mt-1 mt-0 font-bold">
+                                          {item?.title}
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div className="flex flex-col lg:gap-y-2">
+                                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                        {/* <p className="text-[#606970]">Price</p> */}
+                                        <p className="font-bold">
+                                          ₦{item.price}
+                                        </p>
+                                      </div>
+
+                                      {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() =>
+                                    handleAddRemoveRoomDecoration(item)
+                                  }
+                                  className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isRoomDecorationAdded(item)
+                                    ? "Remove Decoration"
+                                    : "Add Decoration"}
+                                </button>
+                              </div> */}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {filteredDiningdinnerExtras?.length > 0 && (
+                            <div>
+                              <h1 className="text-lg mb-3 ml-0 font-semibold">
+                                Beachside Dinner
+                              </h1>
+                              {filteredDiningdinnerExtras.map((item, index) => (
+                                <div key={index} className="mt-4">
+                                  <div className="flex flex-wrap justify-between items-center mb-4">
+                                    <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                                      <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                        {/* <p className="text-[#606970]">Item</p> */}
+                                        <input
+                                          type="checkbox"
+                                          checked={isDiningAdded(item)}
+                                          onChange={() => {
+                                            handleAddRemoveDining(item);
+                                          }}
+                                          className="w-6 h-6 rounded-sm cursor-pointer"
+                                        />
+                                        <p className="lg:mt-1 mt-0 font-bold">
+                                          {item?.title}
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div className="flex flex-col lg:gap-y-2">
+                                      <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                        {/* <p className="text-[#606970]">Price</p> */}
+                                        <p className="font-bold">
+                                          ₦{item.price}
+                                        </p>
+                                      </div>
+
+                                      {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() =>
+                                    handleAddRemoveRoomDecoration(item)
+                                  }
+                                  className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isRoomDecorationAdded(item)
+                                    ? "Remove Decoration"
+                                    : "Add Decoration"}
+                                </button>
+                              </div> */}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                  {daypassExtensionExtra?.length > 0 && (
+                    <div className="my-4">
+                      <div className="flex justify-between items-center gap-x-4">
+                        <div className="flex items-center gap-x-4 ">
+                          <img
+                            src={daypass}
+                            alt=""
+                            className="md:w-[80px] w-[60px] bg-contain h-[5rem]"
+                          />
+                          <h1 className="text-lg mb-3 ml-0 font-semibold">
+                            Daypass Extension
+                          </h1>
+                        </div>
+
+                        <img
+                          onClick={() =>
+                            setshowDaypassExtension(!showDaypassExtension)
+                          }
+                          src={downIcon}
+                          alt=""
+                          className=" cursor-pointer"
+                        />
+                      </div>
+                      {showDaypassExtension && (
+                        <>
+                          {filteredDaypassExtensionExtras?.map(
+                            (item, index) => (
+                              <div key={index} className="mt-4">
+                                <div className="flex flex-wrap justify-between items-center mb-4">
+                                  <div className="flex items-center gap-x-4 min-w-[18rem] overflow-auto">
+                                    <div className="flex items-center gap-x-3 lt:mt-0 mt-2">
+                                      {/* <p className="text-[#606970]">Item</p> */}
+                                      <input
+                                        type="checkbox"
+                                        checked={isDaypassExtensionAdded(item)}
+                                        onChange={() => {
+                                          handleAddRemoveDaypassExtension(item);
+                                        }}
+                                        className="w-6 h-6 rounded-sm cursor-pointer"
+                                      />
+                                      <p className="lg:mt-1 mt-0 font-bold">
+                                        {item?.title}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex flex-col lg:gap-y-2">
+                                    <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
+                                      {/* <p className="text-[#606970]">Price</p> */}
+                                      <p className="font-bold">₦{item.price}</p>
+                                    </div>
+
+                                    {/* <div className="lg:mt-0 mt-4">
+                                <button
+                                  onClick={() =>
+                                    handleAddRemoveRoomDecoration(item)
+                                  }
+                                  className="w-auto px-4 h-[2.4rem] rounded-lg text-white bg-black"
+                                >
+                                  {isRoomDecorationAdded(item)
+                                    ? "Remove Decoration"
+                                    : "Add Decoration"}
+                                </button>
+                              </div> */}
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                   {domesticStaffExtra?.length > 0 && (
                     <div className="my-4">
                       <div className="flex justify-between items-center gap-x-4">

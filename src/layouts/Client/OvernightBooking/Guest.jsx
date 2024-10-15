@@ -155,18 +155,20 @@ const Guest = () => {
                             marginLeft: "-8px",
                           }}
                         >
-                          <AiOutlineMinus
-                            onClick={() =>
-                              setguestNumber({
-                                ...guestNumber,
-                                adults:
-                                  guestNumber.adults > 0
-                                    ? guestNumber.adults - 1
-                                    : guestNumber.adults,
-                              })
-                            }
-                            className="text-white h-[3rem] md:h-[2rem] text-2xl"
-                          />
+                          <button>
+                            <AiOutlineMinus
+                              onClick={() =>
+                                setguestNumber({
+                                  ...guestNumber,
+                                  adults:
+                                    guestNumber.adults > 0
+                                      ? guestNumber.adults - 1
+                                      : guestNumber.adults,
+                                })
+                              }
+                              className="text-white h-[3rem] md:h-[2rem] text-2xl"
+                            />
+                          </button>
                         </div>
                         <div
                           className="w-[2rem] h-[3rem] md:h-[2rem] bg-[#75A9BF] flex  justify-center items-center rounded-md cursor-pointer"
@@ -174,15 +176,17 @@ const Guest = () => {
                             borderRadius: "0 10px 10px 0",
                           }}
                         >
-                          <AiOutlinePlus
-                            onClick={() =>
-                              setguestNumber({
-                                ...guestNumber,
-                                adults: guestNumber.adults + 1,
-                              })
-                            }
-                            className="text-white h-[3rem] md:h-[2rem] text-2xl"
-                          />
+                          <button>
+                            <AiOutlinePlus
+                              onClick={() =>
+                                setguestNumber({
+                                  ...guestNumber,
+                                  adults: guestNumber.adults + 1,
+                                })
+                              }
+                              className="text-white h-[3rem] md:h-[2rem] text-2xl"
+                            />
+                          </button>
                         </div>
                       </div>
                     </div>

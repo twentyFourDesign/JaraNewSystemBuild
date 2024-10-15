@@ -88,9 +88,18 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
               <ul className="list-disc list-inside ml-4">
                 {Object.entries(extra.details).map(([key, value]) => (
                   <li key={key} className="text-sm">
-                    <span className="font-medium">{key}:</span> {value}
+                    <span className="font-medium">{key}:</span>{" "}
+                    {Array.isArray(value) ? value.join(", ") : value}
                   </li>
                 ))}
+              </ul>
+            )}
+            {extra.selectedDates && (
+              <ul className="list-disc list-inside ml-4">
+                <li className="text-sm">
+                  <span className="font-medium">Selected Dates:</span>{" "}
+                  {extra.selectedDates.join(", ")}
+                </li>
               </ul>
             )}
           </div>
@@ -101,6 +110,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
 
   if (!booking) return <div>Loading...</div>;
   // console.log(booking?.bookingDetails?.groups?.Nanny);
+  console.log(booking?.guestDetails?.photo);
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       {/* HEADER  */}

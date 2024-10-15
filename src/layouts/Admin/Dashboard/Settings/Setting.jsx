@@ -22,6 +22,8 @@ import RoomDecoration from "./Popup/RoomDecoration";
 import DomesticStaff from "./Popup/DomesticStaff";
 import UnforgettableExp from "./Popup/UnforgettableExperiences";
 import SeasonalDates from "./Popup/SeasonalDates";
+import DaypassExtension from "./Popup/DaypassExtension";
+import DiningExperience from "./Popup/DiningExperience";
 const Setting = ({ setShowNav, showNav }) => {
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
 
@@ -47,6 +49,8 @@ const Setting = ({ setShowNav, showNav }) => {
     domesticStaff: false,
     unforgettableExp: false,
     seasonal: false,
+    diningExperience: false,
+    daypassExtension: false,
   });
 
   return (
@@ -221,6 +225,22 @@ const Setting = ({ setShowNav, showNav }) => {
           >
             <p>Seasonal Dates</p>
           </div>
+          <div
+            onClick={() =>
+              setShowPopups({ ...showPopups, daypassExtension: true })
+            }
+            className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
+          >
+            <p>Daypass Extension</p>
+          </div>
+          <div
+            onClick={() =>
+              setShowPopups({ ...showPopups, diningExperience: true })
+            }
+            className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
+          >
+            <p>Dining Experience</p>
+          </div>
         </div>
       </div>
 
@@ -383,6 +403,36 @@ const Setting = ({ setShowNav, showNav }) => {
         <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
           <div className="flex justify-center items-center h-[100%] w-[100%]">
             <SeasonalDates
+              setShowPopups={setShowPopups}
+              showPopups={showPopups}
+            />
+          </div>
+        </div>
+      )}
+      {showPopups.daypassExtension && (
+        <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
+          <div className="flex justify-center items-center h-[100%] w-[100%]">
+            <DaypassExtension
+              setShowPopups={setShowPopups}
+              showPopups={showPopups}
+            />
+          </div>
+        </div>
+      )}
+      {showPopups.daypassExtension && (
+        <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
+          <div className="flex justify-center items-center h-[100%] w-[100%]">
+            <DaypassExtension
+              setShowPopups={setShowPopups}
+              showPopups={showPopups}
+            />
+          </div>
+        </div>
+      )}
+      {showPopups.diningExperience && (
+        <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
+          <div className="flex justify-center items-center h-[100%] w-[100%]">
+            <DiningExperience
               setShowPopups={setShowPopups}
               showPopups={showPopups}
             />
