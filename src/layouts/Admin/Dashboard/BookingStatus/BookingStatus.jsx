@@ -293,9 +293,9 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                 </span>
               </div>
               <div className="flex justify-between min-w-[100px] gap-x-4 ">
-                <p className="text-gray-600">Mail List</p>
+                <p className="text-gray-600">Keep Info</p>
                 <span className="font-semibold text-end">
-                  {booking?.guestDetails?.mailLitst ? "Yes" : "No"}
+                  {booking?.guestDetails?.keepInfo ? "Yes" : "No"}
                 </span>
               </div>
               <div className="flex justify-between min-w-[100px] gap-x-4 ">

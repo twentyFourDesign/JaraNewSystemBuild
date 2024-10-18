@@ -24,7 +24,7 @@ import { ImCross } from "react-icons/im";
 import { ClipLoader } from "react-spinners";
 import { PriceContext } from "../../../Context/PriceContext";
 import { Tooltip } from "react-tooltip";
-
+import { MAX_OCCUPANCY } from "../../../constants/occupancyRules";
 const RoomDetails = () => {
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
 
@@ -36,7 +36,7 @@ const RoomDetails = () => {
   // const [selectedRooms, setSelectedRooms] = useState([]);
   const [quantity, setQuantity] = useState(1);
   // const [finalData, setFinalData] = useState([]);
-  const [occupancyRules, setOccupancyRules] = useState({});
+  const [occupancyRules, setOccupancyRules] = useState(MAX_OCCUPANCY);
   // const [numberOfNights, setNumberOfNights] = useState(0);
   // const [selectedDate, setSelectedDate] = useState({
   //   visitDate: null,
@@ -104,12 +104,18 @@ const RoomDetails = () => {
       (selectedRoom) => selectedRoom.id === room.id
     );
     if (existingRoomIndex === -1) {
+      // Room is being added
       setSelectedRooms([...selectedRooms, { ...room, quantity, price }]);
     } else {
       const updatedRooms = selectedRooms.filter(
         (selectedRoom) => selectedRoom.id !== room.id
       );
       setSelectedRooms([...updatedRooms]);
+      setRoomGuestDistribution((prev) => {
+        const newDistribution = { ...prev };
+        delete newDistribution[room.id]; // Remove the distribution for this room
+        return newDistribution;
+      });
     }
     setQuantity(1);
     setSelectedRoomIds((prevIds) =>
@@ -117,32 +123,6 @@ const RoomDetails = () => {
         ? [...prevIds, room.id]
         : prevIds.filter((id) => id !== room.id)
     );
-    // Recalculate price when a room is selected
-    // setshowPopup(false);
-    // setroomId(null);
-    // const existingRoomIndex = selectedRooms.findIndex(
-    //   (selectedRoom) => selectedRoom.id === room.id
-    // );
-    // if (existingRoomIndex !== -1) {
-    //   const updatedRooms = selectedRooms.map((selectedRoom, index) =>
-    //     index === existingRoomIndex
-    //       ? { ...selectedRoom, quantity, price }
-    //       : selectedRoom
-    //   );
-    //   setSelectedRooms(updatedRooms);
-    // } else {
-    //   setSelectedRooms([...selectedRooms, { ...room, quantity, price }]);
-    // }
-    // setQuantity(1);
-    // setSelectedRoomIds((prevIds) => {
-    //   if (prevIds.includes(room.id)) {
-    //     return prevIds.filter((id) => id !== room.id);
-    //   } else {
-    //     return [...prevIds, room.id];
-    //   }
-    // });
-
-    // setPrice(calPrice()); // Recalculate price when a room is selected
   };
   useEffect(() => {
     // if (selectedRooms.length > 0) {
@@ -176,112 +156,6 @@ const RoomDetails = () => {
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
-
-  // const updateOccupancyRules = (modifiedRoom) => {
-  //   const updatedOccupancyRules = {};
-
-  //   modifiedRoom.forEach((room) => {
-  //     const roomType = room.ref.trim();
-  //     const details = room.details;
-
-  //     if (details.length > 0) {
-  //       const firstDetail = details[0];
-  //       updatedOccupancyRules[roomType] = [
-  //         { adults: firstDetail.adult, children: 0, toddlers: 0, infants: 1 },
-  //         {
-  //           adults: firstDetail.adult - 1,
-  //           children: 1,
-  //           toddlers: 0,
-  //           infants: 1,
-  //         },
-  //         {
-  //           adults: firstDetail.adult - 1,
-  //           children: 0,
-  //           toddlers: 1,
-  //           infants: 1,
-  //         },
-  //         {
-  //           adults: firstDetail.adult - 2,
-  //           children: 1,
-  //           toddlers: 1,
-  //           infants: 1,
-  //         },
-  //         {
-  //           adults: firstDetail.adult - 1,
-  //           children: 1,
-  //           toddlers: 1,
-  //           infants: 0,
-  //         },
-  //       ];
-  //     }
-  //   });
-
-  //   return updatedOccupancyRules;
-  // };
-  const updateOccupancyRules = (modifiedRoom) => {
-    const updatedOccupancyRules = {};
-
-    modifiedRoom.forEach((room) => {
-      const roomType = room.ref.trim();
-      const details = room.details;
-
-      if (details.length > 0) {
-        const firstDetail = details[0];
-        updatedOccupancyRules[roomType] = [
-          {
-            adults: firstDetail.adult,
-            children: 0,
-            toddlers: 0,
-            infants: firstDetail.infant,
-          },
-          {
-            adults: firstDetail.adult - 1,
-            children: 1,
-            toddlers: 0,
-            infants: firstDetail.infant,
-          },
-          {
-            adults: firstDetail.adult - 1,
-            children: 0,
-            toddlers: 1,
-            infants: firstDetail.infant,
-          },
-          {
-            adults: firstDetail.adult - 2,
-            children: 2,
-            toddlers: 0,
-            infants: firstDetail.infant,
-          },
-          {
-            adults: firstDetail.adult - 2,
-            children: 1,
-            toddlers: 1,
-            infants: firstDetail.infant,
-          },
-          {
-            adults: firstDetail.adult - 3,
-            children: 3,
-            toddlers: 0,
-            infants: firstDetail.infant,
-          },
-          {
-            adults: firstDetail.adult - 3,
-            children: 2,
-            toddlers: 1,
-            infants: firstDetail.infant,
-          },
-          {
-            adults: firstDetail.adult - 4,
-            children: 4,
-            toddlers: 0,
-            infants: firstDetail.infant,
-          },
-        ];
-      }
-    });
-
-    return updatedOccupancyRules;
-  };
 
   useEffect(() => {
     let requestData = null;
@@ -337,9 +211,6 @@ const RoomDetails = () => {
           return acc;
         }, []);
         setModifiedRoom(groupedRooms);
-        const updatedRules = updateOccupancyRules(groupedRooms);
-        setOccupancyRules(updatedRules);
-        // console.log("groupedRooms", groupedRooms);
       });
   }, [selectedDate]);
 
@@ -385,13 +256,15 @@ const RoomDetails = () => {
         guestCount.adults <= rule.adults &&
         numChildren <= rule.children &&
         numToddlers <= rule.toddlers &&
-        numInfants <= rule.infants &&
-        guestCount.adults + numChildren + numToddlers <=
-          rule.adults + rule.children + rule.toddlers
+        numInfants <= rule.infants
     );
   };
   const calculateMaxCapacity = (room) => {
-    return room.adult + room.infant;
+    const rules = occupancyRules[room];
+    if (!rules) return -1;
+
+    const maxCapacity = rules[0].adults + rules[0].infants;
+    return maxCapacity;
   };
   const handleNext = () => {
     let totalAdults = 0;
@@ -435,7 +308,7 @@ const RoomDetails = () => {
 
       if (groupedRoom) {
         const reference = groupedRoom.ref;
-        const maxCapacity = calculateMaxCapacity(groupedRoom.details[0]);
+        const maxCapacity = calculateMaxCapacity(reference);
         const roomDistribution = roomGuestDistribution[room.id] || {};
         const totalDistributedGuests =
           (roomDistribution.adults || 0) +
@@ -450,7 +323,9 @@ const RoomDetails = () => {
 
         const isValid = validateGuestCount(reference.trim(), roomDistribution);
         if (!isValid) {
-          toast.error(`Invalid guest allocation for room ${room.title}.`);
+          toast.error(
+            `room ${room.title} can't accomodate this guest allocation.`
+          );
         }
         return isValid;
       }
@@ -465,19 +340,19 @@ const RoomDetails = () => {
       }),
       { adults: 0, children: 0, toddlers: 0, infants: 0 }
     );
-
     if (
       totalDistributedGuests.adults !== guestCount.adults ||
       totalDistributedGuests.children !== numChildren ||
       totalDistributedGuests.toddlers !== numToddlers ||
       totalDistributedGuests.infants !== numInfants
     ) {
-      toast.error("The distributed guests don't match the total guest count.");
+      toast.error(
+        "Please ensure you match the number of guests to the correct room."
+      );
       return;
     }
 
     if (isValidOccupancy) {
-      console.log("u can fit ");
       const visitDateObj2 = new Date(selectedDate.visitDate);
       const endDateObj2 = new Date(selectedDate.endDate);
       const serializableSelectedDate = {
@@ -514,7 +389,6 @@ const RoomDetails = () => {
       totalInfants >= guestCount.infants &&
       totalToddlers >= guestCount.toddler
     ) {
-      console.log("u can fit ");
       const visitDateObj2 = new Date(selectedDate.visitDate);
       const endDateObj2 = new Date(selectedDate.endDate);
       const serializableSelectedDate = {

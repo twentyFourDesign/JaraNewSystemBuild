@@ -368,7 +368,7 @@ const Details = () => {
                   )}
                 </div>
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
-                  <div className="flex items-center mt-4">
+                  {/* <div className="flex items-center mt-4">
                     <input
                       checked={userDetails.mailLitst}
                       onChange={(e) => {
@@ -384,7 +384,7 @@ const Details = () => {
                     <p className="text-[#606970] text-sm ml-2">
                       Signup for our mailing list
                     </p>
-                  </div>
+                  </div> */}
                   <div className="flex items-center mt-4">
                     <input
                       checked={userDetails.keepInfo}

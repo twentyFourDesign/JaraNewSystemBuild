@@ -27,7 +27,7 @@ const Confirmation = () => {
     // setDiscount(null);
     // setVoucher(null);
     // setPreviousCost(0);
-    nav("/overnight/guest");
+    nav("/");
     window.location.reload();
   };
   const handleHome = () => {
@@ -38,8 +38,8 @@ const Confirmation = () => {
     // setDiscount(null);
     // setVoucher(null);
     // setPreviousCost(0);
-    nav("/");
-    window.location.reload();
+    // nav("/");
+    window.location.href = "https://www.jarabeachresort.com/";
   };
   return (
     <>
@@ -96,17 +96,17 @@ const Confirmation = () => {
         <div className="flex flex-col gap-y-4 md:gap-y-0 md:flex-row justify-center items-center gap-x-4 mb-4 ml-2 mr-2">
           <button
             onClick={handleAnotherBooking}
-            className="w-[100%] sm:w-[13rem] h-[2.4rem] bg-[#C8D5E0] text-black font-bold flex justify-center items-center gap-x-2 rounded-md cursor-pointer font-robotoFont"
+            className="w-[100%] sm:w-[13rem] h-[2.4rem] bg-[#C8D5E0] text-black font-bold flex justify-center items-center  rounded-md cursor-pointer font-robotoFont"
           >
-            <img src={arrow} alt="icon" className="w-[1rem]" />
+            {/* <img src={arrow} alt="icon" className="w-[1rem]" /> */}
             Make another booking
           </button>
           <button
             onClick={handleHome}
-            className="w-[100%] sm:mt-0 mt-3 sm:w-[13rem] h-[2.4rem] bg-black flex gap-x-2 justify-center items-center font-bold text-white rounded-md cursor-pointer font-robotoFont"
+            className="w-[100%] sm:mt-0 mt-3 sm:w-[13rem] h-[2.4rem] bg-black flex  justify-center items-center font-bold text-white rounded-md cursor-pointer font-robotoFont"
           >
             Go to Website
-            <img src={arrowR} alt="icon" className="w-[1rem]" />
+            {/* <img src={arrowR} alt="icon" className="w-[1rem]" /> */}
           </button>
         </div>
         {/* footer */}

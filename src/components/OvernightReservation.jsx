@@ -122,7 +122,7 @@ const OvernightReservation = () => {
         <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Sub-total</h1>
           <h1 className="text-base font-bold">
-            ₦{overnightSubtotal.toFixed(2)}
+            ₦{Number(overnightSubtotal.toFixed(2)).toLocaleString()}
           </h1>
         </div>
       </div>
@@ -130,11 +130,15 @@ const OvernightReservation = () => {
       <div className="bg-[#F1F5F8] mt-3 h-[6rem] rounded-md shadow-shadow1 p-2 flex justify-center items-start flex-col z-50">
         <div className="flex justify-between items-center w-[100%]">
           <p className="text-sm ">Consumption Tax and VAT (12.5%)</p>
-          <p className="text-sm font-bold">₦{overnightTaxAmount.toFixed(2)}</p>
+          <p className="text-sm font-bold">
+            ₦{Number(overnightTaxAmount.toFixed(2)).toLocaleString()}
+          </p>
         </div>
         <div className="flex justify-between items-center mt-3 w-[100%]">
           <p className="font-bold text-lg">Total</p>
-          <p className="font-bold text-lg">₦{price.toFixed(2)}</p>
+          <p className="font-bold text-lg">
+            ₦{Number(price.toFixed(2)).toLocaleString()}
+          </p>
         </div>
       </div>
       {previousCost > 0 && (

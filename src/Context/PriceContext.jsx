@@ -269,12 +269,20 @@ export const PriceProvider = ({ children }) => {
           const childPrice = Math.ceil(adultPrice * roomPricing.child);
           const toddlerPrice = Math.ceil(adultPrice * roomPricing.toddler);
           const infantPrice = Math.ceil(adultPrice * roomPricing.infant);
-
-          const roomPrice =
-            numAdults * adultPrice +
-            numChildren * childPrice +
-            numToddlers * toddlerPrice +
-            numInfants * infantPrice;
+          let roomPrice;
+          if (numInfants > 1) {
+            roomPrice =
+              numAdults * adultPrice +
+              numChildren * childPrice +
+              numToddlers * toddlerPrice +
+              numInfants * toddlerPrice;
+          } else {
+            roomPrice =
+              numAdults * adultPrice +
+              numChildren * childPrice +
+              numToddlers * toddlerPrice +
+              numInfants * infantPrice;
+          }
 
           eligibleRoomPrice += roomPrice;
         } else {
@@ -294,11 +302,20 @@ export const PriceProvider = ({ children }) => {
           const toddlerPrice = Math.ceil(adultPrice * roomPricing.toddler);
           const infantPrice = Math.ceil(adultPrice * roomPricing.infant);
 
-          const roomPrice =
-            numAdults * adultPrice +
-            numChildren * childPrice +
-            numToddlers * toddlerPrice +
-            numInfants * infantPrice;
+          let roomPrice;
+          if (numInfants > 1) {
+            roomPrice =
+              numAdults * adultPrice +
+              numChildren * childPrice +
+              numToddlers * toddlerPrice +
+              numInfants * toddlerPrice;
+          } else {
+            roomPrice =
+              numAdults * adultPrice +
+              numChildren * childPrice +
+              numToddlers * toddlerPrice +
+              numInfants * infantPrice;
+          }
 
           totalRoomPrice += roomPrice;
         }
