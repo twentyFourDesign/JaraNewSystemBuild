@@ -152,7 +152,7 @@ const OvernightSummary = () => {
       }
 
       if (result.status === 200) {
-        await createPayment(result.data._id, paymentStatus, method);
+        await createPayment(result.data.shortId, paymentStatus, method);
         success = 1;
         if (previousCost > 0) {
           toast.success(
@@ -204,6 +204,8 @@ const OvernightSummary = () => {
             discount: discount ? discount.percentage : 0,
             voucher: voucher ? voucher.voucher.balance : 0,
             multiNightDiscount: multiNightDiscount,
+            previousCost: previousCost,
+            previousPaymentStatus: previousPaymentStatus,
           }
         );
       } else {
@@ -408,7 +410,7 @@ const OvernightSummary = () => {
         </button>
       </div>
 
-      <div className="flex  items-center gap-x-1 mt-4">
+      <div className="flex  items-center gap-x-5 mt-4">
         <input
           type="checkbox"
           name=""
@@ -417,7 +419,7 @@ const OvernightSummary = () => {
           onChange={handleCheckbox}
         />
         <p>
-          I accept Jara's booking{" "}
+          I accept Little Company Nigeria Limited (Jara Beach Resort)'s{" "}
           <span
             onClick={() => setIsModalOpen(true)}
             className="underline text-blue-500 cursor-pointer"
@@ -437,7 +439,7 @@ const OvernightSummary = () => {
           }
           onClick={handleHold}
         >
-          Hold | Bank Trasnfer
+          Hold | Bank Transfer
         </button>
         {!isChecked ? (
           <div

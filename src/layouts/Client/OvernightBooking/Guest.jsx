@@ -84,14 +84,16 @@ const Guest = () => {
   ];
   const handleManageBooking = () => {
     if (previousCost > 0) {
-      dispatch(resetGuestInfo());
-      dispatch(resetGuestCount());
-      dispatch(resetRoomDetails());
-      setPrice(0);
-      setDiscount(null);
-      setVoucher(null);
-      setPreviousCost(0);
+      // dispatch(resetGuestInfo());
+      // dispatch(resetGuestCount());
+      // dispatch(resetRoomDetails());
+      // setPrice(0);
+      // setDiscount(null);
+      // setVoucher(null);
+      // setPreviousCost(0);
+
       nav("/");
+      window.location.reload();
     } else {
       nav("/booking/manage");
     }

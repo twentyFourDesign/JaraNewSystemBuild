@@ -36,6 +36,10 @@ const Extras = ({ finalData, setFinalData, type }) => {
   const [personalExtra, setpersonalExtra] = useState([]);
   const [addedItems, setAddedItems] = useState({});
   const [disabledExtras, setDisabledExtras] = useState([]);
+  const formatPrice = (price) => {
+    const priceNumber = Number(price);
+    return priceNumber.toLocaleString(); // Format the price with commas
+  };
   const getExtras = async () => {
     let cakes = await axios.get(`${baseUrl}/cake/get`);
     // let lookout = await axios.get(`${baseUrl}/lookout/get`);
@@ -542,7 +546,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">₦{item.price}</p>
+                                <p className="font-bold">
+                                  ₦{formatPrice(item.price)}
+                                </p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -608,7 +614,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">₦{item.price}</p>
+                                <p className="font-bold">
+                                  ₦{formatPrice(item.price)}
+                                </p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -676,7 +684,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">₦{item.price}</p>
+                                <p className="font-bold">
+                                  ₦{formatPrice(item.price)}
+                                </p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -744,7 +754,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             <div className="flex flex-col lg:gap-y-2">
                               <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                 {/* <p className="text-[#606970]">Price</p> */}
-                                <p className="font-bold">₦{item.price}</p>
+                                <p className="font-bold">
+                                  ₦{formatPrice(item.price)}
+                                </p>
                               </div>
 
                               {/* <div className="lg:mt-0 mt-4">
@@ -813,7 +825,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">₦{item.price}</p>
+                                    <p className="font-bold">
+                                      ₦{formatPrice(item.price)}
+                                    </p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">
@@ -882,7 +896,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">₦{item.price}</p>
+                                    <p className="font-bold">
+                                      ₦{formatPrice(item.price)}
+                                    </p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">
@@ -960,7 +976,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                         <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                           {/* <p className="text-[#606970]">Price</p> */}
                                           <p className="font-bold">
-                                            ₦{item.price}
+                                            ₦{formatPrice(item.price)}
                                           </p>
                                         </div>
 
@@ -1012,7 +1028,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                       <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                         {/* <p className="text-[#606970]">Price</p> */}
                                         <p className="font-bold">
-                                          ₦{item.price}
+                                          ₦{formatPrice(item.price)}
                                         </p>
                                       </div>
 
@@ -1063,7 +1079,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                       <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                         {/* <p className="text-[#606970]">Price</p> */}
                                         <p className="font-bold">
-                                          ₦{item.price}
+                                          ₦{formatPrice(item.price)}
                                         </p>
                                       </div>
 
@@ -1138,7 +1154,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                   <div className="flex flex-col lg:gap-y-2">
                                     <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                       {/* <p className="text-[#606970]">Price</p> */}
-                                      <p className="font-bold">₦{item.price}</p>
+                                      <p className="font-bold">
+                                        ₦{formatPrice(item.price)}
+                                      </p>
                                     </div>
 
                                     {/* <div className="lg:mt-0 mt-4">
@@ -1210,7 +1228,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">₦{item.price}</p>
+                                    <p className="font-bold">
+                                      ₦{formatPrice(item.price)}
+                                    </p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">
@@ -1286,7 +1306,9 @@ const Extras = ({ finalData, setFinalData, type }) => {
                                 <div className="flex flex-col lg:gap-y-2">
                                   <div className="lg:block flex gap-x-3 lt:mt-0 mt-2 min-w-[8rem]">
                                     {/* <p className="text-[#606970]">Price</p> */}
-                                    <p className="font-bold">₦{item.price}</p>
+                                    <p className="font-bold">
+                                      ₦{formatPrice(item.price)}
+                                    </p>
                                   </div>
 
                                   {/* <div className="lg:mt-0 mt-4">

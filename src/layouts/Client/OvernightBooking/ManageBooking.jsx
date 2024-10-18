@@ -16,7 +16,7 @@ const ManageBooking = () => {
   const [disableUpdate, setDisableUpdate] = useState(false);
   const nav = useNavigate();
   const dispatch = useDispatch();
-  console.log(bookingData);
+  // console.log(bookingData);
   const {
     setPreviousCost,
     setPreviousPaymentStatus,
@@ -34,7 +34,7 @@ const ManageBooking = () => {
         lastName.toLowerCase()
       ) {
         const paymentResponse = await axios.get(
-          `${baseUrl}/payment/get/byBookingId/${response.data._id}`
+          `${baseUrl}/payment/get/byBookingId/${response.data.shortId}`
         );
 
         if (paymentResponse?.data?.[0].status === "Cancelled") {
@@ -71,7 +71,7 @@ const ManageBooking = () => {
     setPreviousCost(paymentInfo.totalCost);
     setPreviousPaymentStatus(paymentInfo.status);
     setPreviousBookingMethod(paymentInfo.method);
-    setPreviousBookingId(bookingData._id);
+    setPreviousBookingId(bookingData.shortId);
     nav("/overnight/guest");
   };
   const handleBack = () => {
@@ -96,7 +96,7 @@ const ManageBooking = () => {
               <input
                 type="text"
                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                placeholder="66bh8bhy987hhs4bcyu67843"
+                placeholder="iNJoaQay"
                 value={bookingRef}
                 onChange={(e) => setBookingRef(e.target.value)}
               />
@@ -141,7 +141,9 @@ const ManageBooking = () => {
               <tbody>
                 <tr>
                   <td className="px-4 py-2">Booking Reference</td>
-                  <td className="px-4 py-2 font-bold">{bookingData?._id}</td>
+                  <td className="px-4 py-2 font-bold">
+                    {bookingData?.shortId}
+                  </td>
                 </tr>
 
                 <tr>

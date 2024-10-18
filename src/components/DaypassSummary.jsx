@@ -69,7 +69,7 @@ const DaypassSummary = () => {
         }
       );
       if (result.status === 200) {
-        await createPayment(result.data._id, paymentStatus, method);
+        await createPayment(result.data.shortId, paymentStatus, method);
         success = 1;
         toast.success("Booking Created");
       } else {
@@ -313,7 +313,7 @@ const DaypassSummary = () => {
           Apply
         </button>
       </div>
-      <div className="flex items-start gap-x-5 mt-10">
+      <div className="flex items-center gap-x-5 mt-10 ">
         <input
           type="checkbox"
           name=""
@@ -322,14 +322,14 @@ const DaypassSummary = () => {
           onChange={handleCheckbox}
         />
         <p className="text-xs">
-          Agree with the Booking {" "}
+          I accept Little Company Nigeria Limited (Jara Beach Resort)'s{" "}
           <span
             onClick={() => setIsModalOpen(true)}
             className="underline text-blue-500 cursor-pointer"
           >
             Terms and Conditions
           </span>{" "}
-           and Proceed to payment.
+           
         </p>
       </div>
       <div className="absolute bottom-2 w-[96%] ">
@@ -342,7 +342,7 @@ const DaypassSummary = () => {
           }
           onClick={handleHold}
         >
-          Hold | Bank Trasnfer
+          Hold | Bank Transfer
         </button>
         {!isChecked ? (
           <div

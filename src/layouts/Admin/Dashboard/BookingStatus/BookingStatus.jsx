@@ -109,8 +109,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   };
 
   if (!booking) return <div>Loading...</div>;
-  // console.log(booking?.bookingDetails?.groups?.Nanny);
-  console.log(booking?.guestDetails?.photo);
+
   return (
     <div className="font-robotoFont w-[100%] overflow-x-auto">
       {/* HEADER  */}
@@ -132,7 +131,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
           <div className="space-y-2">
             <div className="flex flex-wrap justify-between md:min-w-[350px] gap-x-4">
               <p className="text-gray-600">Booking ID</p>
-              <span className="font-semibold ">{booking?._id}</span>
+              <span className="font-semibold ">{id}</span>
             </div>
             <div className="flex justify-between">
               <p className="text-gray-600">Booking Date</p>

@@ -450,7 +450,7 @@ const RoomDetails = () => {
 
         const isValid = validateGuestCount(reference.trim(), roomDistribution);
         if (!isValid) {
-          toast.error(`Invalid guest distribution for room ${room.title}.`);
+          toast.error(`Invalid guest allocation for room ${room.title}.`);
         }
         return isValid;
       }
@@ -575,7 +575,10 @@ const RoomDetails = () => {
     //     ? calculateMaxCapacity(groupedRoom.details[0])
     //     : 0;
     return selectedRooms.map((room) => (
-      <div key={room.id} className="mt-6 p-4 border rounded-md shadow-md">
+      <div
+        key={room.id}
+        className="mt-6 md:w-[80%] p-4 border rounded-md shadow-md bg-[#00A3D2] text-white"
+      >
         <h3 className="text-lg font-semibold mb-4">{room.title}</h3>
         {/* <p className="text-sm mb-2">Maximum Capacity: {maxCapacity}</p> */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -592,7 +595,7 @@ const RoomDetails = () => {
                   onClick={() =>
                     handleGuestDistributionChange(room.id, key, false)
                   }
-                  className="bg-gray-200 px-2 py-1 rounded-l"
+                  className="bg-[#75A9BF] px-2 py-1 rounded-l"
                 >
                   <AiOutlineMinus />
                 </button>
@@ -600,13 +603,13 @@ const RoomDetails = () => {
                   type="text"
                   value={roomGuestDistribution[room.id]?.[key] || 0}
                   readOnly
-                  className="w-12 text-center border-t border-b"
+                  className="w-12 text-center text-black border-t border-b"
                 />
                 <button
                   onClick={() =>
                     handleGuestDistributionChange(room.id, key, true)
                   }
-                  className="bg-gray-200 px-2 py-1 rounded-r"
+                  className="bg-[#75A9BF] px-2 py-1 rounded-r"
                 >
                   <AiOutlinePlus />
                 </button>
@@ -736,7 +739,7 @@ const RoomDetails = () => {
               </div>
               <div className="mt-4">
                 <h1 className="text-lg font-bold ">
-                  Which room you are staying in?
+                  Which rooms you are staying in?
                 </h1>
                 <p className="text-[#606970] text-sm mt-1">
                   Select your desired room type and decide how many people will
@@ -847,7 +850,7 @@ const RoomDetails = () => {
               {selectedRooms.length > 0 && (
                 <div className="mt-6">
                   <h2 className="text-xl font-bold mb-4">
-                    Guest Distribution for Selected Rooms
+                    Guest Allocation for Selected Rooms
                   </h2>
                   {renderGuestDistributionInputs()}
                 </div>

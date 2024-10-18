@@ -13,6 +13,7 @@ const Main = () => {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
+        console.log(bookingRef);
         const response = await axios.get(
           `${baseUrl}/overnight/booking/get/${bookingRef}`
         );
@@ -20,7 +21,7 @@ const Main = () => {
       } catch (error) {
         try {
           const response = await axios.get(
-            `${baseUrl}/daypass/booking/get/${bookingRef}`
+            `${baseUrl}/daypass/booking/get/${bookingRef.toString()}`
           );
           setBooking(response.data);
         } catch (error) {

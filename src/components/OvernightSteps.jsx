@@ -46,7 +46,7 @@ const OvernightSteps = ({ step }) => {
           <div className="w-[11rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
         <span className="text-xs sm:text-base md: w-5/6 ">
-          Select Date(s) & Room(s)
+          Date(s) & Room(s)
         </span>
       </div>
       <div className="flex flex-col justify-center  gap-2">

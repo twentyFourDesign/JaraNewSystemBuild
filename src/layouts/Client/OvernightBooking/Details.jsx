@@ -103,6 +103,8 @@ const Details = () => {
     }
     return age;
   };
+  const [otherSource, setOtherSource] = useState(""); // State for the "Other" input
+
   const isValid =
     userDetails.firstname &&
     userDetails.lastname &&
@@ -111,15 +113,28 @@ const Details = () => {
     userDetails.gender &&
     userDetails.dateOfBirth &&
     userDetails.aboutUs &&
+    (userDetails.aboutUs !== "Other" || otherSource.trim()) && // Check if "Other" is selected and if otherSource is not empty
     userDetails.file;
-  // console.log(userDetails.dateOfBirth);
 
   const acceptedFileTypes = [
     "image/jpeg",
     "image/png",
     "image/gif",
     "application/pdf",
-  ];
+  ]; // State for the "Other" input
+
+  const handleAboutUsChange = (e) => {
+    const value = e.target.value;
+    setuserDetails({
+      ...userDetails,
+      aboutUs: value,
+    });
+    // Check if "Other" is selected
+    if (value === "Other") {
+      setOtherSource(""); // Reset the other source input if "Other" is selected
+    }
+  };
+
   const onSubmit = async () => {
     if (!isValid) {
       toast.error("Please fill all the fields");
@@ -153,7 +168,12 @@ const Details = () => {
       return;
     }
 
-    const updatedDetails = { ...userDetails, para: userDetails.para.trim() };
+    const updatedDetails = {
+      ...userDetails,
+      para: userDetails.para.trim(),
+      aboutUs:
+        userDetails.aboutUs === "Other" ? otherSource : userDetails.aboutUs, // Set aboutUs to otherSource if "Other" is selected
+    };
 
     dispatch(insert(updatedDetails));
     nav("/overnight/summary");
@@ -161,6 +181,7 @@ const Details = () => {
   const handleFileChange = (e) => {
     setuserDetails({ ...userDetails, file: e.target.files[0] });
   };
+
   return (
     <div style={{ fontFamily: "Inter sans-serif" }}>
       <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap">
@@ -253,24 +274,6 @@ const Details = () => {
                     <option value="Female">Female</option>
                   </select>
 
-                  {/* <input
-                    onChange={(e) => {
-                      setuserDetails({
-                        ...userDetails,
-                        dateOfBirth: e.target.value,
-                      });
-                    }}
-                    type="date"
-                    max={
-                      new Date(
-                        new Date().setFullYear(new Date().getFullYear() - 18)
-                      )
-                        .toISOString()
-                        .split("T")[0]
-                    }
-                    placeholder="Date of Birth"
-                    className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  /> */}
                   <div className="w-[100%] lg:mt-0 mt-3 flex-1 flex rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0]">
                     <DatePicker
                       selected={userDetails.dateOfBirth}
@@ -308,7 +311,7 @@ const Details = () => {
                   ID, driver's license)
                 </p>
 
-                <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
+                <div className="mt-4 block flex-wrap lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
                   <div>
                     <label
                       htmlFor="file"
@@ -335,12 +338,7 @@ const Details = () => {
                     className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                     id="aboutus"
                     value={userDetails.aboutUs}
-                    onChange={(e) => {
-                      setuserDetails({
-                        ...userDetails,
-                        aboutUs: e.target.value,
-                      });
-                    }}
+                    onChange={handleAboutUsChange} // Use the new handler
                   >
                     <option value="" selected disabled>
                       How did you hear about us?
@@ -350,13 +348,24 @@ const Details = () => {
                     <option value="Google">Google</option>
                     <option value="Linkedin">Linkedin</option>
                     <option value="Friend/Associate">Friend/Associate</option>
-                    <option value="Billbaord">Billbaord</option>
+                    <option value="Billboard">Billboard</option>
                     <option value="Branded Vehicle">Branded Vehicle</option>
                     <option value="Agent / Tour Operator">
                       Agent / Tour Operator
                     </option>
                     <option value="Other">Other</option>
                   </select>
+
+                  {/* Conditionally render the input for "Other" */}
+                  {userDetails.aboutUs === "Other" && (
+                    <input
+                      type="text"
+                      value={otherSource}
+                      onChange={(e) => setOtherSource(e.target.value)} // Update the other source state
+                      placeholder="Please specify"
+                      className="mt-2 h-[2.4rem] lg:w-[83%] w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
+                    />
+                  )}
                 </div>
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
                   <div className="flex items-center mt-4">
@@ -394,7 +403,7 @@ const Details = () => {
                     </p>
                   </div>
                 </div>
-                <div>
+                <div className="w-[90%]">
                   <GuestForm
                     guests={userDetails.guests}
                     guestCount={guestCount}

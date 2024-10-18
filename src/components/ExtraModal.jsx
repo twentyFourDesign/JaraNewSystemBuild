@@ -539,17 +539,16 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
         );
       default:
         return (
-          // <input
-          //   className="w-full p-2 border border-gray-300 rounded-md"
-          //   type="date"
-          //   name="date"
-          //   value={extraData.date || ""}
-          //   min={getDateString(startDate)}
-          //   max={getDateString(endDate)}
-          //   onChange={(e) => handleInputChange(e, category, extra._id)}
-          //   required
-          // />
-          null
+          <input
+            className="w-full p-2 border border-gray-300 rounded-md"
+            type="date"
+            name="date"
+            value={extraData.date || ""}
+            min={getDateString(startDate)}
+            max={getDateString(endDate)}
+            onChange={(e) => handleInputChange(e, category, extra._id)}
+            required
+          />
         );
     }
   };
@@ -559,6 +558,11 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       <div className="bg-white rounded-lg w-full max-w-3xl max-h-[80vh] flex flex-col">
         <div className="p-6 border-b">
           <h2 className="text-2xl font-bold">Extra Details</h2>
+          <p className="mt-2">
+            please indicate your preference of timing for your chosen Extra,
+            Jara Beach Resort will endeavour to accommodate your request,
+            subject to availability
+          </p>
         </div>
         <div className="p-6 overflow-y-auto flex-grow">
           <form onSubmit={handleSubmit} className="space-y-8">

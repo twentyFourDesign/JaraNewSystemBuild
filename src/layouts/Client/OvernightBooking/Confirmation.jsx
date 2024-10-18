@@ -54,8 +54,8 @@ const Confirmation = () => {
               Thanks {guestDetails.firstname ? guestDetails.firstname : ""}!
             </h1>
             <p className="text-[#606970] text-center mt-2">
-              Your booking is done successfully. We’ve sent an email with all
-              booking details and invoice.
+              Your booking has been received. We’ve sent an email with all
+              booking information and payment details, if applicable
             </p>
 
             <div className="flex justify-center items-center gap-x-4 mt-4">
@@ -79,15 +79,15 @@ const Confirmation = () => {
               </a>
             </div>
             <h1 className="text-xl font-bold text-center mt-5">
-              Connect Socially
+              Connect With Us
             </h1>
 
             <div className="flex justify-center items-center gap-x-4 mt-4">
               <a href="https://www.instagram.com/jarabeachresortng/">
-                <img src={Insta} alt="" className="h-[2rem]" />
+                <img src={Insta} alt="" className="h-[4rem] w-[4rem]" />
               </a>
               <a href="https://www.facebook.com/jarabeachresortnigeria">
-                <img src={Fb} alt="" className="h-[2rem]" />
+                <img src={Fb} alt="" className="h-[4rem] w-[4rem]" />
               </a>
             </div>
           </div>
