@@ -204,6 +204,22 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
               <option value="morning">Morning</option>
               <option value="afternoon">Afternoon</option>
             </select>
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="numberOfPeople"
+              value={extraData.numberOfPeople || ""}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              <option value="">Select Number of People</option>
+              {Array.from({ length: totalGuests }, (_, i) => i + 1).map(
+                (num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                )
+              )}
+            </select>
           </>
         );
       case "dining":
@@ -535,20 +551,54 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
               <option value="morning">Morning</option>
               <option value="afternoon">Afternoon</option>
             </select>
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="numberOfPeople"
+              value={extraData.numberOfPeople || ""}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              <option value="">Select Number of People</option>
+              {Array.from({ length: totalGuests }, (_, i) => i + 1).map(
+                (num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                )
+              )}
+            </select>
           </>
         );
       default:
         return (
-          <input
-            className="w-full p-2 border border-gray-300 rounded-md"
-            type="date"
-            name="date"
-            value={extraData.date || ""}
-            min={getDateString(startDate)}
-            max={getDateString(endDate)}
-            onChange={(e) => handleInputChange(e, category, extra._id)}
-            required
-          />
+          <>
+            <input
+              className="w-full p-2 border border-gray-300 rounded-md"
+              type="date"
+              name="date"
+              value={extraData.date || ""}
+              min={getDateString(startDate)}
+              max={getDateString(endDate)}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            />
+            <select
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="numberOfPeople"
+              value={extraData.numberOfPeople || ""}
+              onChange={(e) => handleInputChange(e, category, extra._id)}
+              required
+            >
+              <option value="">Select Number of People</option>
+              {Array.from({ length: totalGuests }, (_, i) => i + 1).map(
+                (num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                )
+              )}
+            </select>
+          </>
         );
     }
   };

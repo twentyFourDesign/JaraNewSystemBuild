@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightReservation from "../../../components/OvernightReservation";
@@ -37,13 +37,7 @@ const RoomDetails = () => {
   const [quantity, setQuantity] = useState(1);
   // const [finalData, setFinalData] = useState([]);
   const [occupancyRules, setOccupancyRules] = useState(MAX_OCCUPANCY);
-  // const [numberOfNights, setNumberOfNights] = useState(0);
-  // const [selectedDate, setSelectedDate] = useState({
-  //   visitDate: null,
-  //   endDate: null,
-  // });
-
-  // const [selectedRoomIds, setSelectedRoomIds] = useState([]);
+  const datePickerRef = useRef(null);
 
   const [showTooltip, setShowTooltip] = useState(false);
   const {
@@ -64,6 +58,8 @@ const RoomDetails = () => {
     setFinalData,
     roomGuestDistribution,
     setRoomGuestDistribution,
+    dateChoosed,
+    setDateChoosed,
   } = useContext(PriceContext);
 
   // const [roomGuestDistribution, setRoomGuestDistribution] = useState({});
@@ -85,13 +81,6 @@ const RoomDetails = () => {
   };
 
   const handleRestart = () => {
-    // dispatch(resetGuestInfo());
-    // dispatch(resetGuestCount());
-    // dispatch(resetRoomDetails());
-    // setPrice(0);
-    // setDiscount(null);
-    // setVoucher(null);
-    // setPreviousCost(0);
     nav("/");
     window.location.reload();
   };
@@ -495,6 +484,25 @@ const RoomDetails = () => {
     ));
     // });
   };
+  // setting default date for the second date picker two days after visiting date
+  // useEffect(() => {
+  //   if (!dateChoosed) {
+  //     setDateChoosed(true);
+  //     if (selectedDate.visitDate) {
+  //       // const visitDate = new Date(selectedDate.visitDate);
+  //       // const endDate = new Date(visitDate);
+  //       // endDate.setDate(endDate.getDate() + 1);
+  //       // setSelectedDate({
+  //       //   ...selectedDate,
+  //       //   endDate,
+  //       // });
+  //       datePickerRef.current.value = dayjs(selectedDate.visitDate).add(
+  //         2,
+  //         "day"
+  //       );
+  //     }
+  //   }
+  // }, [selectedDate.visitDate]);
 
   return (
     <div>
@@ -561,6 +569,7 @@ const RoomDetails = () => {
                     />
 
                     <DatePicker
+                      ref={datePickerRef}
                       label="Check-out Date"
                       disabled={selectedDate.visitDate ? false : true}
                       value={selectedDate?.endDate || null}
@@ -626,10 +635,11 @@ const RoomDetails = () => {
                 {modifiedRoom?.length > 0 ? (
                   modifiedRoom.map((item, index) => (
                     <div key={index} className="lg:flex  gap-x-10 items-center">
-                      <div>
-                        <h1 className="text-medium font-bold mt-2 w-[12rem] md:w-[6rem] truncate ">
-                          {item?.ref}
+                      <div className="flex items-center gap-x-1">
+                        <h1 className="text-medium font-bold   ">
+                          {item?.ref}{" "}
                         </h1>
+                        <span className="font-">{`(max ${item?.details?.[0].adult} adults)`}</span>
                       </div>
                       <div className="flex-1 flex gap-x-3 lg:mt-0 mt-3 flex-wrap">
                         {item?.details.map((room, index) => (

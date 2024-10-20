@@ -70,7 +70,17 @@ const Guest = () => {
             <div className="w-[100%] lg:w-[90%]">
               <h1 className="text-xl font-bold ">How Many Guest(s)</h1>
               <p className="text-[#606970] text-sm mt-2 w-[100%] lg:w-[70%]">
-                {`Please select the number of guests you would like to book for, i.e. Adult Alcohol, Adult Non-Alcohol, Children, Infants or Nannies. By proceeding you understand your payment is transferable but non-refundable in line with our ${`<> Terms and Conditions <>.`}`}
+                Please select the number of guests you would like to book for,
+                i.e. Adult Alcohol, Adult Non-Alcohol, Children, Infants or
+                Nannies. By proceeding you understand your payment is
+                transferable but non-refundable in line with our{" "}
+                <a
+                  href="https://www.jarabeachresort.com/terms"
+                  className="text-blue-600"
+                >
+                  Terms and Conditions
+                </a>
+                .
               </p>
 
               <div className="mt-4">

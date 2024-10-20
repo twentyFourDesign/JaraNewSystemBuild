@@ -68,14 +68,14 @@ const BookingType = () => {
             All-Inclusive
           </span> */}
           {/* <hr className="md:w-2 md:h-9 z-10" /> */}
-          <span className=" pl-5 py-4 md:py-0 pr-3 text-white text-outline  text-2xl z-20 font-[600] tracking-[10px] leading-[24px] font-poppins  ">
+          <span className=" pl-5 py-4 md:py-0 pr-3 font-rubic text-white text-outline  text-2xl z-20 font-[600] tracking-[10px] leading-[24px] font-poppins  ">
             Indulgent Escapes
           </span>
         </div>
 
         <div className="flex flex-col md:flex-row gap-5 justify-center items-center mt-4">
           <button
-            className="z-10 mt-2 w-[250px] lg:h-40 gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(0,0,0,0.8)] rounded-xl font-inter items-center justify-center text-white text-center font-[400] text-md"
+            className="z-10 mt-2 w-[250px] lg:h-40 gap-4 font-rubic h-auto px-[12px] py-[10px] flex bg-[rgba(0,0,0,0.8)] rounded-xl font-inter items-center justify-center text-white text-center font-[400] text-md"
             onClick={() => openModal("overnight")}
           >
             Overnight Booking
@@ -85,7 +85,7 @@ const BookingType = () => {
           </button>
 
           <button
-            className="z-10 mb-4 mt-2 sm:mb-0 w-[250px] lg:h-40 gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
+            className="z-10 mb-4 mt-2 sm:mb-0 w-[250px] font-rubic lg:h-40 gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
             onClick={() => nav("/daypass/guest")}
           >
             Daypass Booking

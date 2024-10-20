@@ -85,7 +85,7 @@ const ManageBooking = () => {
   };
   return (
     <>
-      <div className="flex flex-col lg:flex-row items-center justify-center w-full h-screen p-8 bg-gray-100 gap-5">
+      <div className="flex flex-col lg:flex-row items-center justify-start md:justify-center w-full h-screen p-8 bg-gray-100 gap-5">
         <div className="flex flex-col items-center justify-center bg-gray-100">
           <h1 className="text-2xl font-bold mb-4">Manage your booking</h1>
           <div className="bg-white shadow-md rounded-lg p-6 w-96">

@@ -24,6 +24,7 @@ import UnforgettableExp from "./Popup/UnforgettableExperiences";
 import SeasonalDates from "./Popup/SeasonalDates";
 import DaypassExtension from "./Popup/DaypassExtension";
 import DiningExperience from "./Popup/DiningExperience";
+import PeakOffPriceSetting from "./Popup/PeakOffPriceSetting";
 const Setting = ({ setShowNav, showNav }) => {
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
 
@@ -51,10 +52,11 @@ const Setting = ({ setShowNav, showNav }) => {
     seasonal: false,
     diningExperience: false,
     daypassExtension: false,
+    peak: false,
   });
 
   return (
-    <div className="font-robotoFont w-[100%] overflow-x-auto">
+    <div className="font-robotoFont w-[100%] overflow-x-auto overflow-y-auto">
       {/* HEADER  */}
       <div className="w-[100%] bg-white h-[6rem] flex justify-between items-center p-5 border-b-2 border-solid border-[#e6e7e9]">
         <h1 className="text-2xl font-medium">Settings 🎡</h1>
@@ -69,8 +71,7 @@ const Setting = ({ setShowNav, showNav }) => {
       </div>
 
       {/* CARDS  */}
-
-      <div className="flex justify-center items-center flex-1 w-full h-[80vh]">
+      <div className="flex justify-center items-center flex-1 w-full md:h-[80vh]">
         <div className="bg-white p-4 w-[100%] lg:w-[70%] ml-5 mr-5 rounded-md flex justify-center md:justify-start items-center gap-2 flex-wrap">
           <div
             onClick={() => setShowPopups({ ...showPopups, term: true })}
@@ -240,6 +241,12 @@ const Setting = ({ setShowNav, showNav }) => {
             className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
           >
             <p>Dining Experience</p>
+          </div>
+          <div
+            onClick={() => setShowPopups({ ...showPopups, peak: true })}
+            className="bg-[#eff6ff]  h-[4rem] min-w-[8rem] flex justify-center items-center rounded-md cursor-pointer"
+          >
+            <p>Peak-Off Price</p>
           </div>
         </div>
       </div>
@@ -433,6 +440,16 @@ const Setting = ({ setShowNav, showNav }) => {
         <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
           <div className="flex justify-center items-center h-[100%] w-[100%]">
             <DiningExperience
+              setShowPopups={setShowPopups}
+              showPopups={showPopups}
+            />
+          </div>
+        </div>
+      )}
+      {showPopups.peak && (
+        <div className="fixed top-0 left-0 bg-black w-[100%] h-screen bg-opacity-50">
+          <div className="flex justify-center items-center h-[100%] w-[100%]">
+            <PeakOffPriceSetting
               setShowPopups={setShowPopups}
               showPopups={showPopups}
             />

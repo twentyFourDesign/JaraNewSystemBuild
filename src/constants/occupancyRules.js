@@ -44,7 +44,7 @@ export const MAX_OCCUPANCY = {
     { adults: 5, children: 0, toddlers: 0, infants: 0 },
   ],
 
-  "FAMILY CABINS": [
+  "Family Cabins": [
     { adults: 5, children: 0, toddlers: 0, infants: 1 },
     { adults: 1, children: 0, toddlers: 0, infants: 0 },
     { adults: 1, children: 1, toddlers: 0, infants: 0 },

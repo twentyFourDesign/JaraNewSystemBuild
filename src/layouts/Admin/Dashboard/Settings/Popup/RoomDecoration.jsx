@@ -65,11 +65,7 @@ const RoomDecoration = ({ setShowPopups, showPopups }) => {
       <div>
         {apiData?.map((i) => (
           <>
-            <div className="mt-4 flex justify-between overflow-auto items-center mb-2">
-              <FaTrash
-                onClick={() => del(i._id)}
-                className="text-red-900 cursor-pointer"
-              />
+            <div className="mt-4 flex flex-col sm:flex-row flex-wrap gap-y-2 justify-between overflow-auto items-center mb-2">
               <input
                 onChange={(e) => onChange(e)}
                 placeholder="Name"
@@ -86,10 +82,16 @@ const RoomDecoration = ({ setShowPopups, showPopups }) => {
                 type="number"
                 defaultValue={i.price}
               />
-              <TiTick
-                className="text-xl text-green-800 cursor-pointer"
-                onClick={() => update(i._id)}
-              />
+              <div className="flex gap-x-2 w-[10rem] justify-center ">
+                <TiTick
+                  className="text-xl text-green-800 cursor-pointer"
+                  onClick={() => update(i._id)}
+                />
+                <FaTrash
+                  onClick={() => del(i._id)}
+                  className="text-red-900 cursor-pointer"
+                />
+              </div>
             </div>
 
             <div className="h-[1px] bg-gray-200 w-[100%]"></div>

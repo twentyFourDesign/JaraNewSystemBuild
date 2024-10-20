@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { baseUrl } from "../constants/baseurl";
 
 const roundUpToNearestWhole = (number) => Math.ceil(number);
 
@@ -113,8 +115,26 @@ export const PriceProvider = ({ children }) => {
   const [previousBookingId, setPreviousBookingId] = useState(null);
   const [previousBookingMethod, setPreviousBookingMethod] = useState(null);
   const [roomGuestDistribution, setRoomGuestDistribution] = useState({});
+  const [dateChoosed, setDateChoosed] = useState(false);
   // console.log(previousCost);
   // let roomsname = "";
+  const [peakOffPriceSetting, setPeakOffPriceSetting] = useState({
+    isEnabled: false,
+    percentage: 0,
+  });
+
+  useEffect(() => {
+    const fetchPeakOffPriceSetting = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/peak/peak-off-price`);
+        setPeakOffPriceSetting(response.data);
+      } catch (error) {
+        console.error("Error fetching peak-off price");
+      }
+    };
+
+    fetchPeakOffPriceSetting();
+  }, []);
   const calPrice = useCallback(() => {
     const pricingPercentages = {
       "Ocean Deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
@@ -264,8 +284,15 @@ export const PriceProvider = ({ children }) => {
             );
             continue;
           }
+          let adultPrice;
+          if (peakOffPriceSetting.isEnabled) {
+            adultPrice =
+              parseInt(room.price, 10) +
+              parseInt(room.price, 10) * (peakOffPriceSetting.percentage / 100);
+          } else {
+            adultPrice = parseInt(room.price, 10);
+          }
 
-          const adultPrice = parseInt(room.price, 10);
           const childPrice = Math.ceil(adultPrice * roomPricing.child);
           const toddlerPrice = Math.ceil(adultPrice * roomPricing.toddler);
           const infantPrice = Math.ceil(adultPrice * roomPricing.infant);
@@ -297,7 +324,14 @@ export const PriceProvider = ({ children }) => {
             continue;
           }
 
-          const adultPrice = parseInt(room.price, 10);
+          let adultPrice;
+          if (peakOffPriceSetting.isEnabled) {
+            adultPrice =
+              parseInt(room.price, 10) +
+              parseInt(room.price, 10) * (peakOffPriceSetting.percentage / 100);
+          } else {
+            adultPrice = parseInt(room.price, 10);
+          }
           const childPrice = Math.ceil(adultPrice * roomPricing.child);
           const toddlerPrice = Math.ceil(adultPrice * roomPricing.toddler);
           const infantPrice = Math.ceil(adultPrice * roomPricing.infant);
@@ -518,6 +552,8 @@ export const PriceProvider = ({ children }) => {
         setExtraFormData,
         roomGuestDistribution,
         setRoomGuestDistribution,
+        dateChoosed,
+        setDateChoosed,
       }}
     >
       {children}

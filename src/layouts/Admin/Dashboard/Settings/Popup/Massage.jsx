@@ -62,11 +62,7 @@ const Massage = ({ setShowPopups, showPopups }) => {
       <div>
         {apiData?.map((i) => (
           <>
-            <div className="mt-4 flex justify-between overflow-auto items-center mb-2">
-              <FaTrash
-                onClick={() => del(i._id)}
-                className="text-red-900 cursor-pointer"
-              />
+            <div className="mt-4 flex gap-y-2 flex-col sm:flex-row flex-wrap justify-between overflow-auto items-center mb-2">
               <input
                 onChange={(e) => onChange(e)}
                 name="title"
@@ -89,10 +85,16 @@ const Massage = ({ setShowPopups, showPopups }) => {
                 type="text"
                 defaultValue={i.duration}
               />
-              <TiTick
-                className="text-xl text-green-800 cursor-pointer"
-                onClick={() => update(i._id)}
-              />
+              <div className="flex gap-x-2 w-[10rem] justify-center ">
+                <FaTrash
+                  onClick={() => del(i._id)}
+                  className="text-red-900 cursor-pointer"
+                />
+                <TiTick
+                  className="text-xl text-green-800 cursor-pointer"
+                  onClick={() => update(i._id)}
+                />
+              </div>
             </div>
 
             <div className="h-[1px] bg-gray-200 w-[100%]"></div>
