@@ -519,11 +519,13 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
               onChange={(e) => handleInputChange(e, category, extra._id)}
               required
             >
-              {Array.from({ length: 29 }, (_, i) => i + 2).map((num) => (
-                <option key={num} value={num.toString()}>
-                  {num}
-                </option>
-              ))}
+              {Array.from({ length: totalGuests }, (_, i) => i + 1).map(
+                (num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                )
+              )}
             </select>
           </>
         );
