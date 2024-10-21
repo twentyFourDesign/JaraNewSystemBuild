@@ -78,6 +78,7 @@ const RoomDetails = () => {
         },
       };
     });
+    setPrice(calPrice());
   };
 
   const handleRestart = () => {
@@ -136,18 +137,13 @@ const RoomDetails = () => {
         selectedRooms,
         ...serializableSelectedDate,
         finalData,
+        selectedDate,
         roomGuestDistribution,
       })
     );
     setPrice(calPrice()); // Recalculate price when a room is selected
     // }
-  }, [
-    selectedRooms,
-    finalData,
-    selectedDate,
-    selectedDate.endDate,
-    selectedDate.roomGuestDistribution,
-  ]);
+  }, [selectedRooms, finalData, selectedDate, roomGuestDistribution]);
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;

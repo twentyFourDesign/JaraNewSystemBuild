@@ -109,6 +109,7 @@ export const PriceProvider = ({ children }) => {
   const [daypassSubtotal, setDaypassSubtotal] = useState(0);
   const [daypassTaxAmount, setDaypassTaxAmount] = useState(0);
   const [multiNightDiscount, setMultiNightDiscount] = useState(0);
+  const [additionalGuestDiscount, setAdditionalGuestDiscount] = useState(0);
   const [previousCost, setPreviousCost] = useState(0);
   const [previousPaymentStatus, setPreviousPaymentStatus] = useState("");
   const [numberOfNights, setNumberOfNights] = useState(0);
@@ -232,6 +233,7 @@ export const PriceProvider = ({ children }) => {
     //     totalRoomPrice += roomPrice;
     //   }
     // }
+
     if (
       roomDetails?.visitDate &&
       roomDetails?.endDate &&
@@ -372,11 +374,13 @@ export const PriceProvider = ({ children }) => {
       guestCount.infants;
 
     // Apply additional guest discount
-    let additionalGuestDiscount = 0;
+    // let additionalGuestDiscount = 0;
     if (totalGuests >= 40) {
-      additionalGuestDiscount = 10;
+      setAdditionalGuestDiscount(10);
     } else if (totalGuests >= 30) {
-      additionalGuestDiscount = 5;
+      setAdditionalGuestDiscount(5);
+    } else {
+      setAdditionalGuestDiscount(0);
     }
 
     const additionalGuestDiscountAmount =

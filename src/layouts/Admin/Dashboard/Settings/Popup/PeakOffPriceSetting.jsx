@@ -64,7 +64,7 @@ const PeakOffPriceSetting = ({ setShowPopups, showPopups }) => {
                 className="w-[100%] lg:w-[10rem] lg:mt-0 mb-2 mt-2 lg:mb-0 block h-[2.3rem] rounded-md px-3 outline-none border border-gray-300"
                 value={percentage}
                 onChange={(e) => setPercentage(e.target.value)}
-                min="0"
+                min="-100"
                 max="100"
               />
             </label>
