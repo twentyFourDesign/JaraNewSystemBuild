@@ -141,7 +141,13 @@ const RoomDetails = () => {
     );
     setPrice(calPrice()); // Recalculate price when a room is selected
     // }
-  }, [selectedRooms, finalData, selectedDate, roomGuestDistribution]);
+  }, [
+    selectedRooms,
+    finalData,
+    selectedDate,
+    selectedDate.endDate,
+    selectedDate.roomGuestDistribution,
+  ]);
   const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
   const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
@@ -484,25 +490,20 @@ const RoomDetails = () => {
     ));
     // });
   };
-  // setting default date for the second date picker two days after visiting date
-  // useEffect(() => {
-  //   if (!dateChoosed) {
-  //     setDateChoosed(true);
-  //     if (selectedDate.visitDate) {
-  //       // const visitDate = new Date(selectedDate.visitDate);
-  //       // const endDate = new Date(visitDate);
-  //       // endDate.setDate(endDate.getDate() + 1);
-  //       // setSelectedDate({
-  //       //   ...selectedDate,
-  //       //   endDate,
-  //       // });
-  //       datePickerRef.current.value = dayjs(selectedDate.visitDate).add(
-  //         2,
-  //         "day"
-  //       );
-  //     }
-  //   }
-  // }, [selectedDate.visitDate]);
+
+  useEffect(() => {
+    if (selectedDate.visitDate) {
+      if (!dateChoosed) {
+        setDateChoosed(true);
+        const checkInDate = dayjs(selectedDate.visitDate).add(2, "day");
+
+        setSelectedDate((prevState) => ({
+          ...prevState,
+          endDate: checkInDate,
+        }));
+      }
+    }
+  }, [selectedDate.visitDate]);
 
   return (
     <div>
@@ -569,7 +570,6 @@ const RoomDetails = () => {
                     />
 
                     <DatePicker
-                      ref={datePickerRef}
                       label="Check-out Date"
                       disabled={selectedDate.visitDate ? false : true}
                       value={selectedDate?.endDate || null}
