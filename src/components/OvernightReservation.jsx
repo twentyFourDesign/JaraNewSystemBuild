@@ -12,6 +12,8 @@ const OvernightReservation = () => {
     previousCost,
     previousPaymentStatus,
     numberOfNights,
+    additionalGuestDiscount,
+    setAdditionalGuestDiscount,
   } = useContext(PriceContext);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestCount = useSelector((state) => state.overnightGuestCount);
@@ -119,6 +121,12 @@ const OvernightReservation = () => {
           <h1 className="text-base font-bold">Multi-Night Discount (%)</h1>
           <h1 className="text-base font-bold">{multiNightDiscount}%</h1>
         </div>
+        {additionalGuestDiscount > 0 && (
+          <div className="flex justify-between items-center">
+            <h1 className="text-base font-bold">Guests Discount (%)</h1>
+            <h1 className="text-base font-bold">{additionalGuestDiscount}%</h1>
+          </div>
+        )}
         <div className="flex justify-between items-center">
           <h1 className="text-base font-bold">Sub-total</h1>
           <h1 className="text-base font-bold">

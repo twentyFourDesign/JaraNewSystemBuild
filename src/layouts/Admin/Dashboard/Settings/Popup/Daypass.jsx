@@ -3,27 +3,49 @@ import { ImCross } from "react-icons/im";
 import axios from "axios";
 import { baseUrl } from "../../../../../constants/baseurl";
 import toast from "react-hot-toast";
-import { FaTrash } from "react-icons/fa";
-import { TiTick } from "react-icons/ti";
 
 const Daypass = ({ setShowPopups, showPopups }) => {
   const [data, setData] = useState({
-    name: "",
-    description: "",
-    weekDayPrice: "",
-    weekendPrice: "",
-    seasonPrice: "",
-    urgetCharges: "",
+    adultsAlcoholic: {
+      weekDayPrice: "",
+      weekendPrice: "",
+      seasonalPrice: "",
+    },
+    adultsNonAlcoholic: {
+      weekDayPrice: "",
+      weekendPrice: "",
+      seasonalPrice: "",
+    },
+    nanny: {
+      weekDayPrice: "",
+      weekendPrice: "",
+      seasonalPrice: "",
+    },
+    childTotal: {
+      weekDayPrice: "",
+      weekendPrice: "",
+      seasonalPrice: "",
+    },
   });
-  const [apiData, setapiData] = useState([]);
+
+  const [apiData, setApiData] = useState([]);
 
   const getData = async () => {
     let response = await axios.get(`${baseUrl}/option/get`);
-    setapiData(response.data);
+    setApiData(response.data);
   };
 
   const onChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const [category, field] = name.split("."); // Split the name to get category and field
+
+    setData((prevData) => ({
+      ...prevData,
+      [category]: {
+        ...prevData[category],
+        [field]: value, // Update the specific field
+      },
+    }));
   };
 
   useEffect(() => {
@@ -68,129 +90,166 @@ const Daypass = ({ setShowPopups, showPopups }) => {
 
       <div>
         {apiData?.map((i) => (
-          <>
-            <div className="mt-4 flex flex-col sm:flex-row  gap-y-2 justify-between overflow-auto items-center mb-2">
+          <div className="flex flex-col items-center sm:items-stretch">
+            <div
+              key={i._id}
+              className="mt-4 flex flex-col sm:flex-row gap-y-2 justify-between overflow-auto items-center mb-2"
+            >
+              <h1 className="font-bold">Adults Alcoholic</h1>
               <input
-                onChange={(e) => onChange(e)}
-                name="name"
-                className="w-[15rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-                type="text"
-                defaultValue={i.name}
-                placeholder="Enter Name"
-              />
-              <input
-                onChange={(e) => onChange(e)}
-                name="description"
-                className="w-[10rem h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-                type="text"
-                defaultValue={i.description}
-                placeholder="Enter Description"
-              />
-              <input
-                onChange={(e) => onChange(e)}
-                name="weekDayPrice"
+                onChange={onChange}
+                name="adultsAlcoholic.weekDayPrice"
                 className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
                 type="number"
-                defaultValue={i.weekDayPrice}
+                defaultValue={i.adultsAlcoholic.weekDayPrice}
                 placeholder="Enter Week Day Price"
+                required
               />
               <input
-                onChange={(e) => onChange(e)}
-                name="weekendPrice"
+                onChange={onChange}
+                name="adultsAlcoholic.weekendPrice"
                 className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
                 type="number"
-                defaultValue={i.weekendPrice}
+                defaultValue={i.adultsAlcoholic.weekendPrice}
                 placeholder="Enter Weekend Price"
+                required
               />
               <input
-                onChange={(e) => onChange(e)}
-                name="seasonPrice"
-                className="w-[10rem] h-[2.3rem] rounded-md px-3 outline-none  mr-2 border border-gray-300"
-                type="number"
-                defaultValue={i.seasonPrice}
-                placeholder="Enter Season Price"
-              />
-              {/* <input
-                onChange={(e) => onChange(e)}
-                name="urgetCharges"
+                onChange={onChange}
+                name="adultsAlcoholic.seasonalPrice"
                 className="w-[10rem] h-[2.3rem] rounded-md px-3 outline-none mr-2 border border-gray-300"
                 type="number"
-                defaultValue={i.urgetCharges}
-                placeholder="Enter Urgent Charges"
-              /> */}
-              <div className="flex gap-x-2 w-[10rem] justify-center ">
-                {/* <TiTick
-                  className="text-xl text-green-800 cursor-pointer"
-                  onClick={() => update(i._id)}
-                /> */}
-                <button
-                  className="w-[7rem] h-[2rem] font-bold rounded-md text-white font-cursive bg-blue-800"
-                  onClick={() => update(i._id)}
-                >
-                  Update
-                </button>
-                {/* <FaTrash
-                  onClick={() => del(i._id)}
-                  className="text-red-900 cursor-pointer"
-                /> */}
-              </div>
+                defaultValue={i.adultsAlcoholic.seasonalPrice}
+                placeholder="Enter Season Price"
+                required
+              />
+              <button
+                className="w-[7rem] h-[2rem] font-bold rounded-md text-white font-cursive bg-blue-800"
+                onClick={() => update(i._id)}
+              >
+                Update
+              </button>
             </div>
-
-            <div className="h-[1px] bg-gray-200 w-[100%]"></div>
-          </>
+            <div
+              key={i._id}
+              className="mt-4 flex flex-col sm:flex-row gap-y-2 justify-between overflow-auto items-center mb-2"
+            >
+              <h1 className="font-bold">Adults Non-Alcoholic</h1>
+              <input
+                onChange={onChange}
+                name="adultsNonAlcoholic.weekDayPrice"
+                className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
+                type="number"
+                defaultValue={i.adultsNonAlcoholic.weekDayPrice}
+                placeholder="Enter Week Day Price"
+                required
+              />
+              <input
+                onChange={onChange}
+                name="adultsNonAlcoholic.weekendPrice"
+                className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
+                type="number"
+                defaultValue={i.adultsNonAlcoholic.weekendPrice}
+                placeholder="Enter Weekend Price"
+                required
+              />
+              <input
+                onChange={onChange}
+                name="adultsNonAlcoholic.seasonalPrice"
+                className="w-[10rem] h-[2.3rem] rounded-md px-3 outline-none mr-2 border border-gray-300"
+                type="number"
+                defaultValue={i.adultsNonAlcoholic.seasonalPrice}
+                placeholder="Enter Season Price"
+                required
+              />
+              <button
+                className="w-[7rem] h-[2rem] font-bold rounded-md text-white font-cursive bg-blue-800"
+                onClick={() => update(i._id)}
+              >
+                Update
+              </button>
+            </div>
+            <div
+              key={i._id}
+              className="mt-4 flex flex-col sm:flex-row gap-y-2 justify-between overflow-auto items-center mb-2"
+            >
+              <h1 className="font-bold">Nanny</h1>
+              <input
+                onChange={onChange}
+                name="nanny.weekDayPrice"
+                className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
+                type="number"
+                defaultValue={i.nanny.weekDayPrice}
+                placeholder="Enter Week Day Price"
+                required
+              />
+              <input
+                onChange={onChange}
+                name="nanny.weekendPrice"
+                className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
+                type="number"
+                defaultValue={i.nanny.weekendPrice}
+                placeholder="Enter Weekend Price"
+                required
+              />
+              <input
+                onChange={onChange}
+                name="nanny.seasonalPrice"
+                className="w-[10rem] h-[2.3rem] rounded-md px-3 outline-none mr-2 border border-gray-300"
+                type="number"
+                defaultValue={i.nanny.seasonalPrice}
+                placeholder="Enter Season Price"
+                required
+              />
+              <button
+                className="w-[7rem] h-[2rem] font-bold rounded-md text-white font-cursive bg-blue-800"
+                onClick={() => update(i._id)}
+              >
+                Update
+              </button>
+            </div>
+            <div
+              key={i._id}
+              className="mt-4 flex flex-col sm:flex-row gap-y-2 justify-between overflow-auto items-center mb-2"
+            >
+              <h1 className="font-bold">Children</h1>
+              <input
+                onChange={onChange}
+                name="childTotal.weekDayPrice"
+                className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
+                type="number"
+                defaultValue={i.childTotal.weekDayPrice}
+                placeholder="Enter Week Day Price"
+                required
+              />
+              <input
+                onChange={onChange}
+                name="childTotal.weekendPrice"
+                className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
+                type="number"
+                defaultValue={i.childTotal.weekendPrice}
+                placeholder="Enter Weekend Price"
+                required
+              />
+              <input
+                onChange={onChange}
+                name="childTotal.seasonalPrice"
+                className="w-[10rem] h-[2.3rem] rounded-md px-3 outline-none mr-2 border border-gray-300"
+                type="number"
+                defaultValue={i.childTotal.seasonalPrice}
+                placeholder="Enter Season Price"
+                required
+              />
+              <button
+                className="w-[7rem] h-[2rem] font-bold rounded-md text-white font-cursive bg-blue-800"
+                onClick={() => update(i._id)}
+              >
+                Update
+              </button>
+            </div>
+          </div>
         ))}
       </div>
-
-      {/* <div className="mt-4 flex justify-between overflow-auto items-center mb-2">
-        <input
-          onChange={(e) => onChange(e)}
-          name="name"
-          className="w-[15rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-          type="text"
-          placeholder="Enter Name"
-        />
-        <input
-          onChange={(e) => onChange(e)}
-          name="description"
-          className="w-[10rem h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-          type="text"
-          placeholder="Enter Description"
-        />
-        <input
-          onChange={(e) => onChange(e)}
-          name="weekDayPrice"
-          className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-          type="number"
-          placeholder="Enter Week Day Price"
-        />
-        <input
-          onChange={(e) => onChange(e)}
-          name="weekendPrice"
-          className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-          type="number"
-          placeholder="Enter Weekend Price"
-        />
-        <input
-          onChange={(e) => onChange(e)}
-          name="seasonPrice"
-          className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-          type="number"
-          placeholder="Enter Season Price"
-        />
-        <input
-          onChange={(e) => onChange(e)}
-          name="urgetCharges"
-          className="w-[10rem] h-[2.3rem] mr-2 rounded-md px-3 outline-none border border-gray-300"
-          type="number"
-          placeholder="Enter Urgent Charges"
-        />
-        <button
-          className="w-[7rem] h-[2rem] font-bold rounded-md text-white font-cursive bg-blue-800"
-          onClick={update}
-        >
-          Create
-        </button>
-      </div> */}
     </div>
   );
 };

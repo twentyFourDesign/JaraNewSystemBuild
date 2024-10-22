@@ -123,19 +123,29 @@ export const PriceProvider = ({ children }) => {
     isEnabled: false,
     percentage: 0,
   });
+  const [daypassGuestPriceData, setDaypassGuestPriceData] = useState(null);
 
+  const fetchDaypassGuestPriceData = async () => {
+    try {
+      let response = await axios.get(`${baseUrl}/option/get`);
+      setDaypassGuestPriceData(response.data);
+    } catch (error) {
+      console.error("Error fetching peak-off price");
+    }
+  };
+  const fetchPeakOffPriceSetting = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/peak/peak-off-price`);
+      setPeakOffPriceSetting(response.data);
+    } catch (error) {
+      console.error("Error fetching peak-off price");
+    }
+  };
   useEffect(() => {
-    const fetchPeakOffPriceSetting = async () => {
-      try {
-        const response = await axios.get(`${baseUrl}/peak/peak-off-price`);
-        setPeakOffPriceSetting(response.data);
-      } catch (error) {
-        console.error("Error fetching peak-off price");
-      }
-    };
-
     fetchPeakOffPriceSetting();
+    fetchDaypassGuestPriceData();
   }, []);
+
   const calPrice = useCallback(() => {
     const pricingPercentages = {
       "Ocean Deluxe 1": { child: 0.3472222, toddler: 0.1736111, infant: 0 },
@@ -423,35 +433,43 @@ export const PriceProvider = ({ children }) => {
     const prices = {
       adultsAlcoholic:
         availablity?.dayType === "weekdays"
-          ? 50000
+          ? parseFloat(daypassGuestPriceData?.[0].adultsAlcoholic?.weekDayPrice)
           : availablity?.dayType === "weekends"
-          ? 55000
+          ? parseFloat(daypassGuestPriceData?.[0].adultsAlcoholic?.weekendPrice)
           : availablity?.dayType === "Seasonal"
-          ? 75000
+          ? parseFloat(
+              daypassGuestPriceData?.[0].adultsAlcoholic?.seasonalPrice
+            )
           : 0,
       adultsNonAlcoholic:
         availablity?.dayType === "weekdays"
-          ? 40000
+          ? parseFloat(
+              daypassGuestPriceData?.[0].adultsNonAlcoholic?.weekDayPrice
+            )
           : availablity?.dayType === "weekends"
-          ? 45000
+          ? parseFloat(
+              daypassGuestPriceData?.[0].adultsNonAlcoholic?.weekendPrice
+            )
           : availablity?.dayType === "Seasonal"
-          ? 60000
+          ? parseFloat(
+              daypassGuestPriceData?.[0].adultsNonAlcoholic?.seasonalPrice
+            )
           : 0,
       child:
         availablity?.dayType === "weekdays"
-          ? 20000
+          ? parseFloat(daypassGuestPriceData?.[0].childTotal?.weekDayPrice)
           : availablity?.dayType === "weekends"
-          ? 25000
+          ? parseFloat(daypassGuestPriceData?.[0].childTotal?.weekendPrice)
           : availablity?.dayType === "Seasonal"
-          ? 35000
+          ? parseFloat(daypassGuestPriceData?.[0].childTotal?.seasonalPrice)
           : 0,
       Nanny:
         availablity?.dayType === "weekdays"
-          ? 20000
+          ? parseFloat(daypassGuestPriceData?.[0].nanny?.weekDayPrice)
           : availablity?.dayType === "weekends"
-          ? 25000
+          ? parseFloat(daypassGuestPriceData?.[0].nanny?.weekendPrice)
           : availablity?.dayType === "Seasonal"
-          ? 35000
+          ? parseFloat(daypassGuestPriceData?.[0].nanny?.seasonalPrice)
           : 0,
     };
 
@@ -479,7 +497,7 @@ export const PriceProvider = ({ children }) => {
     if (daypassDiscount) {
       total -= (daypassDiscount.percentage / 100) * total;
     }
-    console.log(availablity?.dayType);
+
     setDaypassSubtotal(roundUpToNearestWhole(subtotal));
     setDaypassTaxAmount(roundUpToNearestWhole(taxAmount));
 
@@ -558,6 +576,8 @@ export const PriceProvider = ({ children }) => {
         setRoomGuestDistribution,
         dateChoosed,
         setDateChoosed,
+        additionalGuestDiscount,
+        setAdditionalGuestDiscount,
       }}
     >
       {children}

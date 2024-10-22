@@ -10,7 +10,6 @@ const DaypassReservation = () => {
     daypassTaxAmount,
     daypassDiscount,
   } = useContext(PriceContext);
-  console.log(availablity.startDate);
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { year: "numeric", month: "long", day: "numeric" };
