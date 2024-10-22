@@ -428,6 +428,8 @@ const RoomDetails = () => {
       setShowTooltip(true);
       // const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
       // return () => clearTimeout(timer);
+    } else {
+      setShowTooltip(false);
     }
   }, [isValid]);
 
@@ -729,7 +731,10 @@ const RoomDetails = () => {
               {/* Add this section to render guest distribution inputs */}
               {selectedRooms.length > 0 && (
                 <div className="mt-6">
-                  <h2 className="text-xl font-bold mb-4">
+                  <h2
+                    className="text-xl font-bold mb-4 inline-block"
+                    data-tooltip-id="continueTooltip"
+                  >
                     Guest Allocation for Selected Rooms
                   </h2>
                   {renderGuestDistributionInputs()}
@@ -758,7 +763,6 @@ const RoomDetails = () => {
               <div className="w-full relative">
                 <button
                   onClick={handleNext}
-                  data-tooltip-id="continueTooltip"
                   className={`w-full p-2 gap-x-4 ${
                     isValid
                       ? "cursor-pointer bg-black"
@@ -771,7 +775,7 @@ const RoomDetails = () => {
                 <Tooltip
                   id="continueTooltip"
                   place="top"
-                  content="Happy with your room choice? Please continue"
+                  content="Let us know your Guest Distribution"
                   isOpen={showTooltip}
                   style={{
                     backgroundColor: "#FFD562",

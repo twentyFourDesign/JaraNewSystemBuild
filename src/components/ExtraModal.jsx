@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import DatePicker from "react-datepicker";
 
 const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
@@ -77,6 +78,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       },
     }));
   };
+  const handleDateChange = (date, category, extraId) => {
+    setFormData((prev) => ({
+      ...prev,
+      [category]: {
+        ...prev[category],
+        [extraId]: {
+          ...prev[category]?.[extraId],
+          date: formatDate(date),
+        },
+      },
+    }));
+  };
 
   const validateForm = () => {
     const completedCategories = {};
@@ -91,7 +104,7 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
           Object.values(extraData).every(
             (value) => value !== "" && value !== undefined && value !== null
           ) &&
-          (extraData.date?.length > 0 || extraData.selectedDates?.length > 0)
+          (extraData.date || extraData.selectedDates?.length > 0)
         );
       });
       completedCategories[category] = allFieldsFilled;
@@ -125,6 +138,14 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
     )}-${String(date.getDate()).padStart(2, "0")}`;
   };
 
+  const formatDate = (date) => {
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
   const renderFields = (category, extra) => {
     const extraData = formData[category]?.[extra._id] || {};
     const startDate = new Date(
@@ -147,7 +168,7 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       case "cake":
         return (
           <>
-            <input
+            {/* <input
               className="w-full p-2 border border-gray-300 rounded-md"
               type="date"
               name="date"
@@ -156,7 +177,20 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
               max={getDateString(endDate)}
               onChange={(e) => handleInputChange(e, category, extra._id)}
               required
-            />
+            /> */}
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
+
             <input
               className="w-full p-2 border border-gray-300 rounded-md"
               type="text"
@@ -183,16 +217,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       case "massage":
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <select
               className="w-full p-2 border border-gray-300 rounded-md"
               name="time"
@@ -225,31 +261,35 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       case "dining":
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
           </>
         );
       case "roomDecoration":
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <select
               className="w-full p-2 border border-gray-300 rounded-md"
               name="room"
@@ -305,16 +345,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       case "daypassExtension":
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <span className="w-full p-2 border border-gray-300 rounded-md">
               Arrival Time: <strong>11:30 Am</strong>
             </span>
@@ -343,16 +385,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
         const extraTitle = extra.title.trim().toLowerCase();
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             {extraTitle === "floating breakfast (pool)" && (
               <select
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -390,16 +434,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       case "drink":
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <select
               className="w-full p-2 border border-gray-300 rounded-md"
               name="quantity"
@@ -419,16 +465,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       case "photo shoot (photographer access)":
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <select
               className="w-full p-2 border border-gray-300 rounded-md"
               name="assistants"
@@ -483,7 +531,7 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
                   }}
                   className="form-checkbox h-5 w-5 text-blue-600"
                 />
-                <span>{date.toLocaleDateString()}</span>
+                <span>{formatDate(date)}</span>
               </label>
             ))}
           </div>
@@ -499,16 +547,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
         }
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <label htmlFor="participants">
               How many guests would participate?
             </label>
@@ -532,16 +582,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       case "adire":
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <select
               className="w-full p-2 border border-gray-300 rounded-md"
               name="time"
@@ -574,16 +626,18 @@ const ExtraModal = ({ categories, extras, onClose, initialFormData }) => {
       default:
         return (
           <>
-            <input
-              className="w-full p-2 border border-gray-300 rounded-md"
-              type="date"
-              name="date"
-              value={extraData.date || ""}
-              min={getDateString(startDate)}
-              max={getDateString(endDate)}
-              onChange={(e) => handleInputChange(e, category, extra._id)}
-              required
-            />
+            <div className="w-full">
+              <DatePicker
+                className=" p-2 border border-gray-300 rounded-md"
+                selected={extraData.date ? new Date(extraData.date) : null}
+                onChange={(date) => handleDateChange(date, category, extra._id)}
+                minDate={startDate}
+                maxDate={endDate}
+                dateFormat="EE, MMM d, yyyy"
+                placeholderText="Select a date"
+                required
+              />
+            </div>
             <select
               className="w-full p-2 border border-gray-300 rounded-md"
               name="numberOfPeople"

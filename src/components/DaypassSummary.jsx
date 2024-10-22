@@ -71,7 +71,7 @@ const DaypassSummary = () => {
       if (result.status === 200) {
         await createPayment(result.data.shortId, paymentStatus, method);
         success = 1;
-        toast.success("Booking Created");
+        toast.success("Booking Created! Please check your email.");
       } else {
         toast.error(result.data.message || "Failed to create booking");
         setDisabled(false);

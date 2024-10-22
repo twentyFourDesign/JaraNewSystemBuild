@@ -13,7 +13,6 @@ const Main = () => {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        console.log(bookingRef);
         const response = await axios.get(
           `${baseUrl}/overnight/booking/get/${bookingRef}`
         );

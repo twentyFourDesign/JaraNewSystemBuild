@@ -408,7 +408,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
         type != "overnight" && "border-2 border-[#75A9BF] p-4"
       }  rounded-md mt-4 font-robotoFont `}
     >
-      <h1 className="text-xl font-bold">Want to add some Extras</h1>
+      <h1 className="text-xl font-bold">Want to add some Extras?</h1>
 
       <div className="flex justify-between items-center gap-x-4">
         <h1 className="text-sm mt-3 text-[#606970]">
