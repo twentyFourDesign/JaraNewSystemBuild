@@ -578,7 +578,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                         className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                       />
                       <h1 className="text-lg mb-3 ml-0 font-semibold">
-                        Massage
+                        SPA & WELLNESS
                       </h1>
                     </div>
 
@@ -1190,7 +1190,7 @@ const Extras = ({ finalData, setFinalData, type }) => {
                             className="md:w-[80px] w-[60px] rounded-full bg-contain md:h-[5rem] h-[4rem]"
                           />
                           <h1 className="text-lg mb-3 ml-0 font-semibold">
-                            Domestic Staff
+                            Driver's Accomodation
                           </h1>
                         </div>
 

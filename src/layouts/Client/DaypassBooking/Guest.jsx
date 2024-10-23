@@ -76,6 +76,7 @@ const Guest = () => {
                 transferable but non-refundable in line with our{" "}
                 <a
                   href="https://www.jarabeachresort.com/terms"
+                  target="_blank"
                   className="text-blue-600"
                 >
                   Terms and Conditions
@@ -224,9 +225,7 @@ const Guest = () => {
                 <h1 className="text-lg font-bold ">Child Pass(es)</h1>
                 <div className="flex justify-between items-center w-[100%] lg:w-[80%]">
                   <div className="sm:mr-4">
-                    <p className="text-[#606970] mt-2">
-                      Aged 2-17 years (or 3 years+ after first FREE Toddler)
-                    </p>
+                    <p className="text-[#606970] mt-2">Aged 2-17 years</p>
                     <p className="text-[#606970] mt-2">
                       {/* ₦{guestInfo.childTotal * 17500} */}
                     </p>

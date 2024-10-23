@@ -51,13 +51,19 @@ const BookingType = () => {
   return (
     <div className="wrapper-background w-screen h-screen relative font-robotoFont overflow-hidden ">
       {/* UPPER LOGO  */}
-      <div className="flex w-screen justify-center items-center h-[13vh] bg-[#9DD4D3] ">
-        <img
-          src={JaraLogo}
-          loading="true"
-          alt="jaralogo"
-          className="h-[4rem] w-[6rem] p-2 z-10"
-        />
+      <div className="flex w-screen justify-center items-center h-[15vh] bg-[#9DD4D3] ">
+        <a
+          href="https://www.jarabeachresort.com/"
+          target="_blank"
+          className="inline-block hover:scale-100"
+        >
+          <img
+            src={JaraLogo}
+            loading="true"
+            alt="jaralogo"
+            className="h-[6rem] w-[8rem] p-2 z-10 cursor-pointer"
+          />
+        </a>
       </div>
 
       {/* MAIN CARDS FOR BOOKING  */}

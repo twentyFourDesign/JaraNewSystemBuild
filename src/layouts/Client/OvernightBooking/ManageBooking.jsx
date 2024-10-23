@@ -54,8 +54,9 @@ const ManageBooking = () => {
         throw new Error("Booking not found");
       }
     } catch (error) {
-      console.log("not Daypass Booking");
-      toast.error("We could not find your booking");
+      toast.error(
+        "Sorry, we could not find your booking, please email bookings@jarabeachresort.com for help."
+      );
       setBookingData(null);
       setPaymentInfo(null);
     }
