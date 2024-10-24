@@ -28,7 +28,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       console.log("failed to fetch");
     }
   };
-  console.log(booking);
+  // console.log(booking);
   // console.log(paymentInfo);
 
   const confirmPayment = async () => {
