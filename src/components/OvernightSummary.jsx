@@ -1,32 +1,122 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { baseUrl } from "../constants/baseurl";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { PaystackButton } from "react-paystack";
-
+import { PriceContext } from "../Context/PriceContext";
+import Modal from "react-modal";
 const OvernightSummary = () => {
   const guestCount = useSelector((state) => state.overnightGuestCount);
   const roomDetails = useSelector((state) => state.overnightRoomInfo);
   const guestDetails = useSelector((state) => state.overnightGuestDetails);
   const [disabled, setDisabled] = useState(false);
-  const nav = useNavigate();
-  const calPrice = () => {
-    let totalRoomPrice = 0;
-    if (roomDetails?.selectedRooms?.length > 0) {
-      for (const room of roomDetails?.selectedRooms) {
-        const roomPrice = parseInt(room.price, 10);
-        if (isNaN(roomPrice)) {
-          console.error("Error: Invalid price format for room", room);
-          continue;
-        }
-        totalRoomPrice += roomPrice;
-      }
-    } else {
-    }
-    return totalRoomPrice;
+  const [isChecked, setIsChecked] = useState(false);
+  const [discountCode, setDiscountCode] = useState("");
+  const [voucherCode, setVoucherCode] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [discountDisabled, setDiscountDisabled] = useState(false);
+
+  const [data, setData] = useState({
+    heading: "",
+    desc: "",
+    type: "Term",
+    id: "",
+  });
+
+  const getData = async () => {
+    let response = await axios.get(`${baseUrl}/terms/condition/get`);
+    setData({
+      heading: response.data[0].heading,
+      desc: response.data[0].desc,
+      type: response.data[0].type,
+      id: response.data[0]._id,
+    });
   };
+  const termsArray = data?.desc?.split("\n");
+
+  const {
+    price,
+    setPrice,
+    discount,
+    setDiscount,
+    voucher,
+    setVoucher,
+    multiNightDiscount,
+    overnightTaxAmount,
+    calPrice,
+    overnightSubtotal,
+    previousCost,
+    previousBookingId,
+    previousPaymentStatus,
+    previousBookingMethod,
+  } = useContext(PriceContext);
+  const nav = useNavigate();
+
+  const handleApplyVoucher = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/voucher/validate`, {
+        code: voucherCode,
+        price: price,
+      });
+      // console.log(response.data);
+      setVoucher(response.data);
+      toast.success(`Voucher applied successfully`);
+      if (response.data.newPrice == 0) {
+        if (!isChecked) {
+          toast.error(
+            "You must accept the terms and conditions first to proceed"
+          );
+          return;
+        }
+        confirmBooking("Success", "Voucher");
+      }
+    } catch (error) {
+      toast.error(
+        error.response.data.message || "Invalid Voucher Code or Expired"
+      );
+    }
+  };
+  const handleApplyDiscount = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/discount/validate`, {
+        code: discountCode,
+      });
+      // console.log(response.data);
+      setDiscount(response.data);
+      toast.success(`Discount applied successfully`);
+    } catch (error) {
+      // console.log(error);
+      toast.error(
+        error.response.data.message || "Invalid Discount Code or Expired"
+      );
+    }
+  };
+  useEffect(() => {
+    if (discount) {
+      setDiscountDisabled(true);
+    }
+  }, [discount]);
+
+  useEffect(() => {
+    if (isChecked) {
+      if (price == 0) {
+        if (voucher) {
+          confirmBooking("Success", "Voucher");
+        } else if (discount) {
+          confirmBooking("Success", "Discount");
+        }
+      } else if (previousCost > 0) {
+        if (price - previousCost == 0) {
+          confirmBooking("Success", previousBookingMethod);
+        }
+      }
+    }
+  }, [isChecked]);
+  useEffect(() => {
+    getData();
+  }, []);
   const formData = new FormData();
   formData.append("guestCount", guestCount);
   formData.append("roomDetails", JSON.stringify(roomDetails));
@@ -39,20 +129,39 @@ const OvernightSummary = () => {
     let success = 0;
     setDisabled(true);
     try {
-      let result = await axios.post(
-        `${baseUrl}/overnight/booking/create`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      let result;
+      if (previousCost > 0) {
+        result = await axios.put(
+          `${baseUrl}/overnight/booking/update/${previousBookingId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      } else {
+        result = await axios.post(
+          `${baseUrl}/overnight/booking/create`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      }
 
       if (result.status === 200) {
-        await createPayment(result.data._id, paymentStatus, method);
+        await createPayment(result.data.shortId, paymentStatus, method);
         success = 1;
-        toast.success("Booking Created");
+        if (previousCost > 0) {
+          toast.success(
+            "Your Booking has been Updated. Please check your email."
+          );
+        } else {
+          toast.success("Booking Created! Please check your email.");
+        }
       } else {
         toast.error(result.data.message || "Failed to create booking");
         setDisabled(false);
@@ -66,23 +175,65 @@ const OvernightSummary = () => {
 
     await createGuest();
     if (success === 1) {
-      nav(`/overnight/confirmation`);
+      nav("/overnight/confirmation");
     }
   };
   const createPayment = async (bookingId, status, method) => {
     try {
-      let result = await axios.post(`${baseUrl}/payment/create`, {
-        name: guestDetails.firstname + " " + guestDetails.lastname,
-        amount: (12.5 / 100) * calPrice() + calPrice(),
-        status: status,
-        ref: bookingId,
-        method: method,
-        guestDetails: JSON.stringify(guestDetails),
-        roomDetails: JSON.stringify(roomDetails),
-        subTotal: calPrice(),
-        vat: (12.5 / 100) * calPrice(),
-        totalCost: (12.5 / 100) * calPrice() + calPrice(),
-      });
+      let result;
+      if (previousCost > 0) {
+        result = await axios.put(
+          `${baseUrl}/payment/update/${previousBookingId}`,
+          {
+            name: guestDetails.firstname + " " + guestDetails.lastname,
+            // amount: price,
+            amount:
+              previousPaymentStatus == "Pending"
+                ? price
+                : price - previousCost > 0
+                ? price - previousCost
+                : 0,
+
+            status: status,
+            ref: bookingId,
+            method: method,
+            guestDetails: JSON.stringify(guestDetails),
+            roomDetails: JSON.stringify(roomDetails),
+            subTotal: overnightSubtotal,
+            vat: overnightTaxAmount,
+            totalCost: price,
+            discount: discount ? discount.percentage : 0,
+            voucher: voucher ? voucher.voucher.balance : 0,
+            multiNightDiscount: multiNightDiscount,
+            previousCost: previousCost,
+            previousPaymentStatus: previousPaymentStatus,
+          }
+        );
+      } else {
+        result = await axios.post(`${baseUrl}/payment/create`, {
+          name: guestDetails.firstname + " " + guestDetails.lastname,
+          amount: price,
+          // amount:
+          //   previousCost > 0
+          //     ? previousPaymentStatus == "Pending"
+          //       ? price
+          //       : price - previousCost > 0
+          //       ? price - previousCost
+          //       : 0
+          //     : price,
+          status: status,
+          ref: bookingId,
+          method: method,
+          guestDetails: JSON.stringify(guestDetails),
+          roomDetails: JSON.stringify(roomDetails),
+          subTotal: overnightSubtotal,
+          vat: overnightTaxAmount,
+          totalCost: price,
+          discount: discount ? discount.percentage : 0,
+          voucher: voucher ? voucher.voucher.balance : 0,
+          multiNightDiscount: multiNightDiscount,
+        });
+      }
     } catch (err) {
       toast.error("An error occurred while creating payment");
     }
@@ -99,7 +250,7 @@ const OvernightSummary = () => {
         console.log("Guest already exists");
       } else {
         // Handle unexpected status codes
-        console.error("Unexpected response status:", guestResponse.status);
+        console.error("Unexpected response status:");
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -115,11 +266,11 @@ const OvernightSummary = () => {
           });
           console.log("Guest created successfully");
         } catch (createErr) {
-          console.error("Error creating guest:", createErr);
+          console.error("Error creating guest:");
         }
       } else {
         // Handle other errors
-        console.error("Error checking guest:", err);
+        console.error("Error checking guest:");
       }
     }
   };
@@ -150,7 +301,15 @@ const OvernightSummary = () => {
 
   const componentProps = {
     email: guestDetails.email,
-    amount: ((12.5 / 100) * calPrice() + calPrice()) * 100,
+    // amount: price * 100,
+    amount:
+      previousCost > 0
+        ? previousPaymentStatus == "Pending"
+          ? price * 100
+          : price - previousCost > 0
+          ? (price - previousCost) * 100
+          : 0
+        : price * 100,
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     text: "Pay with Paystack",
     metadata: {
@@ -160,8 +319,40 @@ const OvernightSummary = () => {
     onSuccess: (reference) => onSuccess(reference),
     onClose: onClose,
   };
+
   const handleHold = () => {
+    if (!guestCount.adults) {
+      toast.error(
+        "Please Return to Guest Details Page and Select Number of Adults"
+      );
+      return;
+    }
+    if (!isChecked) {
+      toast.error("You must accept the terms and conditions first");
+      return;
+    }
     confirmBooking("Pending", "Bank Transfer");
+  };
+
+  const handleCheckbox = (event) => {
+    setIsChecked(event.target.checked);
+    if (event.target.checked) {
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
+    }
+  };
+  const handlePaystackClick = () => {
+    if (!guestCount.adults) {
+      toast.error(
+        "Please Return to Guest Details Page and Select Number of Adults"
+      );
+      return;
+    }
+    if (!isChecked) {
+      toast.error("You must accept the terms and conditions first");
+      return;
+    }
   };
   return (
     <div className="font-robotoFont py-4 px-2 h-[100%] relative">
@@ -185,34 +376,130 @@ const OvernightSummary = () => {
       <div className="flex justify-between items-center gap-x-3 mt-4">
         <input
           type="text"
-          placeholder="Enter Discount Code / Voucher"
+          placeholder="Enter Voucher Code"
           name=""
+          value={voucherCode}
+          onChange={(e) => setVoucherCode(e.target.value)}
           className="flex-1 h-[2.3rem] border-2 border-[black] pl-3 pr-3 rounded-md outline-none"
         />
-        <button className="w-[6rem] h-[2.3rem] bg-black text-white rounded-md">
+        <button
+          onClick={handleApplyVoucher}
+          className="w-[6rem] h-[2.3rem] bg-black text-white rounded-md"
+        >
+          Apply
+        </button>
+      </div>
+      <div className="flex justify-between items-center gap-x-3 mt-4">
+        <input
+          type="text"
+          placeholder="Enter Discount Code"
+          name=""
+          value={discountCode}
+          onChange={(e) => setDiscountCode(e.target.value)}
+          className="flex-1 h-[2.3rem] border-2 border-[black] pl-3 pr-3 rounded-md outline-none"
+        />
+        <button
+          onClick={handleApplyDiscount}
+          disabled={discountDisabled}
+          className={
+            discountDisabled
+              ? "w-[6rem] h-[2.3rem] bg-black text-white rounded-md opacity-50 cursor-not-allowed"
+              : "w-[6rem] h-[2.3rem] bg-black text-white rounded-md"
+          }
+        >
           Apply
         </button>
       </div>
 
-      <div className="flex  items-center gap-x-1 mt-4">
-        <input type="checkbox" />
-        <p>I accept Jara’s booking terms and conditions</p>
+      <div className="flex  items-center gap-x-5 mt-4">
+        <input
+          type="checkbox"
+          name=""
+          id=""
+          checked={isChecked}
+          onChange={handleCheckbox}
+        />
+        <p>
+          I accept Little Company Nigeria Limited (Jara Beach Resort)'s{" "}
+          <span
+            onClick={() => setIsModalOpen(true)}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Terms and Conditions
+          </span>
+        </p>
       </div>
 
       <div className="absolute bottom-2 w-[96%] ">
         <button
           disabled={disabled}
-          className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
+          className={
+            !isChecked
+              ? "mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive opacity-50 cursor-not-allowed"
+              : "mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
+          }
           onClick={handleHold}
         >
-          Hold | Bank Trasnfer
+          Hold | Bank Transfer
         </button>
-
-        <PaystackButton
+        {!isChecked ? (
+          <div
+            onClick={handlePaystackClick}
+            className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive opacity-50 cursor-not-allowed flex items-center justify-center"
+          >
+            Pay with Paystack
+          </div>
+        ) : (
+          <PaystackButton
+            {...componentProps}
+            className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
+          />
+        )}
+        {/* <PaystackButton
           {...componentProps}
+          onClick={handlePaystackClick}
           className="mt-3 bg-black w-[100%] h-[2.5rem] rounded-lg text-white font-cursive"
-        />
+        /> */}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="Terms and Conditions"
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+          },
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            transform: "translate(-50%, -50%)",
+            minWidth: "300px",
+            maxWidth: "400px",
+            maxHeight: "80vh",
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+          },
+        }}
+      >
+        <div className="h-full w-full overflow-scroll">
+          <h2 className="text-lg font-semibold mb-4 text-center">
+            {data.heading}
+          </h2>
+          {/* <p className="text-gray-600 text-center">{data.desc}</p> */}
+          {termsArray.map((term, index) => (
+            <p key={index}>{term}</p>
+          ))}
+          <button
+            className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

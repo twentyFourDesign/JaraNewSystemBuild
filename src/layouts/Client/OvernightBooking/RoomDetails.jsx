@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import OvernightReservation from "../../../components/OvernightReservation";
@@ -8,45 +8,84 @@ import axios from "axios";
 import { baseUrl } from "../../../constants/baseurl";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { insert } from "../../../store/slices/overnight/roomDetails.slice";
 import toast from "react-hot-toast";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { TextField, InputAdornment } from "@mui/material";
-import EventIcon from "@mui/icons-material/Event";
 import dayjs from "dayjs";
 import { FiRefreshCcw } from "react-icons/fi";
 import arrow from "../../../assets/arrowLeft.png";
 import arrowR from "../../../assets/arrowRIght.png";
+import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
+import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
+import { ImCross } from "react-icons/im";
+import { ClipLoader } from "react-spinners";
+import { PriceContext } from "../../../Context/PriceContext";
+import { Tooltip } from "react-tooltip";
+import { MAX_OCCUPANCY } from "../../../constants/occupancyRules";
 const RoomDetails = () => {
+  const roomDetails = useSelector((state) => state.overnightRoomInfo);
+
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [showPopup, setshowPopup] = useState(false);
   const [roomId, setroomId] = useState(null);
   const [modifiedRoom, setModifiedRoom] = useState([]);
-  const [selectedRooms, setSelectedRooms] = useState([]);
+  // const [selectedRooms, setSelectedRooms] = useState([]);
   const [quantity, setQuantity] = useState(1);
-  const [finalData, setFinalData] = useState([]);
-  const [selectedDate, setSelectedDate] = useState({
-    visitDate: null,
-    endDate: null,
-  });
+  // const [finalData, setFinalData] = useState([]);
+  const [occupancyRules, setOccupancyRules] = useState(MAX_OCCUPANCY);
+  const datePickerRef = useRef(null);
 
+  const [showTooltip, setShowTooltip] = useState(false);
+  const {
+    calPrice,
+    setPrice,
+    setPreviousCost,
+    setDiscount,
+    setVoucher,
+    numberOfNights,
+    setNumberOfNights,
+    selectedDate,
+    setSelectedDate,
+    selectedRoomIds,
+    setSelectedRoomIds,
+    selectedRooms,
+    setSelectedRooms,
+    finalData,
+    setFinalData,
+    roomGuestDistribution,
+    setRoomGuestDistribution,
+    dateChoosed,
+    setDateChoosed,
+  } = useContext(PriceContext);
+
+  // const [roomGuestDistribution, setRoomGuestDistribution] = useState({});
+
+  const handleGuestDistributionChange = (roomId, guestType, increment) => {
+    setRoomGuestDistribution((prev) => {
+      const currentValue = prev[roomId]?.[guestType] || 0;
+      const newValue = increment
+        ? currentValue + 1
+        : Math.max(0, currentValue - 1);
+      return {
+        ...prev,
+        [roomId]: {
+          ...prev[roomId],
+          [guestType]: newValue,
+        },
+      };
+    });
+    setPrice(calPrice());
+  };
+
+  const handleRestart = () => {
+    nav("/");
+    window.location.reload();
+  };
   const guestCount = useSelector((state) => state.overnightGuestCount);
-
-  const incrementQuantity = (maxCapacity) => {
-    setQuantity((currentQuantity) =>
-      currentQuantity < maxCapacity ? currentQuantity + 1 : currentQuantity
-    );
-  };
-
-  const decrementQuantity = () => {
-    setQuantity((currentQuantity) =>
-      currentQuantity > 1 ? currentQuantity - 1 : currentQuantity
-    );
-  };
 
   const handleClickSave = (room, price) => {
     setshowPopup(false);
@@ -54,41 +93,83 @@ const RoomDetails = () => {
     const existingRoomIndex = selectedRooms.findIndex(
       (selectedRoom) => selectedRoom.id === room.id
     );
-    if (existingRoomIndex !== -1) {
-      const updatedRooms = selectedRooms.map((selectedRoom, index) =>
-        index === existingRoomIndex
-          ? { ...selectedRoom, quantity, price }
-          : selectedRoom
-      );
-      setSelectedRooms(updatedRooms);
-    } else {
+    if (existingRoomIndex === -1) {
+      // Room is being added
       setSelectedRooms([...selectedRooms, { ...room, quantity, price }]);
+    } else {
+      const updatedRooms = selectedRooms.filter(
+        (selectedRoom) => selectedRoom.id !== room.id
+      );
+      setSelectedRooms([...updatedRooms]);
+      setRoomGuestDistribution((prev) => {
+        const newDistribution = { ...prev };
+        delete newDistribution[room.id]; // Remove the distribution for this room
+        return newDistribution;
+      });
     }
     setQuantity(1);
+    setSelectedRoomIds((prevIds) =>
+      existingRoomIndex === -1
+        ? [...prevIds, room.id]
+        : prevIds.filter((id) => id !== room.id)
+    );
   };
+  useEffect(() => {
+    // if (selectedRooms.length > 0) {
+    const visitDateObj2 = new Date(
+      selectedDate.visitDate ? selectedDate.visitDate : null
+    );
+    const endDateObj2 = new Date(
+      selectedDate.endDate ? selectedDate.endDate : null
+    );
+    const serializableSelectedDate = {
+      ...selectedDate,
+      visitDate: selectedDate.visitDate
+        ? visitDateObj2.toLocaleDateString("en-CA")
+        : null,
+      endDate: selectedDate.endDate
+        ? endDateObj2.toLocaleDateString("en-CA")
+        : null,
+    };
 
-  const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate; // Check if both dates are selected
-  const hasSelectedRoom = selectedRooms.length > 0; // Check if at least one room is selected
+    dispatch(
+      insert({
+        selectedRooms,
+        ...serializableSelectedDate,
+        finalData,
+        selectedDate,
+        roomGuestDistribution,
+      })
+    );
+    setPrice(calPrice()); // Recalculate price when a room is selected
+    // }
+  }, [selectedRooms, finalData, selectedDate, roomGuestDistribution]);
+  const hasSelectedDates = selectedDate.visitDate && selectedDate.endDate;
+  const hasSelectedRoom = selectedRooms.length > 0;
   const isValid = hasSelectedDates && hasSelectedRoom;
 
   useEffect(() => {
     let requestData = null;
+
     if (selectedDate.visitDate && selectedDate.endDate) {
       const visitDateObj = new Date(selectedDate.visitDate);
       const endDateObj = new Date(selectedDate.endDate);
+      const numberOfNights =
+        (endDateObj - visitDateObj) / (1000 * 60 * 60 * 24);
+      setNumberOfNights(numberOfNights);
       requestData = {
         visitDate: visitDateObj.toLocaleDateString("en-CA"),
         endDate: endDateObj.toLocaleDateString("en-CA"),
       };
     }
-    // selectedDate
+    if (!requestData) return;
     axios
       .post(`${baseUrl}/main/rooms/sub/get/dynamic/all`, requestData)
       .then((res) => {
-        console.log(res.data);
         const groupedRooms = res.data.reduce((acc, room) => {
           const { title, price } = room.roomId;
           const existingGroup = acc.find((group) => group.ref === title);
+          // console.log("existingGroup", existingGroup);
           if (existingGroup) {
             existingGroup.details.push({
               title: room.title,
@@ -121,29 +202,73 @@ const RoomDetails = () => {
           return acc;
         }, []);
         setModifiedRoom(groupedRooms);
-        console.log("grouped rooms", groupedRooms);
       });
   }, [selectedDate]);
 
+  const numChildren = guestCount?.ages?.filter((age) =>
+    age.includes("child")
+  ).length;
+  const numToddlers = guestCount?.ages?.filter((age) =>
+    age.includes("toddler")
+  ).length;
+  const numInfants = guestCount?.ages?.filter((age) =>
+    age.includes("infant")
+  ).length;
+
+  // const validateGuestCount = (roomType, guestCount) => {
+  //   const rules = occupancyRules[roomType];
+  //   if (!rules) return false;
+
+  //   // console.log(guestCount.adults, numChildren, numToddlers, numInfants);
+  //   // console.log(rules);
+  //   const isValid = rules.some(
+  //     (rule) =>
+  //       guestCount.adults <= rule.adults &&
+  //       numChildren <= rule.children &&
+  //       numToddlers <= rule.toddlers &&
+  //       numInfants <= rule.infants
+  //   );
+
+  //   // console.log(`Is valid: ${isValid}`);
+  //   return isValid;
+  // };
+  const validateGuestCount = (roomType, guestCount) => {
+    const rules = occupancyRules[roomType];
+    if (!rules) return false;
+
+    const totalGuests =
+      guestCount.adults + numChildren + numToddlers + numInfants;
+    const maxCapacity = rules[0].adults + rules[0].infants;
+
+    if (totalGuests > maxCapacity) return false;
+
+    return rules.some(
+      (rule) =>
+        guestCount.adults <= rule.adults &&
+        numChildren <= rule.children &&
+        numToddlers <= rule.toddlers &&
+        numInfants <= rule.infants
+    );
+  };
+  const calculateMaxCapacity = (room) => {
+    const rules = occupancyRules[room];
+    if (!rules) return -1;
+
+    const maxCapacity = rules[0].adults + rules[0].infants;
+    return maxCapacity;
+  };
   const handleNext = () => {
     let totalAdults = 0;
     let totalChildren = 0;
     let totalInfants = 0;
     let totalToddlers = 0;
 
-    selectedRooms.forEach((room) => {
-      console.log(room, "rooom");
+    selectedRooms?.forEach((room) => {
       totalAdults += room.adult * room.quantity;
       totalChildren += room.children * room.quantity;
       totalInfants += room.infant * room.quantity;
       totalToddlers += room.toodler * room.quantity;
     });
-    console.log("Calculated Totals:");
-    console.log("Adults:", totalAdults, "vs Booked:", guestCount.adults);
-    console.log("Children:", totalChildren, "vs Booked:", guestCount.children);
-    console.log("Infants:", totalInfants, "vs Booked:", guestCount.infants);
-    console.log("Toddlers:", totalToddlers, "vs Booked:", guestCount.toddler);
-    console.log("GUest Adults", guestCount.adults);
 
     if (!guestCount.adults) {
       toast.error("Please Return back and Select Number of Adults");
@@ -153,14 +278,72 @@ const RoomDetails = () => {
       toast.error("Please Select Dates");
       return;
     }
+    // const isValidOccupancy = selectedRooms?.every((room) => {
+    //   const groupedRoom = modifiedRoom.find((group) =>
+    //     group.details.some((detail) => detail.title === room.title)
+    //   );
 
+    //   if (groupedRoom) {
+    //     const reference = groupedRoom.ref;
+    //     const isValid = validateGuestCount(reference.trim(), guestCount);
+    //     // console.log(`Room: ${room.title}, Is valid: ${isValid}`);
+    //     return isValid;
+    //   }
+    //   // validateGuestCount(room.title, guestCount)
+    // });
+    // console.log("isValidOccupancy", isValidOccupancy);
+    const isValidOccupancy = selectedRooms?.every((room) => {
+      const groupedRoom = modifiedRoom.find((group) =>
+        group.details.some((detail) => detail.title === room.title)
+      );
+
+      if (groupedRoom) {
+        const reference = groupedRoom.ref;
+        const maxCapacity = calculateMaxCapacity(reference);
+        const roomDistribution = roomGuestDistribution[room.id] || {};
+        const totalDistributedGuests =
+          (roomDistribution.adults || 0) +
+          (roomDistribution.children || 0) +
+          (roomDistribution.toddlers || 0) +
+          (roomDistribution.infants || 0);
+
+        if (totalDistributedGuests > maxCapacity) {
+          toast.error(`Room ${room.title} exceeds maximum capacity.`);
+          return false;
+        }
+
+        const isValid = validateGuestCount(reference.trim(), roomDistribution);
+        if (!isValid) {
+          toast.error(
+            `room ${room.title} can't accomodate this guest allocation.`
+          );
+        }
+        return isValid;
+      }
+      return false;
+    });
+    const totalDistributedGuests = Object.values(roomGuestDistribution).reduce(
+      (acc, room) => ({
+        adults: acc.adults + (room.adults || 0),
+        children: acc.children + (room.children || 0),
+        toddlers: acc.toddlers + (room.toddlers || 0),
+        infants: acc.infants + (room.infants || 0),
+      }),
+      { adults: 0, children: 0, toddlers: 0, infants: 0 }
+    );
     if (
-      totalAdults >= guestCount.adults &&
-      totalChildren >= guestCount.children &&
-      totalInfants >= guestCount.infants &&
-      totalToddlers >= guestCount.toddler
+      totalDistributedGuests.adults !== guestCount.adults ||
+      totalDistributedGuests.children !== numChildren ||
+      totalDistributedGuests.toddlers !== numToddlers ||
+      totalDistributedGuests.infants !== numInfants
     ) {
-      console.log("u can fit ");
+      toast.error(
+        "Please ensure you match the number of guests to the correct room."
+      );
+      return;
+    }
+
+    if (isValidOccupancy) {
       const visitDateObj2 = new Date(selectedDate.visitDate);
       const endDateObj2 = new Date(selectedDate.endDate);
       const serializableSelectedDate = {
@@ -168,22 +351,68 @@ const RoomDetails = () => {
         visitDate: visitDateObj2.toLocaleDateString("en-CA"),
         endDate: endDateObj2.toLocaleDateString("en-CA"),
       };
-
-      selectedRooms.forEach((room) => {
-        room.guestCount = {
+      const updatedRooms = selectedRooms.map((room) => ({
+        ...room,
+        guestCount: {
           adults: guestCount.adults,
           children: guestCount.children,
           infants: guestCount.infants,
           toodler: guestCount.toddler,
           ages: guestCount.ages,
-        };
-      });
+        },
+      }));
+
       dispatch(
-        insert({ selectedRooms, ...serializableSelectedDate, finalData })
+        insert({
+          selectedRooms: updatedRooms,
+          ...serializableSelectedDate,
+          finalData,
+          roomGuestDistribution,
+        })
       );
-      nav("/overnight/details");
+      nav("/overnight/extras", {
+        state: { selectedRooms: updatedRooms, ...serializableSelectedDate },
+      });
+    } else if (
+      selectedRooms?.length > 1 &&
+      totalAdults >= guestCount.adults &&
+      totalChildren >= guestCount.children &&
+      totalInfants >= guestCount.infants &&
+      totalToddlers >= guestCount.toddler
+    ) {
+      const visitDateObj2 = new Date(selectedDate.visitDate);
+      const endDateObj2 = new Date(selectedDate.endDate);
+      const serializableSelectedDate = {
+        ...selectedDate,
+        visitDate: visitDateObj2.toLocaleDateString("en-CA"),
+        endDate: endDateObj2.toLocaleDateString("en-CA"),
+      };
+      const updatedRooms = selectedRooms.map((room) => ({
+        ...room,
+        guestCount: {
+          adults: guestCount.adults,
+          children: guestCount.children,
+          infants: guestCount.infants,
+          toodler: guestCount.toddler,
+          ages: guestCount.ages,
+        },
+      }));
+
+      dispatch(
+        insert({
+          selectedRooms: updatedRooms,
+          ...serializableSelectedDate,
+          finalData,
+          roomGuestDistribution,
+        })
+      );
+      nav("/overnight/extras", {
+        state: { selectedRooms: updatedRooms, ...serializableSelectedDate },
+      });
     } else {
-      toast.error("Please Select More Rooms ");
+      toast.error(
+        "Sorry, you have not selected enough rooms based on Jara’s room capacities and size of your visiting group. Please select additional rooms to complete your booking."
+      );
       console.log("u cannot fit");
     }
   };
@@ -193,10 +422,90 @@ const RoomDetails = () => {
   useEffect(() => {
     getSelectedCount();
   }, [selectedRooms]);
+  useEffect(() => {
+    if (isValid) {
+      // console.log("being shown");
+      setShowTooltip(true);
+      // const timer = setTimeout(() => setShowTooltip(false), 5000); // Hide tooltip after 4 seconds
+      // return () => clearTimeout(timer);
+    } else {
+      setShowTooltip(false);
+    }
+  }, [isValid]);
+
+  const renderGuestDistributionInputs = () => {
+    // return selectedRooms.map((room) => {
+    //   const groupedRoom = modifiedRoom.find((group) =>
+    //     group.details.some((detail) => detail.title === room.title)
+    //   );
+    //   const maxCapacity = groupedRoom
+    //     ? calculateMaxCapacity(groupedRoom.details[0])
+    //     : 0;
+    return selectedRooms.map((room) => (
+      <div
+        key={room.id}
+        className="mt-6 md:w-[80%] p-4 border rounded-md shadow-md bg-[#00A3D2] text-white"
+      >
+        <h3 className="text-lg font-semibold mb-4">{room.title}</h3>
+        {/* <p className="text-sm mb-2">Maximum Capacity: {maxCapacity}</p> */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { label: "Adults", key: "adults" },
+            { label: "Children/Nannies", key: "children" },
+            { label: "Toddlers", key: "toddlers" },
+            { label: "Infants", key: "infants" },
+          ].map(({ label, key }) => (
+            <div key={key} className="flex flex-col">
+              <label className="mb-2 text-sm font-medium">{label}</label>
+              <div className="flex items-center">
+                <button
+                  onClick={() =>
+                    handleGuestDistributionChange(room.id, key, false)
+                  }
+                  className="bg-[#75A9BF] px-2 py-1 rounded-l"
+                >
+                  <AiOutlineMinus />
+                </button>
+                <input
+                  type="text"
+                  value={roomGuestDistribution[room.id]?.[key] || 0}
+                  readOnly
+                  className="w-12 text-center text-black border-t border-b"
+                />
+                <button
+                  onClick={() =>
+                    handleGuestDistributionChange(room.id, key, true)
+                  }
+                  className="bg-[#75A9BF] px-2 py-1 rounded-r"
+                >
+                  <AiOutlinePlus />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ));
+    // });
+  };
+
+  useEffect(() => {
+    if (selectedDate.visitDate) {
+      if (!dateChoosed) {
+        setDateChoosed(true);
+        const checkInDate = dayjs(selectedDate.visitDate).add(2, "day");
+
+        setSelectedDate((prevState) => ({
+          ...prevState,
+          endDate: checkInDate,
+        }));
+      }
+    }
+  }, [selectedDate.visitDate]);
 
   return (
     <div>
-      <div className="xl:flex w-screen justify-between items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap overflow-x-auto">
+      <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap overflow-x-auto">
         <div className="w-[100%] lg:w-[70%]  gap-x-3">
           {/* SETPS  */}
           <div className="w-[100%] overflow-x-auto flex justify-center items-center">
@@ -210,11 +519,11 @@ const RoomDetails = () => {
             <div className="">
               <div>
                 <h1 className="text-3xl font-bold md:text-xl  ">
-                  Stay & Room Details
+                  Select Date(s) & Room(s)
                 </h1>
                 <p className="text-[#606970] text-sm mt-1">
-                  Select the check-in and check-out dates you would like to stay
-                  (nights you will be sleeping).
+                  Select the check-in and check-out dates you would like to
+                  stay.
                 </p>
               </div>
 
@@ -255,11 +564,12 @@ const RoomDetails = () => {
                           label: "Check-in Date",
                         },
                       }}
-                      //minDate={dayjs()} // Add this line to set the minimum date to today
+                      minDate={dayjs()} // Add this line to set the minimum date to today
                     />
 
                     <DatePicker
                       label="Check-out Date"
+                      disabled={selectedDate.visitDate ? false : true}
                       value={selectedDate?.endDate || null}
                       onChange={(newValue) => {
                         if (
@@ -290,38 +600,54 @@ const RoomDetails = () => {
                           label: "Check-out Date",
                         },
                       }}
-                      //minDate={dayjs()} // Add this line to set the minimum date to today
+                      minDate={
+                        selectedDate.visitDate
+                          ? dayjs(selectedDate.visitDate).add(1, "day")
+                          : dayjs() // Add this line to set the minimum date to 1 day after the checkin date
+                      }
                     />
                   </div>
                 </div>
               </LocalizationProvider>
               {/* FOR ROOM TYPES  */}
-
+              <div className="mt-4 flex flex-col">
+                <h1>How Long are you staying?</h1>
+                <span className="px-3 py-2 bg-[#75A9BF] text-white rounded-md max-w-max ">
+                  {numberOfNights === 1
+                    ? `${numberOfNights} Night`
+                    : `${numberOfNights} Nights`}
+                </span>
+              </div>
               <div className="mt-4">
                 <h1 className="text-lg font-bold ">
-                  Which room you are staying in?
+                  Which rooms you are staying in?
                 </h1>
                 <p className="text-[#606970] text-sm mt-1">
-                  Select your desired room type for luxury stay and decide how
-                  many people will be in each room.
+                  Select your desired room type and decide how many people will
+                  be in each room.
                 </p>
               </div>
 
               {/* MAIN ROOM TYPES  */}
-              <div className="mt-4 flex ">
-                {modifiedRoom?.length > 0 &&
+              <div className="mt-4 flex flex-col ">
+                {modifiedRoom?.length > 0 ? (
                   modifiedRoom.map((item, index) => (
                     <div key={index} className="lg:flex  gap-x-10 items-center">
-                      <div>
-                        <h1 className="text-medium font-bold mt-2 w-[12rem] md:w-[6rem] truncate ">
-                          {item?.ref}
+                      <div className="flex items-center gap-x-1">
+                        <h1 className="text-medium font-bold   ">
+                          {item?.ref}{" "}
                         </h1>
+                        <span className="font-">{`(max ${item?.details?.[0].adult} adults)`}</span>
                       </div>
                       <div className="flex-1 flex gap-x-3 lg:mt-0 mt-3 flex-wrap">
                         {item?.details.map((room, index) => (
                           <div
                             key={index}
-                            className="relative min-w-[8rem] h-[2.4rem] mt-2 flex justify-center flex-wrap items-center bg-white rounded-xl cursor-pointer"
+                            className={`relative min-w-[8rem] h-[2.4rem] mt-2 flex justify-center flex-wrap items-center rounded-xl cursor-pointer ${
+                              selectedRoomIds.includes(room.id)
+                                ? "bg-[#75A9BF] text-white"
+                                : "bg-white"
+                            }`}
                           >
                             <p
                               className="text-sm"
@@ -332,76 +658,136 @@ const RoomDetails = () => {
                               {room.title}
                             </p>
                             {showPopup && roomId === room.id && (
-                              <div className="absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-[8rem] bg-white shadow-shadow1  rounded-md p-2 z-50">
-                                <h1>Add/minus your guests</h1>
-                                <div className="flex justify-between items-center mt-1">
-                                  <div>
-                                    <p className="text-sm">
-                                      Available Room: {room.capacity}
-                                    </p>
-                                  </div>
-                                  <div className="flex justify-center gap-x-2 items-center text-white bg-[#75A9BF] w-[6rem] h-[2rem] rounded-xl">
-                                    <AiOutlineMinus
-                                      className="cursor-pointer"
-                                      onClick={() => decrementQuantity()}
-                                    />
-                                    <p>{quantity}</p>
-                                    <AiOutlinePlus
-                                      className="cursor-pointer"
+                              <>
+                                <div className="absolute top-[-9rem] left-[0rem] right-0 w-[13rem] sm:w-[18rem] h-auto bg-white text-black shadow-shadow1  rounded-md p-2 z-50">
+                                  <h1 className="text-lg text-black font-bold text-center">
+                                    Capacity of {room.title}
+                                  </h1>
+                                  <ImCross
+                                    onClick={() => setshowPopup(false)}
+                                    className="absolute top-2 right-2 text-sm text-blackcursor-pointer"
+                                  />
+                                  <div className="flex flex-col justify-center items-center mt-1">
+                                    <div>
+                                      <p className="text-sm text-center text-black">
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Adults
+                                        </span>
+                                        : {room.adult} <br />
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Infant
+                                        </span>
+                                        : {room.infant} <br />
+                                        <span>OR</span> <br />
+                                        {room.adult - 1} :{" "}
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Adult
+                                        </span>{" "}
+                                        <br />
+                                        {room.children}:{" "}
+                                        <span className="font-bold text-[#75A9BF]">
+                                          {" "}
+                                          child or Toodler
+                                        </span>{" "}
+                                        <br />
+                                        {room.infant}:{" "}
+                                        <span className="font-bold text-[#75A9BF]">
+                                          Infant
+                                        </span>
+                                      </p>
+                                    </div>
+
+                                    <button
                                       onClick={() =>
-                                        incrementQuantity(room.capacity)
+                                        handleClickSave(room, item.price)
                                       }
-                                    />
+                                      className="mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50"
+                                    >
+                                      {selectedRoomIds.includes(room.id)
+                                        ? "Remove Room"
+                                        : "Select Room"}
+                                    </button>
                                   </div>
                                 </div>
-                                <button
-                                  onClick={() =>
-                                    handleClickSave(room, item.price)
-                                  }
-                                  className="mt-4 bg-black w-[100%] h-[2rem] text-white rounded-md z-50"
-                                >
-                                  Save
-                                </button>
-                              </div>
+                              </>
                             )}
                           </div>
                         ))}
                       </div>
                     </div>
-                  ))}
+                  ))
+                ) : selectedDate.visitDate && selectedDate.endDate ? (
+                  <div className="w-full text-center mt-3">
+                    <ClipLoader color="#000000" size={35} />
+                  </div>
+                ) : null}
               </div>
 
               <p className="text-[#606970] text-sm mt-3">
-                *Available rooms are showing based your selected check-in and
+                *Available rooms are showing based on your selected check-in and
                 check-out dates above.
               </p>
 
+              {/* Add this section to render guest distribution inputs */}
+              {selectedRooms.length > 0 && (
+                <div className="mt-6">
+                  <h2
+                    className="text-xl font-bold mb-4 inline-block"
+                    data-tooltip-id="continueTooltip"
+                  >
+                    Guest Allocation for Selected Rooms
+                  </h2>
+                  {renderGuestDistributionInputs()}
+                </div>
+              )}
+
               {/* EXTRAS  */}
-              <div>
+              {/* <div>
                 <Extras
                   setFinalData={setFinalData}
                   finalData={finalData}
                   type={"overnight"}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
 
         {/* RESERVATION  */}
-        <div className="min-w-[18rem] pr-4">
-          <div className="min-w-[18rem] h-[30rem] mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+        <div className="w-auto mt-4 xl:mt-0 mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
+          <div className="w-full xl:max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">
             <div className="flex flex-col  items-center gap-y-2 pt-4">
-              <div
-                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-                onClick={() => nav("/")}
-              >
-                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
-                <FiRefreshCcw />
-                <p className="font-[500] text-xl">Restart Booking</p>
+              <div className="w-full relative">
+                <button
+                  onClick={handleNext}
+                  className={`w-full p-2 gap-x-4 ${
+                    isValid
+                      ? "cursor-pointer bg-black"
+                      : "bg-[#D2D2D2] cursor-not-allowed"
+                  } text-white rounded-xl flex items-center  justify-center font-robotoFont`}
+                >
+                  <p className={"font-[500] text-xl"}>Continue</p>
+                  <img src={arrowR} alt="icon" className="w-[1rem]" />
+                </button>
+                <Tooltip
+                  id="continueTooltip"
+                  place="top"
+                  content="Let us know your Guest Distribution"
+                  isOpen={showTooltip}
+                  style={{
+                    backgroundColor: "#FFD562",
+                    color: "black",
+                    padding: "8px",
+                    borderRadius: "10px",
+                    fontSize: "15px",
+                    height: "50px",
+                    textAlign: "center",
+                    verticalAlign: "center",
+                  }}
+                />
               </div>
               <div
                 onClick={() => nav("/overnight/guest")}
@@ -410,19 +796,13 @@ const RoomDetails = () => {
                 <img src={arrow} alt="icon" className="w-[1rem]" />
                 <p className="font-[500] text-xl">Back</p>
               </div>
-              <div className="w-full">
-                <button
-                  onClick={handleNext}
-                  // disabled={!isValid}
-                  className={`w-full p-2 gap-x-4 ${
-                    isValid
-                      ? "cursor-pointer bg-black"
-                      : "bg-[#D2D2D2] cursor-not-allowed"
-                  } text-white rounded-xl flex items-center justify-center font-robotoFont`}
-                >
-                  <p className={"font-[500] text-xl"}>Continue</p>
-                  <img src={arrowR} alt="icon" className="w-[1rem]" />
-                </button>
+              <div
+                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
+                onClick={handleRestart}
+              >
+                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
+                <FiRefreshCcw />
+                <p className="font-[500] text-xl">Restart Booking</p>
               </div>
             </div>
           </div>
@@ -431,10 +811,14 @@ const RoomDetails = () => {
 
       {/* FOOTER  */}
 
-      <div className="w-screen bg-black text-white">
-        <div className="flex justify-between items-center px-7 mt-3 pb-3">
-          <p>© 2023 JARA BEACH RESORT</p>
-          <p>owned and operated by Little Company Nigeria Limited</p>
+      <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
+        <div>
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+        </div>
+        <div>
+          <p className="text-right max-w-[300px] md:max-w-full">
+            Owned and Operated By Little Company Nigeria Limited
+          </p>
         </div>
       </div>
     </div>

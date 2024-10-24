@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { useSelector, useDispatch } from "react-redux";
-import { updateGuest } from "../store/slices/overnight/guestInfo.slice";
+import { useSelector } from "react-redux";
 
-const Modal = ({ onClose, onSave }) => {
-  const guests = useSelector((state) => state.overnightGuestDetails);
-  const dispatch = useDispatch();
+const Modal = ({ onClose, onSave, guests, updateGuest }) => {
+  const roomDetails = useSelector((state) => state.overnightRoomInfo);
 
   const handleInputChange = (id, field, value) => {
-    dispatch(updateGuest({ id, field, value }));
+    updateGuest(id, field, value);
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg max-w-xl w-full">
+      <div className="bg-white p-6 rounded-lg max-w-xl w-full max-h-[50vh] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Guests Info</h2>
         <div className="space-y-4">
-          {guests.map((guest) => (
+          {guests?.map((guest) => (
             <div key={guest.id} className="flex space-x-4">
               <div className="w-1/4">
                 <label className="block mb-1">Guest Adult {guest.id}</label>
@@ -52,10 +50,13 @@ const Modal = ({ onClose, onSave }) => {
                   }
                 >
                   <option value="">Select Room</option>
-                  <option value="Loft Sunrise 1">Loft Sunrise 1</option>
+                  {roomDetails?.selectedRooms?.map((room) => (
+                    <option value={room.title}>{room.title}</option>
+                  ))}
+                  {/* <option value="Loft Sunrise 1">Loft Sunrise 1</option>
                   <option value="Loft Sunrise 2">Loft Sunrise 2</option>
                   <option value="Loft Sunset 1">Loft Sunset 1</option>
-                  <option value="Loft Sunset 2">Loft Sunset 2</option>
+                  <option value="Loft Sunset 2">Loft Sunset 2</option> */}
                 </select>
               </div>
             </div>

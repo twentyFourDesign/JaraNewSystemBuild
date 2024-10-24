@@ -1,19 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
-let initialState= {}
-
+let initialState = {};
 
 const daypassUserInfo = createSlice({
-    name:"daypassUserInfo",
-    initialState,
-    reducers:{
-        insert(state,action){
-            return {...state,...action.payload}
-        }
-    }
-})
+  name: "daypassUserInfo",
+  initialState,
+  reducers: {
+    insert(state, action) {
+      return { ...state, ...action.payload };
+    },
+    reset() {
+      return initialState;
+    },
+  },
+});
 
+export const { insert, reset } = daypassUserInfo.actions;
 
-export const {insert}  = daypassUserInfo.actions
-
-export default daypassUserInfo.reducer
+export default daypassUserInfo.reducer;

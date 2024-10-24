@@ -17,7 +17,7 @@ const CustomSelect = ({ label, value, onChange, options }) => {
       <label className="select-label">{label}</label>
       <div className="flex items-center">
         <div onClick={toggleDropdown} className="select-box ">
-          <span>{value || "Select Age"}</span>
+          <span className="px-2 text-sm">{value || "Select Age"}</span>
         </div>
         <div
           className="p-[4px] h-[40px] bg-[#75A9BF] flex justify-center items-center"

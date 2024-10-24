@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {};
+const initialState = {
+  selectedRooms: [],
+  visitDate: null,
+  endDate: null,
+  finalData: [],
+  roomGuestDistribution: {},
+};
 
 const roomDetails = createSlice({
   name: "roomDetails",

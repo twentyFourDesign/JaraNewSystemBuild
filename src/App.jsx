@@ -1,14 +1,13 @@
-import './App.css'
-import Toast from './components/Toast'
-import AllRoutes from './routers/AllRoutes'
+import "./App.css";
+import Toast from "./components/Toast";
+import AllRoutes from "./routers/AllRoutes";
 function App() {
-
   return (
     <>
-      <Toast/>
-      <AllRoutes/>
+      <Toast />
+      <AllRoutes />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

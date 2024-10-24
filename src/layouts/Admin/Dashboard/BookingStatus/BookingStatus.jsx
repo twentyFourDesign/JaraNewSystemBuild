@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../../../../constants/baseurl";
@@ -6,7 +6,9 @@ import toast from "react-hot-toast";
 import { ImCross } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Modal from "react-modal";
+import { AuthContext } from "../../../../Context/AuthContext";
 const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
+  const { adminUser } = useContext(AuthContext);
   const location = useLocation();
   const initialPaymentId = location.state.paymentId;
   const [paymentId, setPaymentId] = useState(initialPaymentId);
@@ -15,6 +17,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   const [selectedBank, setSelectedBank] = useState("");
   const iconStyle = "text-[#828893] text-lg cursor-pointer md:hidden block";
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isModal2Open, setIsModal2Open] = useState(false);
   const fetchPayment = async () => {
     try {
       const result = await axios.get(
@@ -22,10 +25,10 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       );
       setPaymentInfo(result.data);
     } catch (err) {
-      console.log("failed to fetch", err);
+      console.log("failed to fetch");
     }
   };
-  // console.log(booking);
+  console.log(booking);
   // console.log(paymentInfo);
 
   const confirmPayment = async () => {
@@ -33,7 +36,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
       const result = await axios.post(`${baseUrl}/payment/confirm/${id}`, {
         bank: selectedBank,
       });
-      setIsModalOpen(false); // Close the modal after successful payment confirmation
+      setIsModalOpen(false);
       toast.success("Payment confirmed");
       fetchPayment();
     } catch (error) {
@@ -42,7 +45,8 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
   };
   const cancelBooking = async () => {
     try {
-      await axios.post(`${baseUrl}/payment/cancel/${id}`);
+      const result = await axios.post(`${baseUrl}/payment/cancel/${id}`);
+      // console.log(result);
       setIsCancelModalOpen(false);
       toast.success("Booking cancelled successfully");
       fetchPayment();
@@ -59,6 +63,50 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
     const formattedDate = date.toLocaleDateString("en-US", options);
     return formattedDate;
   }
+
+  const renderExtras = () => {
+    const extras =
+      booking?.bookingDetails?.finalData ||
+      booking?.bookingDetails?.extras ||
+      [];
+    const groupedExtras = extras.reduce((acc, extra) => {
+      const category = extra.type || "Other";
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(extra);
+      return acc;
+    }, {});
+
+    return Object.entries(groupedExtras).map(([category, categoryExtras]) => (
+      <div key={category} className="mb-4">
+        <h3 className="text-lg font-semibold capitalize mb-2">{category}</h3>
+        {categoryExtras.map((extra, index) => (
+          <div key={index} className="ml-4 mb-2">
+            <p className="font-medium">{extra.title || extra.key}</p>
+            {extra.details && (
+              <ul className="list-disc list-inside ml-4">
+                {Object.entries(extra.details).map(([key, value]) => (
+                  <li key={key} className="text-sm">
+                    <span className="font-medium">{key}:</span>{" "}
+                    {Array.isArray(value) ? value.join(", ") : value}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {extra.selectedDates && (
+              <ul className="list-disc list-inside ml-4">
+                <li className="text-sm">
+                  <span className="font-medium">Selected Dates:</span>{" "}
+                  {extra.selectedDates.join(", ")}
+                </li>
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    ));
+  };
 
   if (!booking) return <div>Loading...</div>;
 
@@ -81,13 +129,13 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
         <div className="bg-white shadow-md max-h-[15rem] rounded-lg p-5">
           <h2 className="text-lg font-semibold mb-4">Booking Information</h2>
           <div className="space-y-2">
-            <div className="flex justify-between min-w-[350px]">
+            <div className="flex flex-wrap justify-between md:min-w-[350px] gap-x-4">
               <p className="text-gray-600">Booking ID</p>
-              <span className="font-semibold">{booking?._id}</span>
+              <span className="font-semibold ">{id}</span>
             </div>
             <div className="flex justify-between">
               <p className="text-gray-600">Booking Date</p>
-              <span className="font-semibold">
+              <span className="font-semibold text-end">
                 {formatDate(booking?.createdAt)}
               </span>
             </div>
@@ -96,10 +144,10 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
               <span
                 className={
                   paymentInfo?.status == "Success"
-                    ? "text-green-500 font-semibold"
+                    ? "text-green-500 font-semibold text-end"
                     : paymentInfo?.status == "Pending"
-                    ? "text-yellow-500 font-semibold"
-                    : "text-red-500 font-semibold"
+                    ? "text-yellow-500 font-semibold text-end"
+                    : "text-red-500 font-semibold text-end"
                 }
               >
                 {paymentInfo?.status == "Success"
@@ -109,14 +157,15 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                   : "Cancelled"}
               </span>
             </div>
-            {paymentInfo?.status == "Pending" && (
-              <button
-                className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Confirm Payment
-              </button>
-            )}
+            {paymentInfo?.status == "Pending" &&
+              adminUser?.role === "superAdmin" && (
+                <button
+                  className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  Confirm Payment
+                </button>
+              )}
           </div>
         </div>
         {/*Confirm Modal */}
@@ -179,51 +228,88 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
             No, Cancel
           </button>
         </Modal>
+        <Modal
+          isOpen={isModal2Open}
+          onRequestClose={() => setIsModal2Open(false)}
+          contentLabel="ID"
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.75)",
+            },
+            content: {
+              top: "50%",
+              left: "50%",
+              right: "auto",
+              bottom: "auto",
+              transform: "translate(-50%, -50%)",
+              minWidth: "300px",
+              maxWidth: "400px",
+              margin: "0 auto",
+              display: "flex",
+              flexDirection: "column",
+            },
+          }}
+        >
+          <h2 className="text-lg font-semibold mb-4 text-center">Guest ID</h2>
+          <img
+            src={booking?.guestDetails?.photo}
+            alt="guest id"
+            className="w-full h-auto object-cover"
+          />
+        </Modal>
         <div className="w-full space-y-2">
           {/* Guest Information */}
           <div className="bg-white shadow-md rounded-lg p-5 ">
             <h2 className="text-lg font-semibold mb-4">Guest Information</h2>
             <div className="space-y-2">
-              <div className="flex justify-between min-w-[350px]  ">
+              <div className="flex justify-between min-w-[100px] gap-x-4  ">
                 <p className="text-gray-600">First Name</p>
-                <span className="font-semibold text-start">
+                <span className="font-semibold text-end">
                   {booking?.guestDetails?.firstname}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Last Name</p>
-                <span className="font-semibold">
+                <span className="font-semibold text-end">
                   {booking?.guestDetails?.lastname}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex flex-wrap justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Email</p>
-                <span className="font-semibold">
+                <span className="font-semibold text-end ">
                   {booking?.guestDetails?.email}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Phone Number</p>
-                <span className="font-semibold">
+                <span className="font-semibold text-end">
                   {booking?.guestDetails?.phone}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Date of Birth</p>
-                <span className="font-semibold">
+                <span className="font-semibold text-end">
                   {formatDate(booking?.guestDetails?.dateOfBirth)}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
-                <p className="text-gray-600">Mail List</p>
-                <span className="font-semibold">
-                  {booking?.guestDetails?.mailLitst ? "Yes" : "No"}
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
+                <p className="text-gray-600">Keep Info</p>
+                <span className="font-semibold text-end">
+                  {booking?.guestDetails?.keepInfo ? "Yes" : "No"}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
+                <p className="text-gray-600">How Did You Find Us</p>
+                <span className="font-semibold text-end">
+                  {booking?.guestDetails?.aboutUs
+                    ? booking?.guestDetails?.aboutUs
+                    : "Not Provided"}
+                </span>
+              </div>
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Id</p>
-                <span className="font-semibold text-blue-500">
-                  <a
+                <span className="font-semibold text-blue-500 text-end">
+                  {/* <a
                     href={
                       booking?.guestDetails?.photo
                         ? booking?.guestDetails?.photo
@@ -233,7 +319,13 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                     rel="noopener noreferrer"
                   >
                     View Id
-                  </a>
+                  </a> */}
+                  <button
+                    className="text-blue-500"
+                    onClick={() => setIsModal2Open(true)}
+                  >
+                    View Id
+                  </button>
                 </span>
               </div>
             </div>
@@ -243,23 +335,23 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
           <div className="bg-white shadow-md rounded-lg p-5">
             <h2 className="text-lg font-semibold mb-4">Stay Information</h2>
             <div className="space-y-2">
-              <div className="flex justify-between min-w-[350px]  ">
+              <div className="flex justify-between min-w-[100px] gap-x-4  ">
                 <p className="text-gray-600">Arrival Date</p>
-                <span className="font-semibold text-start">
-                  {booking?.bookingDetails?.visitDate ||
-                    booking?.bookingDetails?.startDate}
+                <span className="font-semibold text-end">
+                  {formatDate(booking?.bookingDetails?.visitDate) ||
+                    formatDate(booking?.bookingDetails?.startDate)}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Departure Date</p>
-                <span className="font-semibold">
-                  {booking?.bookingDetails?.endDate ||
-                    booking?.bookingDetails?.startDate}
+                <span className="font-semibold text-end">
+                  {formatDate(booking?.bookingDetails?.endDate) ||
+                    formatDate(booking?.bookingDetails?.startDate)}
                 </span>
               </div>
-              <div className="flex justify-between items-start min-w-[350px] ">
+              <div className="flex justify-between items-start min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Group</p>
-                <span className="font-semibold space-y-2 flex flex-col items-center">
+                <span className="font-semibold space-y-2 flex flex-col items-center text-end">
                   {
                     booking?.bookingDetails?.selectedRooms?.[0].guestCount
                       ?.adults
@@ -276,7 +368,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                         <span key={index}>{age} </span>
                       )
                     )}
-                    {booking?.bookingDetails?.groups?.adultsAlcoholic != 0 ? (
+                    {booking?.bookingDetails?.groups?.adultsAlcoholic ? (
                       <span>
                         {booking?.bookingDetails?.groups?.adultsAlcoholic}{" "}
                         Adults Alcoholic
@@ -284,8 +376,7 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                     ) : (
                       ""
                     )}
-                    {booking?.bookingDetails?.groups?.adultsNonAlcoholic !=
-                    0 ? (
+                    {booking?.bookingDetails?.groups?.adultsNonAlcoholic ? (
                       <span>
                         {booking?.bookingDetails?.groups?.adultsNonAlcoholic}{" "}
                         Adults Non Alcoholic
@@ -293,14 +384,14 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                     ) : (
                       ""
                     )}
-                    {booking?.bookingDetails?.groups?.Nanny != 0 ? (
+                    {booking?.bookingDetails?.groups?.Nanny ? (
                       <span>
                         {booking?.bookingDetails?.groups?.Nanny} Nanny
                       </span>
                     ) : (
                       ""
                     )}
-                    {booking?.bookingDetails?.groups?.childTotal != 0 ? (
+                    {booking?.bookingDetails?.groups?.childTotal ? (
                       <span>
                         {booking?.bookingDetails?.groups?.childTotal} Child
                       </span>
@@ -310,65 +401,86 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
                   </span>
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
-                <p className="text-gray-600">Room</p>
-                <span className="font-semibold">
-                  {booking?.bookingDetails?.selectedRooms?.[0].title ||
-                    "Day Pass"}
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
+                <p className="text-gray-600">Rooms</p>
+                <span className="font-semibold flex flex-col">
+                  {booking?.bookingDetails?.selectedRooms?.map(
+                    (room, index) => (
+                      <span key={index} className="text-end">
+                        {room?.title}{" "}
+                      </span>
+                    )
+                  ) || "Day Pass"}
+                </span>
+              </div>
+              {booking?.bookingDetails?.selectedRooms ? (
+                <div className="flex justify-between min-w-[100px] gap-x-4 ">
+                  <p className="text-gray-600">Guests</p>
+                  <span className="font-semibold flex flex-col">
+                    {booking?.guestDetails?.guests?.map((guest, index) => (
+                      <span key={index} className="text-end">
+                        {guest?.firstName} {guest?.lastName} - {guest?.room}{" "}
+                      </span>
+                    ))}
+                  </span>
+                </div>
+              ) : (
+                ""
+              )}
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
+                <p className="text-gray-600">Extra Need</p>
+                <span className="font-semibold text-end">
+                  {booking?.guestDetails?.para
+                    ? booking?.guestDetails?.para
+                    : "nothing"}
                 </span>
               </div>
             </div>
           </div>
-
+          {/* Extras Section */}
           <div className="bg-white shadow-md rounded-lg p-5">
             <h2 className="text-lg font-semibold mb-4">Extras</h2>
-            {/* Add your extras fields here */}
-            <div className="space-y-2">
-              {booking?.bookingDetails?.finalData?.map((extra, index) => (
-                <div className="flex justify-between min-w-[350px]" key={index}>
-                  <p className="text-gray-600">Extra {index + 1}</p>
-                  <span className="font-semibold text-start">{extra.key}</span>
-                </div>
-              )) ||
-                booking?.bookingDetails?.extras?.map((extra, index) => (
-                  <div
-                    className="flex justify-between min-w-[350px]"
-                    key={index}
-                  >
-                    <p className="text-gray-600">Extra {index + 1}</p>
-                    <span className="font-semibold text-start">
-                      {extra.key}
-                    </span>
-                  </div>
-                ))}
-            </div>
+            <div className="space-y-2">{renderExtras()}</div>
           </div>
 
           <div className="bg-white shadow-md rounded-lg p-5">
             <h2 className="text-lg font-semibold mb-4">Payment Information</h2>
             {/* Add your payment information fields here */}
             <div className="space-y-2">
-              <div className="flex justify-between min-w-[350px]  ">
+              <div className="flex justify-between min-w-[100px] gap-x-4  ">
                 <p className="text-gray-600">Payment Method</p>
-                <span className="font-semibold text-start">
+                <span className="font-semibold text-end">
                   {paymentInfo?.method}
                 </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Payment Status</p>
                 <span className="font-semibold">{paymentInfo?.status}</span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">amount</p>
                 <span className="font-semibold">{paymentInfo?.amount}</span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
                 <p className="text-gray-600">Discount</p>
-                <span className="font-semibold">None</span>
+                <span className="font-semibold">
+                  {paymentInfo?.discount ? `${paymentInfo?.discount}%` : "None"}
+                </span>
               </div>
-              <div className="flex justify-between min-w-[350px] ">
-                <p className="text-gray-600">Voucher</p>
-                <span className="font-semibold">None</span>
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
+                <p className="text-gray-600">Voucher Balance</p>
+                <span className="font-semibold">
+                  {paymentInfo?.voucher ? paymentInfo?.voucher : "None"}
+                </span>
+              </div>
+
+              <div className="flex justify-between min-w-[100px] gap-x-4 ">
+                <p className="text-gray-600">Multi Night Discount</p>
+                <span className="font-semibold">
+                  {paymentInfo?.multiNightDiscount
+                    ? `${paymentInfo?.multiNightDiscount}%`
+                    : "None"}
+                </span>
               </div>
             </div>
           </div>
@@ -418,14 +530,15 @@ const BookingStatus = ({ booking, showNav, setShowNav, id }) => {
             </button>
           </Modal>
           <div className="flex items-center justify-end">
-            {paymentInfo?.status === "Pending" && (
-              <button
-                onClick={() => setIsCancelModalOpen(true)}
-                className="bg-red-500 text-white py-2 px-4 rounded-lg mt-4"
-              >
-                Cancel Booking
-              </button>
-            )}
+            {paymentInfo?.status === "Pending" &&
+              adminUser?.role === "superAdmin" && (
+                <button
+                  onClick={() => setIsCancelModalOpen(true)}
+                  className="bg-red-500 text-white py-2 px-4 rounded-lg mt-4"
+                >
+                  Cancel Booking
+                </button>
+              )}
           </div>
         </div>
       </div>

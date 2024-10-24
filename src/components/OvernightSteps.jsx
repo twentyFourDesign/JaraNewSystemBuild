@@ -18,24 +18,26 @@ const OvernightSteps = ({ step }) => {
   };
 
   return (
-    <div className="flex items-center justify-center lg:justify-start lg:ml-3 font-robotoFont w-[100%]">
+    <div className="flex items-center justify-center lg:justify-start lg:ml-3 font-robotoFont w-[100%] px-4">
       <div className="flex flex-col justify-center  gap-2">
         <div className="flex items-center">
           <div
-            className={`w-[60px] h-[60px] flex items-center justify-center rounded-full ${getStepClass(
+            className={` w-[35px] h-[35px] sm:w-[60px] sm:h-[60px] flex items-center justify-center rounded-full ${getStepClass(
               1
             )}`}
           >
             {getStepContent(1)}
           </div>
-          <div className="w-[11rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
+          <div className=" w-[9rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-        <span className="md: w-3/4">Guest(s) Details</span>
+        <span className="text-xs sm:text-base md: w-3/4 ">
+          Guest(s) Details
+        </span>
       </div>
-      <div className="flex flex-col justify-center  gap-2 ">
-        <div className="flex items-center">
+      <div className="flex flex-col justify-center  gap-2  ">
+        <div className="flex items-center ">
           <div
-            className={`w-[60px] h-[60px] flex items-center justify-center rounded-full ${getStepClass(
+            className={` w-[35px] h-[35px] sm:w-[60px] sm:h-[60px] flex items-center justify-center rounded-full ${getStepClass(
               2
             )}`}
           >
@@ -43,19 +45,38 @@ const OvernightSteps = ({ step }) => {
           </div>
           <div className="w-[11rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-        <span className="md: w-3/4">Stay & Room Details</span>
+        <span className="text-xs sm:text-base md: w-5/6 ">
+          Date(s) & Room(s)
+        </span>
       </div>
       <div className="flex flex-col justify-center  gap-2">
         <div className="flex items-center">
           <div
-            className={`w-[60px] h-[60px] flex items-center justify-center rounded-full ${getStepClass(
+            className={` w-[35px] h-[35px] sm:w-[60px] sm:h-[60px] flex items-center justify-center rounded-full ${getStepClass(
               3
             )}`}
           >
             {getStepContent(3)}
           </div>
+          <div className="w-[9rem] h-[4px] bg-[#C8D5E0] lg:block hidden"></div>
         </div>
-        <span className="md: w-full">Guest(s) info</span>
+        <span className="text-xs sm:text-base md: w-3/4 ">
+          Extras & Experiences
+        </span>
+      </div>
+      <div className="flex flex-col justify-center gap-2">
+        <div className="flex items-center">
+          <div
+            className={` w-[35px] h-[35px] sm:w-[60px] sm:h-[60px] flex items-center justify-center rounded-full ${getStepClass(
+              4
+            )}`}
+          >
+            {getStepContent(4)}
+          </div>
+        </div>
+        <span className="text-xs sm:text-base w-3/4  lg:w-full">
+          Guest(s) info
+        </span>
       </div>
     </div>
   );

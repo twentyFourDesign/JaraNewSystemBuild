@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import JaraLogo from "../../assets/jarabeachlogo.png";
+import JaraLogo from "../../assets/jaralogo.png";
 import moon from "../../assets/akar-icons_moon.png";
 import light from "../../assets/Vector (1).png";
 import existing from "../../assets/existing.png";
@@ -40,7 +40,7 @@ const BookingType = () => {
     setModalIsOpen(false);
 
     if (bookingType === "overnight") {
-      window.location.href = "https://booking.jarabeachresort.com/manage";
+      nav("/booking/manage");
     } else if (bookingType === "daypass") {
       window.location.href = "https://booking.jarabeachresort.com/manage";
     }
@@ -49,33 +49,39 @@ const BookingType = () => {
     setModalIsOpen(false);
   };
   return (
-    <div className="wrapper-background w-screen h-screen relative bg-[rgba(0,0,0,0.8)] font-robotoFont overflow-hidden ">
+    <div className="wrapper-background w-screen h-screen relative font-robotoFont overflow-hidden ">
       {/* UPPER LOGO  */}
-      <div className="flex w-screen justify-center items-center h-[13vh] bg-[rgba(0,0,0,0.8)] ">
-        <img
-          src={JaraLogo}
-          loading="true"
-          alt="jaralogo"
-          className="h-[100%] p-2 z-10"
-        />
+      <div className="flex w-screen justify-center items-center h-[15vh] bg-[#9DD4D3] ">
+        <a
+          href="https://www.jarabeachresort.com/"
+          target="_blank"
+          className="inline-block hover:scale-100"
+        >
+          <img
+            src={JaraLogo}
+            loading="true"
+            alt="jaralogo"
+            className="h-[6rem] w-[8rem] p-2 z-10 cursor-pointer"
+          />
+        </a>
       </div>
 
       {/* MAIN CARDS FOR BOOKING  */}
 
       <div className="w-full h-full flex flex-col z-20 items-center">
-        <div className="flex items-center flex-col md:flex-row md:gap-0 gap-2 w-full justify-center pt-36">
-          <span className="px-3 py-4 md:py-0 text-white  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins border-b-2  border-b-[#bcb9b9] md:border-b-0  md:border-r-2">
+        <div className="flex items-center text-center flex-col md:flex-row md:gap-0 gap-2 w-full justify-center pt-36">
+          {/* <span className="px-3 py-4 md:py-0 text-white text-outline text-2xl z-20 font-[600] tracking-[10px] leading-[24px] font-poppins border-b-2  border-b-[#bcb9b9] md:border-b-0  md:border-r-2">
             All-Inclusive
-          </span>
+          </span> */}
           {/* <hr className="md:w-2 md:h-9 z-10" /> */}
-          <span className=" pl-5 py-4 md:py-0 pr-3 text-white  text-2xl z-20 font-[400] tracking-[10px] leading-[24px] font-poppins  md:border-l-2">
-            Beach Experience
+          <span className=" pl-5 py-4 md:py-0 pr-3 font-rubic text-white text-outline  text-2xl z-20 font-[600] tracking-[10px] leading-[24px] font-poppins  ">
+            Indulgent Escapes
           </span>
         </div>
 
         <div className="flex flex-col md:flex-row gap-5 justify-center items-center mt-4">
           <button
-            className="z-10 mt-2 w-[250px] gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(0,0,0,0.8)] rounded-xl font-inter items-center justify-center text-white text-center font-[400] text-md"
+            className="z-10 mt-2 w-[250px] lg:h-40 gap-4 font-rubic h-auto px-[12px] py-[10px] flex bg-[rgba(0,0,0,0.8)] rounded-xl font-inter items-center justify-center text-white text-center font-[400] text-md"
             onClick={() => openModal("overnight")}
           >
             Overnight Booking
@@ -85,7 +91,7 @@ const BookingType = () => {
           </button>
 
           <button
-            className="z-10 mt-2 w-[250px] gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
+            className="z-10 mb-4 mt-2 sm:mb-0 w-[250px] font-rubic lg:h-40 gap-4 h-auto px-[12px] py-[10px] flex bg-[rgba(255,255,255,0.7)] rounded-xl font-inter items-center justify-center text-black text-center font-[400] text-md"
             onClick={() => nav("/daypass/guest")}
           >
             Daypass Booking
@@ -141,6 +147,15 @@ const BookingType = () => {
             </div>
 
             <div className="flex flex-col gap-4 md:flex-row justify-center items-center mt-2">
+              <div className="border-2 border-black px-6 py-8 gap-4 flex flex-col rounded-lg justify-center items-center bg-black ">
+                <img src={newbooking} alt="new booking" className="w-16 h16" />
+                <button
+                  className="bg-white text-black font-inter font-[500] px-4 py-2 rounded-md"
+                  onClick={handleNewBookingClick}
+                >
+                  New Booking
+                </button>
+              </div>
               <div className="border-2 border-black px-4 py-8 gap-4 flex flex-col justify-center rounded-lg items-center ">
                 <img
                   src={existing}
@@ -152,15 +167,6 @@ const BookingType = () => {
                   onClick={handleExistingBookingClick}
                 >
                   Existing Booking
-                </button>
-              </div>
-              <div className="border-2 border-black px-4 py-8 gap-4 flex flex-col rounded-lg justify-center items-center bg-black ">
-                <img src={newbooking} alt="new booking" className="w-16 h16" />
-                <button
-                  className="bg-white text-black font-inter font-[500] px-4 py-2 rounded-md"
-                  onClick={handleNewBookingClick}
-                >
-                  New Booking
                 </button>
               </div>
             </div>
@@ -179,20 +185,21 @@ const BookingType = () => {
             <path
               d="M0,0 Q600,150 1200,0 V150 H0 Z"
               className="shape-fill"
-              fill-opacity="0.8"
+              fillOpacity="0.8"
+              fill="#9DD4D3"
             ></path>
           </svg>
         </div>
       )}
 
       {/* FOOTER CONTACT  */}
-      <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#000000] text-white font-cursive py-3 md:px-5  px-2 text-sm z-10">
+      <div className="absolute bottom-0 left-0 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
         <div>
-          <p>© 2023 JARA BEACH RESORT</p>
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
         </div>
         <div>
           <p className="text-right max-w-[300px] md:max-w-full">
-            owned and operated by Little Company Nigeria Limited
+            Owned and Operated By Little Company Nigeria Limited
           </p>
         </div>
       </div>

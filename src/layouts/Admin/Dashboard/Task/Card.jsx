@@ -1,37 +1,65 @@
-import React from 'react'
+import React from "react";
 import { FaTrash } from "react-icons/fa";
-const Card = () => {
+import axios from "axios";
+import { baseUrl } from "../../../../constants/baseurl";
+import toast from "react-hot-toast";
+const Card = ({ taskGroup, setData }) => {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    return formattedDate;
+  }
 
-    const task = [1, 2, 3, 4, 5, 6, 6, 7, 7, 7, 545, 4, 54, 5, 34, 2, 34, 4, 3, 4, 3, 4, 3]
-    return (
+  const handleDelete = async () => {
+    try {
+      await axios
+        .delete(`${baseUrl}/task/delete/${taskGroup?._id}`)
+        .then((response) => {
+          if (response.status) {
+            toast.success("Task Deleted");
+            axios.get(`${baseUrl}/task/get`).then((res) => {
+              setData(res?.data);
+            });
+          } else {
+            toast.error("Something went wrong");
+          }
+        });
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+  return (
+    <div className="bg-white pt-4 pb-4 h-[25rem] overflow-y-auto min-w-[15rem] rounded-md shadow-shadow2 font-robotoFont">
+      <div className="flex justify-between items-center pl-2 pr-2 border-b-2 border-solid border-[#e6e7e9] pb-2">
+        <h1 className="truncate w-[9rem]">{taskGroup?.heading}</h1>
+        <FaTrash
+          className="text-red-700 cursor-pointer"
+          onClick={handleDelete}
+        />
+      </div>
 
-        <div className='bg-white pt-4 pb-4 h-[25rem] overflow-y-auto min-w-[15rem] rounded-md shadow-shadow2 font-robotoFont'>
+      <div className="flex justify-between items-center mt-2 pl-2 pr-2 border-b-2 border-solid border-[#e6e7e9] pb-2">
+        <h1 className="truncate w-[100%]">
+          Created Date: {taskGroup?.date && formatDate(taskGroup?.date)}
+        </h1>
+      </div>
 
-            <div className='flex justify-between items-center pl-2 pr-2 border-b-2 border-solid border-[#e6e7e9] pb-2'>
-                <h1 className='truncate w-[9rem]'>Task Heading</h1>
-                <FaTrash className='text-red-700 cursor-pointer' />
-            </div>
+      {/* EACH SINGLE TASK  */}
+      <div>
+        {taskGroup?.tasks?.map((item, i) => (
+          <div
+            key={item + i}
+            className="flex justify-between items-center mt-2 pl-2 pr-2 border-b-2 border-solid border-[#e6e7e9] pb-2"
+          >
+            <h1 className="truncate w-[100%] text-[#828893]">
+              {i + 1}. {item?.title}
+            </h1>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
-            <div className='flex justify-between items-center mt-2 pl-2 pr-2 border-b-2 border-solid border-[#e6e7e9] pb-2'>
-                <h1 className='truncate w-[100%]'>Created Date: 17-02-2024</h1>
-            </div>
-
-            {/* EACH SINGLE TASK  */}
-            <div>
-                {
-                    task?.map((item,i) => (
-                        <div key={item+i} className='flex justify-between items-center mt-2 pl-2 pr-2 border-b-2 border-solid border-[#e6e7e9] pb-2'>
-                            <h1 className='truncate w-[100%] text-[#828893]'>{i+1}. Task 1</h1>
-                        </div>
-
-                    ))
-                }
-
-
-            </div>
-
-        </div>
-    )
-}
-
-export default Card
+export default Card;

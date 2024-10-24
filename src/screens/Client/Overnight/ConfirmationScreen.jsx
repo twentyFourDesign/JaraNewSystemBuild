@@ -1,14 +1,15 @@
-import React from 'react'
-import Header from '../../../components/Header'
-import Confirmation from '../../../layouts/Client/OvernightBooking/Confirmation'
-
+import React from "react";
+import ConfirmationHeader from "../../../components/ConfirmationHeader";
+import Confirmation from "../../../layouts/Client/OvernightBooking/Confirmation";
+import WhatsAppChatButton from "../../../components/WhatsappSupport";
 const ConfirmationScreen = () => {
   return (
     <div>
-      <Header/>
-      <Confirmation/>
+      <ConfirmationHeader />
+      <WhatsAppChatButton />
+      <Confirmation />
     </div>
-  )
-}
+  );
+};
 
-export default ConfirmationScreen
+export default ConfirmationScreen;

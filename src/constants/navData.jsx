@@ -15,10 +15,11 @@ import {
 // import { TbDiscountCheckFilled } from "react-icons/tb";
 import { IoIosSettings } from "react-icons/io";
 import { TbRosetteDiscountCheckFilled } from "react-icons/tb";
+import { BiSolidUserAccount } from "react-icons/bi";
 
 export const navLinks = [
   {
-    title: "Booking",
+    title: "Bookings",
     link: "/admin/jara/booking",
     icons: <FaBed />,
   },
@@ -68,12 +69,12 @@ export const navLinks = [
     icons: <RiCoupon3Fill />,
   },
   {
-    title: "Payment",
+    title: "Payments",
     link: "/admin/jara/payment",
     icons: <MdOutlinePayments />,
   },
   {
-    title: "Setting",
+    title: "Settings",
     link: "/admin/jara/setting",
     icons: <IoIosSettings />,
   },
@@ -81,5 +82,10 @@ export const navLinks = [
     title: "Rooms",
     link: "/admin/jara/rooms",
     icons: <MdOutlineBedroomParent />,
+  },
+  {
+    title: "Accounts",
+    link: "/admin/jara/accounts",
+    icons: <BiSolidUserAccount />,
   },
 ];

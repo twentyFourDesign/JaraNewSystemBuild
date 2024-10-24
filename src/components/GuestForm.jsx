@@ -6,37 +6,21 @@ import Edit from "../assets/edit.png";
 import { useSelector, useDispatch } from "react-redux";
 import { insert as insertGuestCount } from "../store/slices/overnight/overnightGuest.slice";
 import { insert as insertGuestInfo } from "../store/slices/overnight/guestInfo.slice";
-const GuestForm = () => {
+const GuestForm = ({ guests, guestCount, updateGuest }) => {
   const dispatch = useDispatch();
-  const guestCount = useSelector(
-    (state) => state.overnightGuestCount.adults || 0
-  );
-  const guests = useSelector((state) => state.overnightGuestDetails);
+
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    if (guestCount > 0) {
-      const initialGuests = Array.from({ length: guestCount }, (_, i) => ({
-        id: i + 1,
-        firstName: "",
-        lastName: "",
-        room: "",
-      }));
-      dispatch(insertGuestInfo(initialGuests));
-    }
-  }, [guestCount, dispatch]);
-
   const handleAddGuests = () => {
-    dispatch(insertGuestCount({ guestCount: guestCount }));
+    // dispatch(insertGuestCount({ guestCount: guestCount }));
     setShowModal(true);
   };
-
   return (
     <div
-      className="px-4 py-2 w-[90%] border-2 mt-4 border-[#75A9BF] rounded-xl "
+      className="px-4 py-2 w-[90%] border-2 mt-4 flex flex-col items-start md:items-center border-[#75A9BF] rounded-xl "
       style={{ fontFamily: "Inter, sans-serif" }}
     >
-      <div className="flex justify-between  items-center">
+      <div className="flex flex-col md:flex-row justify-between  gap-4 w-full items-start md:items-center">
         <div>
           <h2 className="text-2xl font-bold mb-4">Names of guests</h2>
           <p className="mb-4">
@@ -68,6 +52,8 @@ const GuestForm = () => {
         <Modal
           onClose={() => setShowModal(false)}
           onSave={() => setShowModal(false)}
+          guests={guests}
+          updateGuest={updateGuest}
         />
       )}
     </div>

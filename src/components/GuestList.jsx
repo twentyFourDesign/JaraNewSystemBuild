@@ -2,7 +2,7 @@ import React from "react";
 
 const GuestList = ({ guests }) => {
   return (
-    <div className="mt-4">
+    <div className="mt-4 w-full">
       {guests.length > 0 && guests?.[0].firstName !== "" ? (
         <div className="flex flex-wrap gap-2">
           {guests.map((guest, index) => (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import JaraLogo from "../../../assets/jaralogo.png";
 import AuthImage from "../../../assets/loginImage.png";
@@ -6,8 +6,12 @@ import Input from "../../../components/Input";
 import { baseUrl } from "../../../constants/baseurl";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../Context/AuthContext";
+import { ClipLoader } from "react-spinners";
 
 const LoginLayout = () => {
+  const [spinner, setSpinner] = useState(false);
+  const { setAdminUser } = useContext(AuthContext);
   const [loginInfo, setloginInfo] = useState({ email: "", password: "" });
   const nav = useNavigate("");
 
@@ -17,8 +21,10 @@ const LoginLayout = () => {
 
   const loginFunc = (e) => {
     e.preventDefault();
+    setSpinner(true);
     if (!loginInfo.email || !loginInfo.password) {
       toast.error("All Fields Are Required");
+      setSpinner(false);
     } else {
       axios
         .post(`${baseUrl}/admin/login`, loginInfo)
@@ -27,16 +33,43 @@ const LoginLayout = () => {
             toast.success("Login Succesfull");
             localStorage.setItem("adminId", res.data.adminInfo._id);
             localStorage.setItem("token", res.data.token);
+            setAdminUser(res.data.adminInfo);
+            setSpinner(false);
             nav("/admin/jara/booking");
           }
         })
         .catch((e) => {
           if (e.response.status === 404) {
             toast.error("Invalid Email Or Password");
+            setSpinner(false);
           } else if (e.response.status === 406) {
             toast.error("Invalid Email Or Password");
+            setSpinner(false);
           } else {
             toast.error("Check Your Internet Connection");
+            setSpinner(false);
+          }
+        });
+    }
+  };
+  const handleForgotPassword = () => {
+    if (!loginInfo.email) {
+      toast.error("Please Enter Email Address");
+    } else {
+      axios
+        .post(`${baseUrl}/admin/forgot-password`, { email: loginInfo.email })
+        .then((res) => {
+          if (res.status) {
+            toast.success("Reset Link Sent To Your Email");
+          }
+        })
+        .catch((e) => {
+          if (e.response.status === 404) {
+            toast.error("Email Not Found");
+          } else if (e.response.status === 500) {
+            toast.error("Internal Server Error");
+          } else {
+            toast.error("something went wrong");
           }
         });
     }
@@ -48,7 +81,7 @@ const LoginLayout = () => {
         <div className="h-[100%] relative">
           <img
             src={AuthImage}
-            alt=""
+            alt="Jara Booking"
             className="h-[100%] rounded-xl w-[20rem] xl:w-[30rem]"
           />
         </div>
@@ -113,12 +146,15 @@ const LoginLayout = () => {
             onClick={loginFunc}
             className="bg-[#46a1cd] w-[100%] h-[3rem] text-white mt-10 rounded-md"
           >
-            Sign In
+            {spinner ? <ClipLoader size={15} color="white" /> : "Login"}
           </button>
 
-          <h1 className="text-center text-[#73696c] mt-8 underline cursor-pointer">
+          <p
+            onClick={handleForgotPassword}
+            className="text-center text-[#73696c] mt-8 underline cursor-pointer"
+          >
             Forgot your password?
-          </h1>
+          </p>
         </form>
       </div>
     </div>

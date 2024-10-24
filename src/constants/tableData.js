@@ -224,9 +224,6 @@ export const DaypassVouchersRow = [
   {
     title: "Status",
   },
-  {
-    title: "Options",
-  },
 ];
 
 export const paymentRow = [
@@ -265,5 +262,22 @@ export const roomsRow = [
   },
   {
     title: "Sub Rooms",
+  },
+];
+export const accountRow = [
+  {
+    title: "Id",
+  },
+  {
+    title: "Username",
+  },
+  {
+    title: "Email",
+  },
+  {
+    title: "Role",
+  },
+  {
+    title: "Actions",
   },
 ];

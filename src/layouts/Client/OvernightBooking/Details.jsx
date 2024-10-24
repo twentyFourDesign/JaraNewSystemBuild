@@ -1,53 +1,95 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import upload from "../../../assets/Vector.png";
 import OvernightReservation from "../../../components/OvernightReservation";
-import OvernightFooter from "../../../components/OvernightFooter";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import OvernightSteps from "../../../components/OvernightSteps";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { insert } from "../../../store/slices/overnight/guestInfo.slice";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import GuestForm from "../../../components/GuestForm";
-import { Photo } from "@mui/icons-material";
 import { FiRefreshCcw } from "react-icons/fi";
 import toast from "react-hot-toast";
 import arrow from "../../../assets/arrowLeft.png";
 
 import arrowR from "../../../assets/arrowRIght.png";
 
-import { baseUrl } from "../../../constants/baseurl";
+import { reset as resetGuestInfo } from "../../../store/slices/overnight/guestInfo.slice";
+import { reset as resetGuestCount } from "../../../store/slices/overnight/overnightGuest.slice";
+import { reset as resetRoomDetails } from "../../../store/slices/overnight/roomDetails.slice";
+import { PriceContext } from "../../../Context/PriceContext";
 
 const Details = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const guestCount = useSelector(
+    (state) => state.overnightGuestCount.adults || 0
+  );
 
+  const {
+    setPrice,
+    setPreviousCost,
+    setDiscount,
+    setVoucher,
+    userDetails,
+    setuserDetails,
+  } = useContext(PriceContext);
+  const handleRestart = () => {
+    // dispatch(resetGuestInfo());
+    // dispatch(resetGuestCount());
+    // dispatch(resetRoomDetails());
+    // setPrice(0);
+    // setDiscount(null);
+    // setVoucher(null);
+    // setPreviousCost(0);
+    nav("/");
+    window.location.reload();
+  };
   const guests = useSelector((state) => state.overnightGuestDetails);
+  // console.log(guests);
   const [isNamesValid, setIsNamesValid] = useState(false);
-  useEffect(() => {
-    // Step 3: Use Effect for Validation
-    validateGuests();
-  }, [guests]);
+
+  // const [userDetails, setuserDetails] = useState({
+  //   firstname: "",
+  //   lastname: "",
+  //   email: "",
+  //   phone: "",
+  //   gender: "",
+  //   para: "",
+  //   dateOfBirth: "",
+  //   mailLitst: false,
+  //   keepInfo: false,
+  //   file: "",
+  //   aboutUs: "",
+  //   guests: Array.from({ length: guestCount }, (_, i) => ({
+  //     id: i + 1,
+  //     firstName: "",
+  //     lastName: "",
+  //     room: "",
+  //   })),
+  // });
+
+  const updateGuest = (id, field, value) => {
+    setuserDetails((prevState) => ({
+      ...prevState,
+      guests: prevState.guests.map((guest) =>
+        guest.id === id ? { ...guest, [field]: value } : guest
+      ),
+    }));
+  };
+
   const validateGuests = () => {
-    // Step 2: Validation Function
-    if (!guests) return;
-    const isNamesValid = guests.every(
+    if (!userDetails.guests) return;
+    const isNamesValid = userDetails.guests?.every(
       (guest) => guest.firstName && guest.lastName && guest.room
     ); // Example validation
     setIsNamesValid(isNamesValid);
   };
-  const [userDetails, setuserDetails] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    gender: "",
-    para: "",
-    dateOfBirth: "",
-    mailLitst: false,
-    keepInfo: false,
-    file: "",
-  });
+  useEffect(() => {
+    // Step 3: Use Effect for Validation
+    validateGuests();
+  }, [userDetails.guests]);
+
   const calculateAge = (dateOfBirth) => {
     const today = new Date();
     const birthDate = new Date(dateOfBirth);
@@ -61,6 +103,8 @@ const Details = () => {
     }
     return age;
   };
+  const [otherSource, setOtherSource] = useState(""); // State for the "Other" input
+
   const isValid =
     userDetails.firstname &&
     userDetails.lastname &&
@@ -68,6 +112,8 @@ const Details = () => {
     userDetails.phone &&
     userDetails.gender &&
     userDetails.dateOfBirth &&
+    userDetails.aboutUs &&
+    (userDetails.aboutUs !== "Other" || otherSource.trim()) && // Check if "Other" is selected and if otherSource is not empty
     userDetails.file;
 
   const acceptedFileTypes = [
@@ -75,7 +121,20 @@ const Details = () => {
     "image/png",
     "image/gif",
     "application/pdf",
-  ];
+  ]; // State for the "Other" input
+
+  const handleAboutUsChange = (e) => {
+    const value = e.target.value;
+    setuserDetails({
+      ...userDetails,
+      aboutUs: value,
+    });
+    // Check if "Other" is selected
+    if (value === "Other") {
+      setOtherSource(""); // Reset the other source input if "Other" is selected
+    }
+  };
+
   const onSubmit = async () => {
     if (!isValid) {
       toast.error("Please fill all the fields");
@@ -109,20 +168,28 @@ const Details = () => {
       return;
     }
 
-    dispatch(insert(userDetails));
+    const updatedDetails = {
+      ...userDetails,
+      para: userDetails.para.trim(),
+      aboutUs:
+        userDetails.aboutUs === "Other" ? otherSource : userDetails.aboutUs, // Set aboutUs to otherSource if "Other" is selected
+    };
+
+    dispatch(insert(updatedDetails));
     nav("/overnight/summary");
   };
   const handleFileChange = (e) => {
     setuserDetails({ ...userDetails, file: e.target.files[0] });
   };
+
   return (
     <div style={{ fontFamily: "Inter sans-serif" }}>
-      <div className="xl:flex w-screen justify-between items-start bg-[#eff6ff] p-[1rem] font-robotoFont flex-wrap">
+      <div className="xl:flex w-screen justify-between items-start bg-[white] p-[1rem] font-robotoFont flex-wrap">
         <div className="flex-1 gap-x-3">
           {/* SETPS  */}
           <div className="w-[100%] flex justify-center items-center">
             <div className="w-[100%] lg:w-[90%]">
-              <OvernightSteps step={3} />
+              <OvernightSteps step={4} />
             </div>
           </div>
 
@@ -147,6 +214,7 @@ const Details = () => {
                         firstname: e.target.value,
                       });
                     }}
+                    value={userDetails.firstname}
                     type="text"
                     placeholder="First name"
                     className="flex-1 h-[2.4rem] w-[100%] rounded-md bg-white pl-3 pr-3 outline-none border-2 border-[#C8D5E0]"
@@ -159,6 +227,7 @@ const Details = () => {
                       });
                     }}
                     type="text"
+                    value={userDetails.lastname}
                     placeholder="Last name"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                   />
@@ -172,6 +241,7 @@ const Details = () => {
                       });
                     }}
                     type="email"
+                    value={userDetails.email}
                     placeholder="Email"
                     className="flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 outline-none border-2 border-[#C8D5E0]"
                   />
@@ -183,6 +253,7 @@ const Details = () => {
                       });
                     }}
                     type="tel"
+                    value={userDetails.phone}
                     placeholder="Phone Number"
                     className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
                   />
@@ -203,38 +274,44 @@ const Details = () => {
                     <option value="Female">Female</option>
                   </select>
 
-                  <input
-                    onChange={(e) => {
-                      setuserDetails({
-                        ...userDetails,
-                        dateOfBirth: e.target.value,
-                      });
-                    }}
-                    type="date"
-                    max={
-                      new Date(
-                        new Date().setFullYear(new Date().getFullYear() - 18)
-                      )
-                        .toISOString()
-                        .split("T")[0]
-                    }
-                    placeholder=""
-                    className="lg:mt-0 mt-3 flex-1 h-[2.4rem]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  />
+                  <div className="w-[100%] lg:mt-0 mt-3 flex-1 flex rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0]">
+                    <DatePicker
+                      selected={userDetails.dateOfBirth}
+                      value={userDetails.dateOfBirth}
+                      onChange={(date) => {
+                        setuserDetails({
+                          ...userDetails,
+                          dateOfBirth: date,
+                        });
+                      }}
+                      dateFormat="yyyy-MM-dd"
+                      maxDate={
+                        new Date(
+                          new Date().setFullYear(new Date().getFullYear() - 18)
+                        )
+                      }
+                      className=" h-[2.4rem]  w-[100%] outline-none"
+                      placeholderText="Date of Birth"
+                    />
+                  </div>
                 </div>
 
                 <textarea
+                  onChange={(e) => {
+                    setuserDetails({ ...userDetails, para: e.target.value });
+                  }}
                   type="text"
+                  value={userDetails.para}
                   placeholder="State any dietary or setup requirements (i.e baby bathtub or children’s cot)"
                   name=""
                   className=" lg:w-[83%] w-[100%] h-[5rem] rounded-md bg-white outline-none border-2 border-[#C8D5E0] mt-4 resize-none p-4"
                 />
                 <p className="mt-2">
                   Upload Image [face] identification (i.e. passport, national
-                  ID, driver's license) - Max: 5 MB
+                  ID, driver's license)
                 </p>
 
-                <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
+                <div className="mt-4 block flex-wrap lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
                   <div>
                     <label
                       htmlFor="file"
@@ -256,18 +333,44 @@ const Details = () => {
                     />
                   </div>
 
-                  <input
-                    onChange={(e) => {
-                      setuserDetails({ ...userDetails, para: e.target.value });
-                    }}
-                    type="text"
-                    placeholder="How did you hear about us?"
+                  <select
+                    name="aboutus"
                     className="lg:mt-0 mt-3 flex-1 h-[50px]  w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
-                  />
+                    id="aboutus"
+                    value={userDetails.aboutUs}
+                    onChange={handleAboutUsChange} // Use the new handler
+                  >
+                    <option value="" selected disabled>
+                      How did you hear about us?
+                    </option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Google">Google</option>
+                    <option value="Linkedin">Linkedin</option>
+                    <option value="Friend/Associate">Friend/Associate</option>
+                    <option value="Billboard">Billboard</option>
+                    <option value="Branded Vehicle">Branded Vehicle</option>
+                    <option value="Agent / Tour Operator">
+                      Agent / Tour Operator
+                    </option>
+                    <option value="Other">Other</option>
+                  </select>
+
+                  {/* Conditionally render the input for "Other" */}
+                  {userDetails.aboutUs === "Other" && (
+                    <input
+                      type="text"
+                      value={otherSource}
+                      onChange={(e) => setOtherSource(e.target.value)} // Update the other source state
+                      placeholder="Please specify"
+                      className="mt-2 h-[2.4rem] lg:w-[83%] w-[100%] rounded-md bg-white pl-3 pr-3 border-2 border-[#C8D5E0] outline-none"
+                    />
+                  )}
                 </div>
                 <div className="mt-4 block lg:flex justify-between items-center gap-x-4 lg:w-[83%] w-[100%]">
-                  <div className="flex items-center mt-4">
+                  {/* <div className="flex items-center mt-4">
                     <input
+                      checked={userDetails.mailLitst}
                       onChange={(e) => {
                         setuserDetails({
                           ...userDetails,
@@ -281,9 +384,10 @@ const Details = () => {
                     <p className="text-[#606970] text-sm ml-2">
                       Signup for our mailing list
                     </p>
-                  </div>
+                  </div> */}
                   <div className="flex items-center mt-4">
                     <input
+                      checked={userDetails.keepInfo}
                       type="radio"
                       onChange={(e) => {
                         setuserDetails({
@@ -299,8 +403,12 @@ const Details = () => {
                     </p>
                   </div>
                 </div>
-                <div>
-                  <GuestForm />
+                <div className="w-[90%]">
+                  <GuestForm
+                    guests={userDetails.guests}
+                    guestCount={guestCount}
+                    updateGuest={updateGuest}
+                  />
                 </div>
               </div>
             </div>
@@ -309,27 +417,12 @@ const Details = () => {
 
         {/* RESERVATION  */}
 
-        <div className="min-w-[18rem] pr-4">
-          <div className="min-w-[18rem] h-[30rem] mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
+        <div className="w-auto  lg:mt-4 xl:mt-0 mx-4 md:mx-0 px-4 md:pr-4 md:px-2">
+          <div className="w-full xl:max-w-[18rem] h-auto mt-6 lg:mt-0 shadow-shadow1 bg-white border-2 border-[#C8D5E0] rounded-md">
             <OvernightReservation />
           </div>
           <div className="min-w-[18rem] ">
             <div className="flex flex-col  items-center gap-y-2 pt-4">
-              <div
-                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-                onClick={() => nav("/")}
-              >
-                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
-                <FiRefreshCcw />
-                <p className="font-[500] text-xl">Restart Booking</p>
-              </div>
-              <div
-                onClick={() => nav("/overnight/room-details")}
-                className=" flex w-full p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
-              >
-                <img src={arrow} alt="icon" className="w-[1rem]" />
-                <p className="font-[500] text-xl">Back</p>
-              </div>
               <div className="w-full">
                 <button
                   onClick={onSubmit}
@@ -346,6 +439,21 @@ const Details = () => {
                   <img src={arrowR} alt="icon" className="w-[1rem]" />
                 </button>
               </div>
+              <div
+                onClick={() => nav("/overnight/extras")}
+                className=" flex w-full p-2 border-2 border-black bg-[#C8D5E0] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
+              >
+                <img src={arrow} alt="icon" className="w-[1rem]" />
+                <p className="font-[500] text-xl">Back</p>
+              </div>
+              <div
+                className="flex  w-full p-2 border-2 border-black bg-[#F1F5F8] rounded-xl gap-x-2 justify-center items-center text-black cursor-pointer"
+                onClick={handleRestart}
+              >
+                {/* <img src={Edit} alt="icon" className="w-[1rem]" /> */}
+                <FiRefreshCcw />
+                <p className="font-[500] text-xl">Restart Booking</p>
+              </div>
             </div>
           </div>
         </div>
@@ -353,10 +461,14 @@ const Details = () => {
 
       {/* FOOTER  */}
 
-      <div className="w-screen bg-black text-white">
-        <div className="flex justify-between items-center px-7 mt-3 pb-3">
-          <p>© 2023 JARA BEACH RESORT</p>
-          <p>owned and operated by Little Company Nigeria Limited</p>
+      <div className="mt-3 gap-4 md:gap-0 flex justify-between items-center w-screen bg-[#9DD4D3] text-black font-rubic py-3 md:px-5  px-2 text-sm ">
+        <div>
+          <p>© {new Date().getFullYear()} JARA BEACH RESORT</p>
+        </div>
+        <div>
+          <p className="text-right max-w-[300px] md:max-w-full">
+            Owned and Operated By Little Company Nigeria Limited
+          </p>
         </div>
       </div>
     </div>
