@@ -116,12 +116,7 @@ const Details = () => {
     (userDetails.aboutUs !== "Other" || otherSource.trim()) && // Check if "Other" is selected and if otherSource is not empty
     userDetails.file;
 
-  const acceptedFileTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    "application/pdf",
-  ]; // State for the "Other" input
+  const acceptedFileTypes = ["image/jpeg", "image/png", "image/gif"]; // State for the "Other" input
 
   const handleAboutUsChange = (e) => {
     const value = e.target.value;
@@ -160,7 +155,7 @@ const Details = () => {
       userDetails.file &&
       !acceptedFileTypes.includes(userDetails.file.type)
     ) {
-      toast.error("Please upload a valid file (jpg, png, gif, pdf)");
+      toast.error("Please upload a valid file (jpg, png, gif)");
       return;
     }
     if (!isNamesValid) {
