@@ -34,6 +34,7 @@ const OvernightSummary = () => {
       id: response.data[0]._id,
     });
   };
+  const termsArray = data?.desc?.split("\n");
 
   const {
     price,
@@ -487,7 +488,10 @@ const OvernightSummary = () => {
           <h2 className="text-lg font-semibold mb-4 text-center">
             {data.heading}
           </h2>
-          <p className="text-gray-600 text-center">{data.desc}</p>
+          {/* <p className="text-gray-600 text-center">{data.desc}</p> */}
+          {termsArray.map((term, index) => (
+            <p key={index}>{term}</p>
+          ))}
           <button
             className="bg-blue-500 w-full text-white py-2 px-4 rounded-lg mt-4"
             onClick={() => setIsModalOpen(false)}
